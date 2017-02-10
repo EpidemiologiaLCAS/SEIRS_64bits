@@ -92,12 +92,18 @@
 #define GET_E(i) (int)((agentes[i] & MA_E) >> A_E)
 
 // Sets
-#define SET_Q(i, novo) (agentes[i] = ((agentes[i] & NM_Q) | (((TIPO_AGENTE)novo) << A_Q)))
-#define SET_L(i, novo) (agentes[i] = ((agentes[i] & NM_L) | (((TIPO_AGENTE)novo) << A_L)))
-#define SET_X(i, novo) (agentes[i] = ((agentes[i] & NM_X) | (((TIPO_AGENTE)novo) << A_X)))
-#define SET_Y(i, novo) (agentes[i] = ((agentes[i] & NM_Y) | (((TIPO_AGENTE)novo) << A_Y)))
-#define SET_C(i, novo) (agentes[i] = ((agentes[i] & NM_C) | (((TIPO_AGENTE)novo) << A_C)))
-#define SET_E(i, novo) (agentes[i] = ((agentes[i] & NM_E) | (((TIPO_AGENTE)novo) << A_E)))
+#define SET_Q(i, novo)                                                         \
+  (agentes[i] = ((agentes[i] & NM_Q) | (((TIPO_AGENTE)novo) << A_Q)))
+#define SET_L(i, novo)                                                         \
+  (agentes[i] = ((agentes[i] & NM_L) | (((TIPO_AGENTE)novo) << A_L)))
+#define SET_X(i, novo)                                                         \
+  (agentes[i] = ((agentes[i] & NM_X) | (((TIPO_AGENTE)novo) << A_X)))
+#define SET_Y(i, novo)                                                         \
+  (agentes[i] = ((agentes[i] & NM_Y) | (((TIPO_AGENTE)novo) << A_Y)))
+#define SET_C(i, novo)                                                         \
+  (agentes[i] = ((agentes[i] & NM_C) | (((TIPO_AGENTE)novo) << A_C)))
+#define SET_E(i, novo)                                                         \
+  (agentes[i] = ((agentes[i] & NM_E) | (((TIPO_AGENTE)novo) << A_E)))
 
 #endif
 

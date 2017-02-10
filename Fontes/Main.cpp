@@ -1,10 +1,10 @@
 #include <chrono>
+#include <cstdint>
 #include <cstdlib>
 #include <fstream>
 #include <iostream>
 #include <random>
 #include <tuple>
-#include <cstdint>
 
 #ifdef __GPU__
 
@@ -25,7 +25,7 @@ using namespace std;
 #include "MonteCarlo.cpp"
 
 int main(int argc, char **argv) {
-  
+
 #ifdef __CPU__
 
   if (argc == 2) {

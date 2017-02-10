@@ -39,11 +39,16 @@ double randomizarPercentual() { return dis(gen); }
 
 namespace Parametros {
 
-tuple<int, int *> lerQuadras() {
+tuple<int, int *, int *, int *, int *, int *, int *> lerVetores() {
   int quantQuadras;
   int *quantLotes;
+  int *indexQuadras;
+  int *indexVizinhancas;
+  int *vizinhancas;
+  int *indexPosicoes;
+  int *posicoes;
   string nomeArquivoEntrada =
-      string("Entradas") + SEPARADOR + string("Quadras.csv");
+      string("Entradas") + SEPARADOR + string("Vetores.csv");
   ifstream arquivoEntrada(nomeArquivoEntrada);
   if (arquivoEntrada.is_open()) {
     arquivoEntrada >> quantQuadras;
@@ -53,12 +58,40 @@ tuple<int, int *> lerQuadras() {
       arquivoEntrada >> quantLotes[i];
       arquivoEntrada.get();
     }
+    indexQuadras = new int[quantQuadras * 2];
+    for (int i = 0; i < quantQuadras * 2; ++i) {
+      arquivoEntrada >> indexQuadras[i];
+      arquivoEntrada.get();
+    }
+    indexVizinhancas = new int[indexQuadras[quantQuadras * 2 - 1] + 1];
+    for (int i = 0; i < indexQuadras[quantQuadras * 2 - 1] + 1; ++i) {
+      arquivoEntrada >> indexVizinhancas[i];
+      arquivoEntrada.get();
+    }
+    vizinhancas = new int[indexVizinhancas[indexQuadras[quantQuadras * 2 - 1]]];
+    for (int i = 0; i < indexVizinhancas[indexQuadras[quantQuadras * 2 - 1]];
+         ++i) {
+      arquivoEntrada >> vizinhancas[i];
+      arquivoEntrada.get();
+    }
+    indexPosicoes = new int[indexQuadras[quantQuadras * 2 - 1] + 1];
+    for (int i = 0; i < indexQuadras[quantQuadras * 2 - 1] + 1; ++i) {
+      arquivoEntrada >> indexPosicoes[i];
+      arquivoEntrada.get();
+    }
+    posicoes = new int[indexPosicoes[indexQuadras[quantQuadras * 2 - 1]]];
+    for (int i = 0; i < indexPosicoes[indexQuadras[quantQuadras * 2 - 1]];
+         ++i) {
+      arquivoEntrada >> posicoes[i];
+      arquivoEntrada.get();
+    }
     arquivoEntrada.close();
   } else {
     cerr << "Arquivo: " << nomeArquivoEntrada << " nao foi aberto!" << endl;
     exit(1);
   }
-  return make_tuple(quantQuadras, quantLotes);
+  return make_tuple(quantQuadras, quantLotes, indexQuadras, indexVizinhancas,
+                    vizinhancas, indexPosicoes, posicoes);
 }
 
 tuple<int, double *> lerParametros(string pastaEntrada, const int *quantLotes,
@@ -122,52 +155,6 @@ int *calcularIndexParametros(const int *quantLotes, int quantQuadras) {
         retorno[i - 1] + (QUANTIDADE_PARAMETROS_LOTE * 2 * quantLotes[i - 1]);
   }
   return retorno;
-}
-
-tuple<int *, int *, int *, int *, int *> lerVetores(int quantQuadras) {
-  int *indexQuadras;
-  int *indexVizinhancas;
-  int *vizinhancas;
-  int *indexPosicoes;
-  int *posicoes;
-  string nomeArquivoEntrada =
-      string("Entradas") + SEPARADOR + string("Vetores.csv");
-  ifstream arquivoEntrada(nomeArquivoEntrada);
-  if (arquivoEntrada.is_open()) {
-    indexQuadras = new int[quantQuadras * 2];
-    for (int i = 0; i < quantQuadras * 2; ++i) {
-      arquivoEntrada >> indexQuadras[i];
-      arquivoEntrada.get();
-    }
-    indexVizinhancas = new int[indexQuadras[quantQuadras * 2 - 1] + 1];
-    for (int i = 0; i < indexQuadras[quantQuadras * 2 - 1] + 1; ++i) {
-      arquivoEntrada >> indexVizinhancas[i];
-      arquivoEntrada.get();
-    }
-    vizinhancas = new int[indexVizinhancas[indexQuadras[quantQuadras * 2 - 1]]];
-    for (int i = 0; i < indexVizinhancas[indexQuadras[quantQuadras * 2 - 1]];
-         ++i) {
-      arquivoEntrada >> vizinhancas[i];
-      arquivoEntrada.get();
-    }
-    indexPosicoes = new int[indexQuadras[quantQuadras * 2 - 1] + 1];
-    for (int i = 0; i < indexQuadras[quantQuadras * 2 - 1] + 1; ++i) {
-      arquivoEntrada >> indexPosicoes[i];
-      arquivoEntrada.get();
-    }
-    posicoes = new int[indexPosicoes[indexQuadras[quantQuadras * 2 - 1]]];
-    for (int i = 0; i < indexPosicoes[indexQuadras[quantQuadras * 2 - 1]];
-         ++i) {
-      arquivoEntrada >> posicoes[i];
-      arquivoEntrada.get();
-    }
-    arquivoEntrada.close();
-  } else {
-    cerr << "Arquivo: " << nomeArquivoEntrada << " nao foi aberto!" << endl;
-    exit(1);
-  }
-  return make_tuple(indexQuadras, indexVizinhancas, vizinhancas, indexPosicoes,
-                    posicoes);
 }
 }
 
