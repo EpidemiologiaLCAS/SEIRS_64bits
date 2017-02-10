@@ -1,0 +1,9 @@
+Min;Max;Descricao
+0;0;Quantidade de Agentes Suscetiveis
+0.0;0.0;Quantidade de Agentes Expostos
+0;0;Quantidade de Agentes Infectados
+0.0;0.0;Quantidade de Agentes Recuperados
+0.9;0.95;Taxa de Infeccao
+15.0;20.0;Numero de Ciclos para Agente Exposto
+30.0;35.0;Numero de Ciclos para Agente Infectado
+40.0;45.0;Numero de Ciclos para Agente Recuperado
