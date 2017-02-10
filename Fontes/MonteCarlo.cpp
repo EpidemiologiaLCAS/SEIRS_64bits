@@ -81,28 +81,6 @@ void gerarSaidaQuantidadeQuadras(int idMonteCarlo, int quantQuadras, int ciclos,
   }
 }
 
-int *alocarSaidaQuantidadeTotal(int ciclos) {
-  int *matriz = new int[ciclos * COLUNAS_SAIDAS_QUANTIDADES];
-  for (int i = 0; i < ciclos * COLUNAS_SAIDAS_QUANTIDADES; ++i) {
-    matriz[i] = 0;
-  }
-  return matriz;
-}
-
-int *alocarSaidaQuantidadeQuadras(int ciclos, int quantQuadras,
-                                  const int *indexSaidaQuantidadeQuadras) {
-  int *retorno = new int[indexSaidaQuantidadeQuadras[quantQuadras]];
-  for (int k = 0; k < quantQuadras; ++k) {
-    for (int i = 0; i < ciclos; ++i) {
-      for (int j = 0; j < COLUNAS_SAIDAS_QUANTIDADES; ++j) {
-        retorno[indexSaidaQuantidadeQuadras[k] +
-                VEC(i, j, COLUNAS_SAIDAS_QUANTIDADES)] = 0;
-      }
-    }
-  }
-  return retorno;
-}
-
 int *calcularIndexSaidaQuantidadeQuadras(int quantQuadras, int ciclos) {
   int i = 0, size = 0;
   int *deslocamentos = new int[quantQuadras + 1];
@@ -142,13 +120,12 @@ void iniciarSimulacao(int idMonteCarlo, string pastaEntrada,
   int ciclos = NUMERO_CICLOS_SIMULACAO + 1;
   int simulacoes = QUANTIDADE_SIMULACOES;
 
-  int *saidaQuantidadeTotal =
-      SaidasMonteCarlo::alocarSaidaQuantidadeTotal(ciclos);
+  int *saidaQuantidadeTotal = new int[ciclos * COLUNAS_SAIDAS_QUANTIDADES]();
   int *indexSaidaQuantidadeQuadras =
       SaidasMonteCarlo::calcularIndexSaidaQuantidadeQuadras(quantQuadras,
                                                             ciclos);
-  int *saidaQuantidadeQuadras = SaidasMonteCarlo::alocarSaidaQuantidadeQuadras(
-      ciclos, quantQuadras, indexSaidaQuantidadeQuadras);
+  int *saidaQuantidadeQuadras =
+      new int[indexSaidaQuantidadeQuadras[quantQuadras]]();
 
   for (int idSimulacao = 0; idSimulacao < simulacoes; ++idSimulacao) {
     string pastaSaidaSimulacao = pastaSaidaMonteCarlo + string("Simulacao_") +
