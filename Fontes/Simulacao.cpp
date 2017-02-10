@@ -3,7 +3,8 @@
 
 namespace Agentes {
 
-void inicializarAgente(TIPO_AGENTE *agentes, int id, int e, int x, int y, int l, int q) {
+void inicializarAgente(TIPO_AGENTE *agentes, int id, int e, int x, int y, int l,
+                       int q) {
   SET_Q(id, q);
   SET_L(id, l);
   SET_X(id, x);
@@ -13,9 +14,9 @@ void inicializarAgente(TIPO_AGENTE *agentes, int id, int e, int x, int y, int l,
 }
 
 TIPO_AGENTE *criarAgentes(int quantAgentes, const double *parametros,
-                       const int *indexParametros, const int *quantLotes,
-                       int quantQuadras, const int *indexQuadras,
-                       const int *indexPosicoes, const int *posicoes) {
+                          const int *indexParametros, const int *quantLotes,
+                          int quantQuadras, const int *indexQuadras,
+                          const int *indexPosicoes, const int *posicoes) {
   int i = 0, p, x, y;
   TIPO_AGENTE *agentes = new TIPO_AGENTE[quantAgentes * ATRIBUTOS_AGENTE];
   for (int q = 0; q < quantQuadras; ++q) {
@@ -209,7 +210,6 @@ void gerarSaidaEspacial(const TIPO_AGENTE *agentes, int quantAgentes,
 }
 
 #endif
-
 }
 
 namespace Simulacao {
@@ -260,11 +260,11 @@ __global__ void movimentacao(curandState *seeds, TIPO_AGENTE *agentes,
   }
 }
 
-__global__ void contato(curandState *seeds, TIPO_AGENTE *agentes, int quantAgentes,
-                        const int *quantLotes, int quantQuadras,
-                        const double *parametros, const int *indexParametros,
-                        const int *indexQuadras, const int *indexPosicoes,
-                        const int *posicoes) {
+__global__ void contato(curandState *seeds, TIPO_AGENTE *agentes,
+                        int quantAgentes, const int *quantLotes,
+                        int quantQuadras, const double *parametros,
+                        const int *indexParametros, const int *indexQuadras,
+                        const int *indexPosicoes, const int *posicoes) {
   int pos = threadIdx.x + blockIdx.x * blockDim.x;
   if (pos < indexPosicoes[indexQuadras[quantQuadras * 2 - 1]] / 4) {
     int x = posicoes[pos * 4 + 0];
@@ -350,8 +350,9 @@ __global__ void initCurand(curandState *seeds, const int *rands,
 
 #ifdef __CPU__
 
-void movimentacao(TIPO_AGENTE *agentes, int quantAgentes, const int *indexQuadras,
-                  const int *indexVizinhancas, const int *vizinhancas) {
+void movimentacao(TIPO_AGENTE *agentes, int quantAgentes,
+                  const int *indexQuadras, const int *indexVizinhancas,
+                  const int *vizinhancas) {
 #pragma omp parallel for
   for (int id = 0; id < quantAgentes; id++) {
     int q = GET_Q(id);

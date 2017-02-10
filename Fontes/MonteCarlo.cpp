@@ -125,21 +125,19 @@ void iniciarSimulacao(int idMonteCarlo, string pastaEntrada,
 
   int quantQuadras;
   int *quantLotes;
-  tie(quantQuadras, quantLotes) = Parametros::lerQuadras();
+  int *indexQuadras;
+  int *indexVizinhancas;
+  int *vizinhancas;
+  int *indexPosicoes;
+  int *posicoes;
+  tie(quantQuadras, quantLotes, indexQuadras, indexVizinhancas, vizinhancas,
+      indexPosicoes, posicoes) = Parametros::lerVetores();
   int sizeParametros;
   double *parametros;
   tie(sizeParametros, parametros) = Parametros::lerParametros(
       pastaEntradaMonteCarlo, quantLotes, quantQuadras);
   int *indexParametros =
       Parametros::calcularIndexParametros(quantLotes, quantQuadras);
-
-  int *indexQuadras;
-  int *indexVizinhancas;
-  int *vizinhancas;
-  int *indexPosicoes;
-  int *posicoes;
-  tie(indexQuadras, indexVizinhancas, vizinhancas, indexPosicoes, posicoes) =
-      Parametros::lerVetores(quantQuadras);
 
   int ciclos = NUMERO_CICLOS_SIMULACAO + 1;
   int simulacoes = QUANTIDADE_SIMULACOES;
