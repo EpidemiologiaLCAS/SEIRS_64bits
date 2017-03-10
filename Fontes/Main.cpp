@@ -6,14 +6,14 @@
 #include <random>
 #include <tuple>
 
-#ifdef __GPU__
+#if defined(__GPU__)
 
 #include <curand.h>
 #include <curand_kernel.h>
 
 #endif
 
-#ifdef __CPU__
+#if defined(__CPU__)
 
 #include <omp.h>
 
@@ -26,7 +26,7 @@ using namespace std;
 
 int main(int argc, char **argv) {
 
-#ifdef __CPU__
+#if defined(__CPU__)
 
   if (argc == 2) {
     omp_set_num_threads(atoi(argv[1]));

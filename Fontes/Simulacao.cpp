@@ -102,9 +102,8 @@ void salvarSaidaEspacial(string pastaSaida, const int *saidaEspacial,
 
 __global__ void gerarSaidaQuantidadeTotal(const TIPO_AGENTE *agentes,
                                           int quantAgentes,
-                                          int *saidaQuantidadeTotal,
-                                          int ciclo) {
-  int i = threadIdx.x + blockIdx.x * blockDim.x;
+                                          int *saidaQuantidadeTotal, int ciclo, int chunk) {
+  int i = (threadIdx.x + blockIdx.x * blockDim.x) + chunk;
   if (i < quantAgentes) {
     atomicAdd(&saidaQuantidadeTotal[VEC(ciclo, GET_E(i) + 1,
                                         COLUNAS_SAIDAS_QUANTIDADES)],
@@ -117,8 +116,8 @@ __global__ void gerarSaidaQuantidadeTotal(const TIPO_AGENTE *agentes,
 __global__ void
 gerarSaidaQuantidadeQuadras(const TIPO_AGENTE *agentes, int quantAgentes,
                             const int *indexSaidaQuantidadeQuadras,
-                            int *saidaQuantidadeQuadras, int ciclo) {
-  int i = threadIdx.x + blockIdx.x * blockDim.x;
+                            int *saidaQuantidadeQuadras, int ciclo, int chunk) {
+  int i = (threadIdx.x + blockIdx.x * blockDim.x) + chunk;
   if (i < quantAgentes) {
     atomicAdd(&saidaQuantidadeQuadras[indexSaidaQuantidadeQuadras[GET_Q(i)] +
                                       VEC(ciclo, GET_E(i) + 1,
@@ -136,8 +135,8 @@ __global__ void gerarSaidaEspacial(const TIPO_AGENTE *agentes, int quantAgentes,
                                    int quantQuadras, int ciclos,
                                    const int *indexQuadras,
                                    const int *indexPosicoes,
-                                   const int *posicoes) {
-  int pos = threadIdx.x + blockIdx.x * blockDim.x;
+                                   const int *posicoes, int chunk) {
+  int pos = (threadIdx.x + blockIdx.x * blockDim.x) + chunk;
   if (pos < indexPosicoes[indexQuadras[quantQuadras * 2 - 1]] / 4) {
     int x = posicoes[pos * 4 + 0];
     int y = posicoes[pos * 4 + 1];
@@ -219,8 +218,8 @@ namespace Simulacao {
 __global__ void movimentacao(curandState *seeds, TIPO_AGENTE *agentes,
                              int quantAgentes, const int *indexQuadras,
                              const int *indexVizinhancas,
-                             const int *vizinhancas) {
-  int id = threadIdx.x + blockIdx.x * blockDim.x;
+                             const int *vizinhancas, int chunk) {
+  int id = (threadIdx.x + blockIdx.x * blockDim.x) + chunk;
   if (id < quantAgentes) {
     int q = GET_Q(id);
     int l = GET_L(id);
@@ -264,8 +263,8 @@ __global__ void contato(curandState *seeds, TIPO_AGENTE *agentes,
                         int quantAgentes, const int *quantLotes,
                         int quantQuadras, const double *parametros,
                         const int *indexParametros, const int *indexQuadras,
-                        const int *indexPosicoes, const int *posicoes) {
-  int pos = threadIdx.x + blockIdx.x * blockDim.x;
+                        const int *indexPosicoes, const int *posicoes, int chunk) {
+  int pos = (threadIdx.x + blockIdx.x * blockDim.x) + chunk;
   if (pos < indexPosicoes[indexQuadras[quantQuadras * 2 - 1]] / 4) {
     int x = posicoes[pos * 4 + 0];
     int y = posicoes[pos * 4 + 1];
@@ -300,8 +299,8 @@ __global__ void contato(curandState *seeds, TIPO_AGENTE *agentes,
 
 __global__ void transicao(curandState *seeds, TIPO_AGENTE *agentes,
                           int quantAgentes, const double *parametros,
-                          const int *indexParametros) {
-  int i = threadIdx.x + blockIdx.x * blockDim.x;
+                          const int *indexParametros, int chunk) {
+  int i = (threadIdx.x + blockIdx.x * blockDim.x) + chunk;
   if (i < quantAgentes) {
     int idLote = GET_L(i);
     int idQuadra = GET_Q(i);
@@ -500,7 +499,7 @@ void iniciarSimulacao(int idSimulacao, const double *parametros,
     cout << totMem << endl;
   }
 
-#ifdef __GPU__
+#if defined(__GPU__)
 
   TIPO_AGENTE *agentesDev;
   int *saidaQuantidadeTotalDev;
@@ -600,35 +599,98 @@ void iniciarSimulacao(int idSimulacao, const double *parametros,
 
 #ifdef __GPU__
 
-  SaidasSimulacao::gerarSaidaQuantidadeTotal<<<f1, numThreads>>>(
-      agentesDev, quantAgentes, saidaQuantidadeTotalDev, 0);
-  SaidasSimulacao::gerarSaidaQuantidadeQuadras<<<f1, numThreads>>>(
-      agentesDev, quantAgentes, indexSaidaQuantidadeQuadrasDev,
-      saidaQuantidadeQuadrasDev, 0);
-  SaidasSimulacao::gerarSaidaEspacial<<<f2, numThreads>>>(
-      agentesDev, quantAgentes, saidaEspacialDev, 0, quantQuadras, ciclos,
-      indexQuadrasDev, indexPosicoesDev, posicoesDev);
+  cudaStream_t stream0, stream1;
+  
+  cudaStreamCreate(&stream0);
+  cudaStreamCreate(&stream1);
 
+  int b1 = f1 / 2 + 1;
+  int c1 = b1 * numThreads;
+  int d1 = f1 - b1;
+  
+  int b2 = f2 / 2 + 1;
+  int c2 = b2 * numThreads;
+  int d2 = f2 - b2;
+  
+  SaidasSimulacao::
+      gerarSaidaQuantidadeTotal<<<b1, numThreads, 0, stream0>>>(
+          agentesDev, quantAgentes, saidaQuantidadeTotalDev, 0, 0);
+  SaidasSimulacao::
+      gerarSaidaQuantidadeTotal<<<d1, numThreads, 0, stream1>>>(
+          agentesDev, quantAgentes, saidaQuantidadeTotalDev, 0, c1);
+
+  SaidasSimulacao::
+      gerarSaidaQuantidadeQuadras<<<b1, numThreads, 0, stream0>>>(
+          agentesDev, quantAgentes, indexSaidaQuantidadeQuadrasDev,
+          saidaQuantidadeQuadrasDev, 0, 0);
+  SaidasSimulacao::
+      gerarSaidaQuantidadeQuadras<<<d1, numThreads, 0, stream1>>>(
+          agentesDev, quantAgentes, indexSaidaQuantidadeQuadrasDev,
+          saidaQuantidadeQuadrasDev, 0, c1);
+
+  SaidasSimulacao::
+      gerarSaidaEspacial<<<b2, numThreads, 0, stream0>>>(
+          agentesDev, quantAgentes, saidaEspacialDev, 0, quantQuadras, ciclos,
+          indexQuadrasDev, indexPosicoesDev, posicoesDev, 0);
+  SaidasSimulacao::
+    gerarSaidaEspacial<<<d2, numThreads, 0, stream1>>>(
+        agentesDev, quantAgentes, saidaEspacialDev, 0, quantQuadras, ciclos,
+        indexQuadrasDev, indexPosicoesDev, posicoesDev, c2);
+  
   for (int ciclo = 1; ciclo < ciclos; ++ciclo) {
-    movimentacao<<<f1, numThreads>>>(seedsDev, agentesDev, quantAgentes,
-                                     indexQuadrasDev, indexVizinhancasDev,
-                                     vizinhancasDev);
-    contato<<<f2, numThreads>>>(seedsDev, agentesDev, quantAgentes,
-                                quantLotesDev, quantQuadras, parametrosDev,
-                                indexParametrosDev, indexQuadrasDev,
-                                indexPosicoesDev, posicoesDev);
-    transicao<<<f1, numThreads>>>(seedsDev, agentesDev, quantAgentes,
-                                  parametrosDev, indexParametrosDev);
 
-    SaidasSimulacao::gerarSaidaQuantidadeTotal<<<f1, numThreads>>>(
-        agentesDev, quantAgentes, saidaQuantidadeTotalDev, ciclo);
-    SaidasSimulacao::gerarSaidaQuantidadeQuadras<<<f1, numThreads>>>(
-        agentesDev, quantAgentes, indexSaidaQuantidadeQuadrasDev,
-        saidaQuantidadeQuadrasDev, ciclo);
-    SaidasSimulacao::gerarSaidaEspacial<<<f2, numThreads>>>(
-        agentesDev, quantAgentes, saidaEspacialDev, ciclo, quantQuadras, ciclos,
-        indexQuadrasDev, indexPosicoesDev, posicoesDev);
+    movimentacao<<<b1, numThreads, 0, stream0>>>(
+        seedsDev, agentesDev, quantAgentes, indexQuadrasDev,
+        indexVizinhancasDev, vizinhancasDev, 0);
+    movimentacao<<<d1, numThreads, 0, stream1>>>(
+        seedsDev, agentesDev, quantAgentes, indexQuadrasDev,
+        indexVizinhancasDev, vizinhancasDev, c1);
+
+    contato<<<b2, numThreads, 0, stream0>>>(
+        seedsDev, agentesDev, quantAgentes, quantLotesDev, quantQuadras,
+        parametrosDev, indexParametrosDev, indexQuadrasDev, indexPosicoesDev,
+        posicoesDev, 0);
+    contato<<<d2, numThreads, 0, stream1>>>(
+        seedsDev, agentesDev, quantAgentes, quantLotesDev, quantQuadras,
+        parametrosDev, indexParametrosDev, indexQuadrasDev, indexPosicoesDev,
+        posicoesDev, c2);
+
+    transicao<<<b1, numThreads, 0, stream0>>>(
+        seedsDev, agentesDev, quantAgentes, parametrosDev, indexParametrosDev, 0);
+    transicao<<<d1, numThreads, 0, stream1>>>(
+        seedsDev, agentesDev, quantAgentes, parametrosDev, indexParametrosDev, c1);
+
+    SaidasSimulacao::
+        gerarSaidaQuantidadeTotal<<<b1, numThreads, 0, stream0>>>(
+            agentesDev, quantAgentes, saidaQuantidadeTotalDev, ciclo, 0);
+    SaidasSimulacao::
+        gerarSaidaQuantidadeTotal<<<d1, numThreads, 0, stream1>>>(
+            agentesDev, quantAgentes, saidaQuantidadeTotalDev, ciclo, c1);
+
+    SaidasSimulacao::
+        gerarSaidaQuantidadeQuadras<<<b1, numThreads, 0, stream0>>>(
+            agentesDev, quantAgentes, indexSaidaQuantidadeQuadrasDev,
+            saidaQuantidadeQuadrasDev, ciclo, 0);
+    SaidasSimulacao::
+        gerarSaidaQuantidadeQuadras<<<d1, numThreads, 0, stream1>>>(
+            agentesDev, quantAgentes, indexSaidaQuantidadeQuadrasDev,
+            saidaQuantidadeQuadrasDev, ciclo, c1);
+
+    SaidasSimulacao::
+        gerarSaidaEspacial<<<b2, numThreads, 0, stream0>>>(
+            agentesDev, quantAgentes, saidaEspacialDev, ciclo, quantQuadras, ciclos,
+            indexQuadrasDev, indexPosicoesDev, posicoesDev, 0);
+    SaidasSimulacao::
+      gerarSaidaEspacial<<<d2, numThreads, 0, stream1>>>(
+          agentesDev, quantAgentes, saidaEspacialDev, ciclo, quantQuadras, ciclos,
+          indexQuadrasDev, indexPosicoesDev, posicoesDev, c2);
   }
+  
+  cudaStreamSynchronize(stream0);
+  cudaStreamSynchronize(stream1);
+
+  cudaStreamDestroy(stream0);
+  cudaStreamDestroy(stream1);
 
 #endif
 
@@ -662,7 +724,7 @@ void iniciarSimulacao(int idSimulacao, const double *parametros,
 
 #endif
 
-#ifdef __GPU__
+#if defined(__GPU__)
 
   cudaMemcpy(saidaQuantidadeTotal, saidaQuantidadeTotalDev,
              ciclos * COLUNAS_SAIDAS_QUANTIDADES * sizeof(int),
