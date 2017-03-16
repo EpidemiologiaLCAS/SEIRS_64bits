@@ -16,30 +16,42 @@
 #define INFECTADO 2
 #define RECUPERADO 3
 
-#define COLUNAS_SAIDAS_QUANTIDADES 6
+#define FEMININO 0
+#define MASCULINO 1
+
+#define CRIANCA 3
+#define JOVEM 2
+#define ADULTO 1
+#define IDOSO 0
+
+#define COLUNAS_SAIDAS_QUANTIDADES 34
 #define VEC(i, j, num_colunas) (((i) * (num_colunas)) + (j))
 
 #ifdef __CONVENCIONAL__
 
 #define TIPO_AGENTE int
 
-#define ATRIBUTOS_AGENTE 6
+#define ATRIBUTOS_AGENTE 8
 
 // Gets
 #define GET_Q(i) (int)(agentes[(i)*ATRIBUTOS_AGENTE + 0])
-#define GET_L(i) (int)(agentes[(i)*ATRIBUTOS_AGENTE + 1])
-#define GET_X(i) (int)(agentes[(i)*ATRIBUTOS_AGENTE + 2])
-#define GET_Y(i) (int)(agentes[(i)*ATRIBUTOS_AGENTE + 3])
-#define GET_C(i) (int)(agentes[(i)*ATRIBUTOS_AGENTE + 4])
-#define GET_E(i) (int)(agentes[(i)*ATRIBUTOS_AGENTE + 5])
+#define GET_S(i) (int)(agentes[(i)*ATRIBUTOS_AGENTE + 1])
+#define GET_I(i) (int)(agentes[(i)*ATRIBUTOS_AGENTE + 2])
+#define GET_L(i) (int)(agentes[(i)*ATRIBUTOS_AGENTE + 3])
+#define GET_X(i) (int)(agentes[(i)*ATRIBUTOS_AGENTE + 4])
+#define GET_Y(i) (int)(agentes[(i)*ATRIBUTOS_AGENTE + 5])
+#define GET_C(i) (int)(agentes[(i)*ATRIBUTOS_AGENTE + 6])
+#define GET_E(i) (int)(agentes[(i)*ATRIBUTOS_AGENTE + 7])
 
 // Sets
 #define SET_Q(i, novo) (agentes[(i)*ATRIBUTOS_AGENTE + 0] = (novo))
-#define SET_L(i, novo) (agentes[(i)*ATRIBUTOS_AGENTE + 1] = (novo))
-#define SET_X(i, novo) (agentes[(i)*ATRIBUTOS_AGENTE + 2] = (novo))
-#define SET_Y(i, novo) (agentes[(i)*ATRIBUTOS_AGENTE + 3] = (novo))
-#define SET_C(i, novo) (agentes[(i)*ATRIBUTOS_AGENTE + 4] = (novo))
-#define SET_E(i, novo) (agentes[(i)*ATRIBUTOS_AGENTE + 5] = (novo))
+#define SET_S(i, novo) (agentes[(i)*ATRIBUTOS_AGENTE + 1] = (novo))
+#define SET_I(i, novo) (agentes[(i)*ATRIBUTOS_AGENTE + 2] = (novo))
+#define SET_L(i, novo) (agentes[(i)*ATRIBUTOS_AGENTE + 3] = (novo))
+#define SET_X(i, novo) (agentes[(i)*ATRIBUTOS_AGENTE + 4] = (novo))
+#define SET_Y(i, novo) (agentes[(i)*ATRIBUTOS_AGENTE + 5] = (novo))
+#define SET_C(i, novo) (agentes[(i)*ATRIBUTOS_AGENTE + 6] = (novo))
+#define SET_E(i, novo) (agentes[(i)*ATRIBUTOS_AGENTE + 7] = (novo))
 
 #endif
 
@@ -52,7 +64,9 @@
 // Macros bitstring
 
 // Tamanho em bits dos campos:
-#define T_Q 8  // MAX = 256 valores
+#define T_Q 5  // MAX = 32 valores
+#define T_S 1  // MAX = 2 valores
+#define T_I 2  // MAX = 4 valores
 #define T_L 5  // MAX = 32 valores
 #define T_X 19 // MAX = 524288 valores
 #define T_Y 24 // MAX = 16777216 valores
@@ -60,7 +74,9 @@
 #define T_E 2  // MAX = 4 valores
 
 // Número de bits anteriores a cada campo:
-#define A_Q 56
+#define A_Q 59
+#define A_S 58
+#define A_I 56
 #define A_L 51
 #define A_X 32
 #define A_Y 8
@@ -69,14 +85,18 @@
 
 // Máscaras
 
-#define MA_Q (TIPO_AGENTE)18374686479671623680U
+#define MA_Q (TIPO_AGENTE)17870283321406128128U
+#define MA_S (TIPO_AGENTE)288230376151711744U
+#define MA_I (TIPO_AGENTE)216172782113783808U
 #define MA_L (TIPO_AGENTE)69805794224242688U
 #define MA_X (TIPO_AGENTE)2251795518717952U
 #define MA_Y (TIPO_AGENTE)4294967040U
 #define MA_C (TIPO_AGENTE)252U
 #define MA_E (TIPO_AGENTE)3U
 
-#define NM_Q (TIPO_AGENTE)72057594037927935U
+#define NM_Q (TIPO_AGENTE)576460752303423487U
+#define NM_S (TIPO_AGENTE)18158513697557839871U
+#define NM_I (TIPO_AGENTE)18230571291595767807U
 #define NM_L (TIPO_AGENTE)18376938279485308927U
 #define NM_X (TIPO_AGENTE)18444492278190833663U
 #define NM_Y (TIPO_AGENTE)18446744069414584575U
@@ -85,6 +105,8 @@
 
 // Gets
 #define GET_Q(i) (int)((agentes[i] & MA_Q) >> A_Q)
+#define GET_S(i) (int)((agentes[i] & MA_S) >> A_S)
+#define GET_I(i) (int)((agentes[i] & MA_I) >> A_I)
 #define GET_L(i) (int)((agentes[i] & MA_L) >> A_L)
 #define GET_X(i) (int)((agentes[i] & MA_X) >> A_X)
 #define GET_Y(i) (int)((agentes[i] & MA_Y) >> A_Y)
@@ -94,6 +116,10 @@
 // Sets
 #define SET_Q(i, novo)                                                         \
   (agentes[i] = ((agentes[i] & NM_Q) | (((TIPO_AGENTE)novo) << A_Q)))
+#define SET_S(i, novo)                                                         \
+  (agentes[i] = ((agentes[i] & NM_S) | (((TIPO_AGENTE)novo) << A_S)))
+#define SET_I(i, novo)                                                         \
+  (agentes[i] = ((agentes[i] & NM_I) | (((TIPO_AGENTE)novo) << A_I)))
 #define SET_L(i, novo)                                                         \
   (agentes[i] = ((agentes[i] & NM_L) | (((TIPO_AGENTE)novo) << A_L)))
 #define SET_X(i, novo)                                                         \
