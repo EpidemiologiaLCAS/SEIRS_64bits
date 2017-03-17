@@ -1,36 +1,36 @@
 Min;Max;Descricao
-0;0;Quantidade de Agentes Suscetiveis Crianca Masculino
-0;0;Quantidade de Agentes Expostos Crianca Masculino
-0;0;Quantidade de Agentes Infectados Crianca Masculino
-0;0;Quantidade de Agentes Recuperados Crianca Masculino
-0;0;Quantidade de Agentes Suscetiveis Crianca Feminino
-0;0;Quantidade de Agentes Expostos Crianca Feminino 
-0;0;Quantidade de Agentes Infectados Crianca Feminino
-0;0;Quantidade de Agentes Recuperados Crianca Feminino
-0;0;Quantidade de Agentes Suscetiveis Jovem Masculino
-0;0;Quantidade de Agentes Expostos Jovem Masculino
-0;0;Quantidade de Agentes Infectados Jovem Masculino
-0;0;Quantidade de Agentes Recuperados Jovem Masculino
-0;0;Quantidade de Agentes Suscetiveis Jovem Feminino
-0;0;Quantidade de Agentes Expostos Jovem Feminino
-0;0;Quantidade de Agentes Infectados Jovem Feminino
-0;0;Quantidade de Agentes Recuperados Jovem Feminino
-0;0;Quantidade de Agentes Suscetiveis Adulto Masculino
-0;0;Quantidade de Agentes Expostos Adulto Masculino
-0;0;Quantidade de Agentes Infectados Adulto Masculino
-0;0;Quantidade de Agentes Recuperados Adulto Masculino
-0;0;Quantidade de Agentes Suscetiveis Adulto Feminino
-0;0;Quantidade de Agentes Expostos Adulto Feminino
-0;0;Quantidade de Agentes Infectados Adulto Feminino
-0;0;Quantidade de Agentes Recuperados Adulto Feminino
-0;0;Quantidade de Agentes Suscetiveis Idoso Masculino
-0;0;Quantidade de Agentes Expostos Idoso Masculino
-0;0;Quantidade de Agentes Infectados Idoso Masculino
-0;0;Quantidade de Agentes Recuperados Idoso Masculino
-0;0;Quantidade de Agentes Suscetiveis Idoso Feminino
-0;0;Quantidade de Agentes Expostos Idoso Feminino
-0;0;Quantidade de Agentes Infectados Idoso Feminino
-0;0;Quantidade de Agentes Recuperados Idoso Feminino
+2;2;Quantidade de Agentes Suscetiveis Crianca Masculino
+2;2;Quantidade de Agentes Expostos Crianca Masculino
+2;2;Quantidade de Agentes Infectados Crianca Masculino
+2;2;Quantidade de Agentes Recuperados Crianca Masculino
+2;2;Quantidade de Agentes Suscetiveis Crianca Feminino
+2;2;Quantidade de Agentes Expostos Crianca Feminino 
+2;2;Quantidade de Agentes Infectados Crianca Feminino
+2;2;Quantidade de Agentes Recuperados Crianca Feminino
+2;2;Quantidade de Agentes Suscetiveis Jovem Masculino
+2;2;Quantidade de Agentes Expostos Jovem Masculino
+2;2;Quantidade de Agentes Infectados Jovem Masculino
+2;2;Quantidade de Agentes Recuperados Jovem Masculino
+2;2;Quantidade de Agentes Suscetiveis Jovem Feminino
+2;2;Quantidade de Agentes Expostos Jovem Feminino
+2;2;Quantidade de Agentes Infectados Jovem Feminino
+2;2;Quantidade de Agentes Recuperados Jovem Feminino
+2;2;Quantidade de Agentes Suscetiveis Adulto Masculino
+2;2;Quantidade de Agentes Expostos Adulto Masculino
+2;2;Quantidade de Agentes Infectados Adulto Masculino
+2;2;Quantidade de Agentes Recuperados Adulto Masculino
+2;2;Quantidade de Agentes Suscetiveis Adulto Feminino
+2;2;Quantidade de Agentes Expostos Adulto Feminino
+2;2;Quantidade de Agentes Infectados Adulto Feminino
+2;2;Quantidade de Agentes Recuperados Adulto Feminino
+2;2;Quantidade de Agentes Suscetiveis Idoso Masculino
+2;2;Quantidade de Agentes Expostos Idoso Masculino
+2;2;Quantidade de Agentes Infectados Idoso Masculino
+2;2;Quantidade de Agentes Recuperados Idoso Masculino
+2;2;Quantidade de Agentes Suscetiveis Idoso Feminino
+2;2;Quantidade de Agentes Expostos Idoso Feminino
+2;2;Quantidade de Agentes Infectados Idoso Feminino
+2;2;Quantidade de Agentes Recuperados Idoso Feminino
 0.90;0.95;Taxa de Infeccao Crianca
 15;20;Numero de Ciclos para Agente Exposto Crianca
 30;35;Numero de Ciclos para Agente Infectado Crianca
@@ -47,7 +47,7 @@ Min;Max;Descricao
 15;20;Numero de Ciclos para Agente Exposto Idoso
 30;35;Numero de Ciclos para Agente Infectado Idoso
 40;45;Numero de Ciclos para Agente Recuperado Idoso
-0.95;0.99;Taxa de Mobilidade para Agente Crianca
+0.50;0.60;Taxa de Mobilidade para Agente Crianca
 0.90;0.95;Taxa de Mobilidade para Agente Jovem
-0.80;0.90;Taxa de Mobilidade para Agente Adulto
-0.70;0.80;Taxa de Mobilidade para Agente Idoso
+0.95;0.99;Taxa de Mobilidade para Agente Adulto
+0.60;0.70;Taxa de Mobilidade para Agente Idoso

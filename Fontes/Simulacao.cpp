@@ -26,7 +26,7 @@ TIPO_AGENTE *criarAgentes(int quantAgentes, const double *parametros,
       int posicoesLote = (indexPosicoes[indexQuadras[2 * q] + l + 1] -
                           indexPosicoes[indexQuadras[2 * q] + l]) /
                          4;
-      suscetiveis = QUANTIDADE_HUMANOS_SUSCETIVEIS_CRIANCA_MASCULINO(l, q);
+      suscetiveis = QUANTIDADE_AGENTES_SUSCETIVEIS_CRIANCA_MASCULINO(l, q);
       for (int j = 0; j < suscetiveis; ++j) {
         p = ENTRE_FAIXA(0, posicoesLote, randomizarPercentual());
         x = posicoes[indexPosicoes[indexQuadras[q * 2] + l] + p * 4 + 0];
@@ -34,7 +34,7 @@ TIPO_AGENTE *criarAgentes(int quantAgentes, const double *parametros,
         inicializarAgente(agentes, i, SUSCETIVEL, x, y, l, q, MASCULINO, CRIANCA);
         i++;
       }
-      expostos = QUANTIDADE_HUMANOS_EXPOSTOS_CRIANCA_MASCULINO(l, q);
+      expostos = QUANTIDADE_AGENTES_EXPOSTOS_CRIANCA_MASCULINO(l, q);
       for (int j = 0; j < expostos; ++j) {
         p = ENTRE_FAIXA(0, posicoesLote, randomizarPercentual());
         x = posicoes[indexPosicoes[indexQuadras[q * 2] + l] + p * 4 + 0];
@@ -42,7 +42,7 @@ TIPO_AGENTE *criarAgentes(int quantAgentes, const double *parametros,
         inicializarAgente(agentes, i, EXPOSTO, x, y, l, q, MASCULINO, CRIANCA);
         i++;
       }
-      infectados = QUANTIDADE_HUMANOS_INFECTADOS_CRIANCA_MASCULINO(l, q);
+      infectados = QUANTIDADE_AGENTES_INFECTADOS_CRIANCA_MASCULINO(l, q);
       for (int j = 0; j < infectados; ++j) {
         p = ENTRE_FAIXA(0, posicoesLote, randomizarPercentual());
         x = posicoes[indexPosicoes[indexQuadras[q * 2] + l] + p * 4 + 0];
@@ -50,7 +50,7 @@ TIPO_AGENTE *criarAgentes(int quantAgentes, const double *parametros,
         inicializarAgente(agentes, i, INFECTADO, x, y, l, q, MASCULINO, CRIANCA);
         i++;
       }
-      recuperados = QUANTIDADE_HUMANOS_RECUPERADOS_CRIANCA_MASCULINO(l, q);
+      recuperados = QUANTIDADE_AGENTES_RECUPERADOS_CRIANCA_MASCULINO(l, q);
       for (int j = 0; j < recuperados; ++j) {
         p = ENTRE_FAIXA(0, posicoesLote, randomizarPercentual());
         x = posicoes[indexPosicoes[indexQuadras[q * 2] + l] + p * 4 + 0];
@@ -59,7 +59,7 @@ TIPO_AGENTE *criarAgentes(int quantAgentes, const double *parametros,
         i++;
       }
       
-      suscetiveis = QUANTIDADE_HUMANOS_SUSCETIVEIS_CRIANCA_FEMININO(l, q);
+      suscetiveis = QUANTIDADE_AGENTES_SUSCETIVEIS_CRIANCA_FEMININO(l, q);
       for (int j = 0; j < suscetiveis; ++j) {
         p = ENTRE_FAIXA(0, posicoesLote, randomizarPercentual());
         x = posicoes[indexPosicoes[indexQuadras[q * 2] + l] + p * 4 + 0];
@@ -67,7 +67,7 @@ TIPO_AGENTE *criarAgentes(int quantAgentes, const double *parametros,
         inicializarAgente(agentes, i, SUSCETIVEL, x, y, l, q, FEMININO, CRIANCA);
         i++;
       }
-      expostos = QUANTIDADE_HUMANOS_EXPOSTOS_CRIANCA_FEMININO(l, q);
+      expostos = QUANTIDADE_AGENTES_EXPOSTOS_CRIANCA_FEMININO(l, q);
       for (int j = 0; j < expostos; ++j) {
         p = ENTRE_FAIXA(0, posicoesLote, randomizarPercentual());
         x = posicoes[indexPosicoes[indexQuadras[q * 2] + l] + p * 4 + 0];
@@ -75,7 +75,7 @@ TIPO_AGENTE *criarAgentes(int quantAgentes, const double *parametros,
         inicializarAgente(agentes, i, EXPOSTO, x, y, l, q, FEMININO, CRIANCA);
         i++;
       }
-      infectados = QUANTIDADE_HUMANOS_INFECTADOS_CRIANCA_FEMININO(l, q);
+      infectados = QUANTIDADE_AGENTES_INFECTADOS_CRIANCA_FEMININO(l, q);
       for (int j = 0; j < infectados; ++j) {
         p = ENTRE_FAIXA(0, posicoesLote, randomizarPercentual());
         x = posicoes[indexPosicoes[indexQuadras[q * 2] + l] + p * 4 + 0];
@@ -83,7 +83,7 @@ TIPO_AGENTE *criarAgentes(int quantAgentes, const double *parametros,
         inicializarAgente(agentes, i, INFECTADO, x, y, l, q, FEMININO, CRIANCA);
         i++;
       }
-      recuperados = QUANTIDADE_HUMANOS_RECUPERADOS_CRIANCA_FEMININO(l, q);
+      recuperados = QUANTIDADE_AGENTES_RECUPERADOS_CRIANCA_FEMININO(l, q);
       for (int j = 0; j < recuperados; ++j) {
         p = ENTRE_FAIXA(0, posicoesLote, randomizarPercentual());
         x = posicoes[indexPosicoes[indexQuadras[q * 2] + l] + p * 4 + 0];
@@ -92,7 +92,7 @@ TIPO_AGENTE *criarAgentes(int quantAgentes, const double *parametros,
         i++;
       }
       
-      suscetiveis = QUANTIDADE_HUMANOS_SUSCETIVEIS_JOVEM_MASCULINO(l, q);
+      suscetiveis = QUANTIDADE_AGENTES_SUSCETIVEIS_JOVEM_MASCULINO(l, q);
       for (int j = 0; j < suscetiveis; ++j) {
         p = ENTRE_FAIXA(0, posicoesLote, randomizarPercentual());
         x = posicoes[indexPosicoes[indexQuadras[q * 2] + l] + p * 4 + 0];
@@ -100,7 +100,7 @@ TIPO_AGENTE *criarAgentes(int quantAgentes, const double *parametros,
         inicializarAgente(agentes, i, SUSCETIVEL, x, y, l, q, MASCULINO, JOVEM);
         i++;
       }
-      expostos = QUANTIDADE_HUMANOS_EXPOSTOS_JOVEM_MASCULINO(l, q);
+      expostos = QUANTIDADE_AGENTES_EXPOSTOS_JOVEM_MASCULINO(l, q);
       for (int j = 0; j < expostos; ++j) {
         p = ENTRE_FAIXA(0, posicoesLote, randomizarPercentual());
         x = posicoes[indexPosicoes[indexQuadras[q * 2] + l] + p * 4 + 0];
@@ -108,7 +108,7 @@ TIPO_AGENTE *criarAgentes(int quantAgentes, const double *parametros,
         inicializarAgente(agentes, i, EXPOSTO, x, y, l, q, MASCULINO, JOVEM);
         i++;
       }
-      infectados = QUANTIDADE_HUMANOS_INFECTADOS_JOVEM_MASCULINO(l, q);
+      infectados = QUANTIDADE_AGENTES_INFECTADOS_JOVEM_MASCULINO(l, q);
       for (int j = 0; j < infectados; ++j) {
         p = ENTRE_FAIXA(0, posicoesLote, randomizarPercentual());
         x = posicoes[indexPosicoes[indexQuadras[q * 2] + l] + p * 4 + 0];
@@ -116,7 +116,7 @@ TIPO_AGENTE *criarAgentes(int quantAgentes, const double *parametros,
         inicializarAgente(agentes, i, INFECTADO, x, y, l, q, MASCULINO, JOVEM);
         i++;
       }
-      recuperados = QUANTIDADE_HUMANOS_RECUPERADOS_JOVEM_MASCULINO(l, q);
+      recuperados = QUANTIDADE_AGENTES_RECUPERADOS_JOVEM_MASCULINO(l, q);
       for (int j = 0; j < recuperados; ++j) {
         p = ENTRE_FAIXA(0, posicoesLote, randomizarPercentual());
         x = posicoes[indexPosicoes[indexQuadras[q * 2] + l] + p * 4 + 0];
@@ -125,7 +125,7 @@ TIPO_AGENTE *criarAgentes(int quantAgentes, const double *parametros,
         i++;
       }
       
-      suscetiveis = QUANTIDADE_HUMANOS_SUSCETIVEIS_JOVEM_FEMININO(l, q);
+      suscetiveis = QUANTIDADE_AGENTES_SUSCETIVEIS_JOVEM_FEMININO(l, q);
       for (int j = 0; j < suscetiveis; ++j) {
         p = ENTRE_FAIXA(0, posicoesLote, randomizarPercentual());
         x = posicoes[indexPosicoes[indexQuadras[q * 2] + l] + p * 4 + 0];
@@ -133,7 +133,7 @@ TIPO_AGENTE *criarAgentes(int quantAgentes, const double *parametros,
         inicializarAgente(agentes, i, SUSCETIVEL, x, y, l, q, FEMININO, JOVEM);
         i++;
       }
-      expostos = QUANTIDADE_HUMANOS_EXPOSTOS_JOVEM_FEMININO(l, q);
+      expostos = QUANTIDADE_AGENTES_EXPOSTOS_JOVEM_FEMININO(l, q);
       for (int j = 0; j < expostos; ++j) {
         p = ENTRE_FAIXA(0, posicoesLote, randomizarPercentual());
         x = posicoes[indexPosicoes[indexQuadras[q * 2] + l] + p * 4 + 0];
@@ -141,7 +141,7 @@ TIPO_AGENTE *criarAgentes(int quantAgentes, const double *parametros,
         inicializarAgente(agentes, i, EXPOSTO, x, y, l, q, FEMININO, JOVEM);
         i++;
       }
-      infectados = QUANTIDADE_HUMANOS_INFECTADOS_JOVEM_FEMININO(l, q);
+      infectados = QUANTIDADE_AGENTES_INFECTADOS_JOVEM_FEMININO(l, q);
       for (int j = 0; j < infectados; ++j) {
         p = ENTRE_FAIXA(0, posicoesLote, randomizarPercentual());
         x = posicoes[indexPosicoes[indexQuadras[q * 2] + l] + p * 4 + 0];
@@ -149,7 +149,7 @@ TIPO_AGENTE *criarAgentes(int quantAgentes, const double *parametros,
         inicializarAgente(agentes, i, INFECTADO, x, y, l, q, FEMININO, JOVEM);
         i++;
       }
-      recuperados = QUANTIDADE_HUMANOS_RECUPERADOS_JOVEM_FEMININO(l, q);
+      recuperados = QUANTIDADE_AGENTES_RECUPERADOS_JOVEM_FEMININO(l, q);
       for (int j = 0; j < recuperados; ++j) {
         p = ENTRE_FAIXA(0, posicoesLote, randomizarPercentual());
         x = posicoes[indexPosicoes[indexQuadras[q * 2] + l] + p * 4 + 0];
@@ -158,7 +158,7 @@ TIPO_AGENTE *criarAgentes(int quantAgentes, const double *parametros,
         i++;
       }
       
-      suscetiveis = QUANTIDADE_HUMANOS_SUSCETIVEIS_ADULTO_MASCULINO(l, q);
+      suscetiveis = QUANTIDADE_AGENTES_SUSCETIVEIS_ADULTO_MASCULINO(l, q);
       for (int j = 0; j < suscetiveis; ++j) {
         p = ENTRE_FAIXA(0, posicoesLote, randomizarPercentual());
         x = posicoes[indexPosicoes[indexQuadras[q * 2] + l] + p * 4 + 0];
@@ -166,7 +166,7 @@ TIPO_AGENTE *criarAgentes(int quantAgentes, const double *parametros,
         inicializarAgente(agentes, i, SUSCETIVEL, x, y, l, q, MASCULINO, ADULTO);
         i++;
       }
-      expostos = QUANTIDADE_HUMANOS_EXPOSTOS_ADULTO_MASCULINO(l, q);
+      expostos = QUANTIDADE_AGENTES_EXPOSTOS_ADULTO_MASCULINO(l, q);
       for (int j = 0; j < expostos; ++j) {
         p = ENTRE_FAIXA(0, posicoesLote, randomizarPercentual());
         x = posicoes[indexPosicoes[indexQuadras[q * 2] + l] + p * 4 + 0];
@@ -174,7 +174,7 @@ TIPO_AGENTE *criarAgentes(int quantAgentes, const double *parametros,
         inicializarAgente(agentes, i, EXPOSTO, x, y, l, q, MASCULINO, ADULTO);
         i++;
       }
-      infectados = QUANTIDADE_HUMANOS_INFECTADOS_ADULTO_MASCULINO(l, q);
+      infectados = QUANTIDADE_AGENTES_INFECTADOS_ADULTO_MASCULINO(l, q);
       for (int j = 0; j < infectados; ++j) {
         p = ENTRE_FAIXA(0, posicoesLote, randomizarPercentual());
         x = posicoes[indexPosicoes[indexQuadras[q * 2] + l] + p * 4 + 0];
@@ -182,7 +182,7 @@ TIPO_AGENTE *criarAgentes(int quantAgentes, const double *parametros,
         inicializarAgente(agentes, i, INFECTADO, x, y, l, q, MASCULINO, ADULTO);
         i++;
       }
-      recuperados = QUANTIDADE_HUMANOS_RECUPERADOS_ADULTO_MASCULINO(l, q);
+      recuperados = QUANTIDADE_AGENTES_RECUPERADOS_ADULTO_MASCULINO(l, q);
       for (int j = 0; j < recuperados; ++j) {
         p = ENTRE_FAIXA(0, posicoesLote, randomizarPercentual());
         x = posicoes[indexPosicoes[indexQuadras[q * 2] + l] + p * 4 + 0];
@@ -191,7 +191,7 @@ TIPO_AGENTE *criarAgentes(int quantAgentes, const double *parametros,
         i++;
       }
       
-      suscetiveis = QUANTIDADE_HUMANOS_SUSCETIVEIS_ADULTO_FEMININO(l, q);
+      suscetiveis = QUANTIDADE_AGENTES_SUSCETIVEIS_ADULTO_FEMININO(l, q);
       for (int j = 0; j < suscetiveis; ++j) {
         p = ENTRE_FAIXA(0, posicoesLote, randomizarPercentual());
         x = posicoes[indexPosicoes[indexQuadras[q * 2] + l] + p * 4 + 0];
@@ -199,7 +199,7 @@ TIPO_AGENTE *criarAgentes(int quantAgentes, const double *parametros,
         inicializarAgente(agentes, i, SUSCETIVEL, x, y, l, q, FEMININO, ADULTO);
         i++;
       }
-      expostos = QUANTIDADE_HUMANOS_EXPOSTOS_ADULTO_FEMININO(l, q);
+      expostos = QUANTIDADE_AGENTES_EXPOSTOS_ADULTO_FEMININO(l, q);
       for (int j = 0; j < expostos; ++j) {
         p = ENTRE_FAIXA(0, posicoesLote, randomizarPercentual());
         x = posicoes[indexPosicoes[indexQuadras[q * 2] + l] + p * 4 + 0];
@@ -207,7 +207,7 @@ TIPO_AGENTE *criarAgentes(int quantAgentes, const double *parametros,
         inicializarAgente(agentes, i, EXPOSTO, x, y, l, q, FEMININO, ADULTO);
         i++;
       }
-      infectados = QUANTIDADE_HUMANOS_INFECTADOS_ADULTO_FEMININO(l, q);
+      infectados = QUANTIDADE_AGENTES_INFECTADOS_ADULTO_FEMININO(l, q);
       for (int j = 0; j < infectados; ++j) {
         p = ENTRE_FAIXA(0, posicoesLote, randomizarPercentual());
         x = posicoes[indexPosicoes[indexQuadras[q * 2] + l] + p * 4 + 0];
@@ -215,7 +215,7 @@ TIPO_AGENTE *criarAgentes(int quantAgentes, const double *parametros,
         inicializarAgente(agentes, i, INFECTADO, x, y, l, q, FEMININO, ADULTO);
         i++;
       }
-      recuperados = QUANTIDADE_HUMANOS_RECUPERADOS_ADULTO_FEMININO(l, q);
+      recuperados = QUANTIDADE_AGENTES_RECUPERADOS_ADULTO_FEMININO(l, q);
       for (int j = 0; j < recuperados; ++j) {
         p = ENTRE_FAIXA(0, posicoesLote, randomizarPercentual());
         x = posicoes[indexPosicoes[indexQuadras[q * 2] + l] + p * 4 + 0];
@@ -224,7 +224,7 @@ TIPO_AGENTE *criarAgentes(int quantAgentes, const double *parametros,
         i++;
       }
       
-      suscetiveis = QUANTIDADE_HUMANOS_SUSCETIVEIS_IDOSO_MASCULINO(l, q);
+      suscetiveis = QUANTIDADE_AGENTES_SUSCETIVEIS_IDOSO_MASCULINO(l, q);
       for (int j = 0; j < suscetiveis; ++j) {
         p = ENTRE_FAIXA(0, posicoesLote, randomizarPercentual());
         x = posicoes[indexPosicoes[indexQuadras[q * 2] + l] + p * 4 + 0];
@@ -232,7 +232,7 @@ TIPO_AGENTE *criarAgentes(int quantAgentes, const double *parametros,
         inicializarAgente(agentes, i, SUSCETIVEL, x, y, l, q, MASCULINO, IDOSO);
         i++;
       }
-      expostos = QUANTIDADE_HUMANOS_EXPOSTOS_IDOSO_MASCULINO(l, q);
+      expostos = QUANTIDADE_AGENTES_EXPOSTOS_IDOSO_MASCULINO(l, q);
       for (int j = 0; j < expostos; ++j) {
         p = ENTRE_FAIXA(0, posicoesLote, randomizarPercentual());
         x = posicoes[indexPosicoes[indexQuadras[q * 2] + l] + p * 4 + 0];
@@ -240,7 +240,7 @@ TIPO_AGENTE *criarAgentes(int quantAgentes, const double *parametros,
         inicializarAgente(agentes, i, EXPOSTO, x, y, l, q, MASCULINO, IDOSO);
         i++;
       }
-      infectados = QUANTIDADE_HUMANOS_INFECTADOS_IDOSO_MASCULINO(l, q);
+      infectados = QUANTIDADE_AGENTES_INFECTADOS_IDOSO_MASCULINO(l, q);
       for (int j = 0; j < infectados; ++j) {
         p = ENTRE_FAIXA(0, posicoesLote, randomizarPercentual());
         x = posicoes[indexPosicoes[indexQuadras[q * 2] + l] + p * 4 + 0];
@@ -248,7 +248,7 @@ TIPO_AGENTE *criarAgentes(int quantAgentes, const double *parametros,
         inicializarAgente(agentes, i, INFECTADO, x, y, l, q, MASCULINO, IDOSO);
         i++;
       }
-      recuperados = QUANTIDADE_HUMANOS_RECUPERADOS_IDOSO_MASCULINO(l, q);
+      recuperados = QUANTIDADE_AGENTES_RECUPERADOS_IDOSO_MASCULINO(l, q);
       for (int j = 0; j < recuperados; ++j) {
         p = ENTRE_FAIXA(0, posicoesLote, randomizarPercentual());
         x = posicoes[indexPosicoes[indexQuadras[q * 2] + l] + p * 4 + 0];
@@ -257,7 +257,7 @@ TIPO_AGENTE *criarAgentes(int quantAgentes, const double *parametros,
         i++;
       }
       
-      suscetiveis = QUANTIDADE_HUMANOS_SUSCETIVEIS_IDOSO_FEMININO(l, q);
+      suscetiveis = QUANTIDADE_AGENTES_SUSCETIVEIS_IDOSO_FEMININO(l, q);
       for (int j = 0; j < suscetiveis; ++j) {
         p = ENTRE_FAIXA(0, posicoesLote, randomizarPercentual());
         x = posicoes[indexPosicoes[indexQuadras[q * 2] + l] + p * 4 + 0];
@@ -265,7 +265,7 @@ TIPO_AGENTE *criarAgentes(int quantAgentes, const double *parametros,
         inicializarAgente(agentes, i, SUSCETIVEL, x, y, l, q, FEMININO, IDOSO);
         i++;
       }
-      expostos = QUANTIDADE_HUMANOS_EXPOSTOS_IDOSO_FEMININO(l, q);
+      expostos = QUANTIDADE_AGENTES_EXPOSTOS_IDOSO_FEMININO(l, q);
       for (int j = 0; j < expostos; ++j) {
         p = ENTRE_FAIXA(0, posicoesLote, randomizarPercentual());
         x = posicoes[indexPosicoes[indexQuadras[q * 2] + l] + p * 4 + 0];
@@ -273,7 +273,7 @@ TIPO_AGENTE *criarAgentes(int quantAgentes, const double *parametros,
         inicializarAgente(agentes, i, EXPOSTO, x, y, l, q, FEMININO, IDOSO);
         i++;
       }
-      infectados = QUANTIDADE_HUMANOS_INFECTADOS_IDOSO_FEMININO(l, q);
+      infectados = QUANTIDADE_AGENTES_INFECTADOS_IDOSO_FEMININO(l, q);
       for (int j = 0; j < infectados; ++j) {
         p = ENTRE_FAIXA(0, posicoesLote, randomizarPercentual());
         x = posicoes[indexPosicoes[indexQuadras[q * 2] + l] + p * 4 + 0];
@@ -281,7 +281,7 @@ TIPO_AGENTE *criarAgentes(int quantAgentes, const double *parametros,
         inicializarAgente(agentes, i, INFECTADO, x, y, l, q, FEMININO, IDOSO);
         i++;
       }
-      recuperados = QUANTIDADE_HUMANOS_RECUPERADOS_IDOSO_FEMININO(l, q);
+      recuperados = QUANTIDADE_AGENTES_RECUPERADOS_IDOSO_FEMININO(l, q);
       for (int j = 0; j < recuperados; ++j) {
         p = ENTRE_FAIXA(0, posicoesLote, randomizarPercentual());
         x = posicoes[indexPosicoes[indexQuadras[q * 2] + l] + p * 4 + 0];
@@ -299,41 +299,41 @@ int contarTotalAgentes(const int *quantLotes, int quantQuadras,
   int quantAgentes = 0;
   for (int j = 0; j < quantQuadras; ++j) {
     for (int i = 0; i < quantLotes[j]; ++i) {
-      quantAgentes += QUANTIDADE_HUMANOS_SUSCETIVEIS_CRIANCA_MASCULINO(i, j) +
-                      QUANTIDADE_HUMANOS_EXPOSTOS_CRIANCA_MASCULINO(i, j) +
-                      QUANTIDADE_HUMANOS_INFECTADOS_CRIANCA_MASCULINO(i, j) +
-                      QUANTIDADE_HUMANOS_RECUPERADOS_CRIANCA_MASCULINO(i, j) + 
-                      QUANTIDADE_HUMANOS_SUSCETIVEIS_CRIANCA_FEMININO(i, j) +
-                      QUANTIDADE_HUMANOS_EXPOSTOS_CRIANCA_FEMININO(i, j) +
-                      QUANTIDADE_HUMANOS_INFECTADOS_CRIANCA_FEMININO(i, j) +
-                      QUANTIDADE_HUMANOS_RECUPERADOS_CRIANCA_FEMININO(i, j) + 
+      quantAgentes += QUANTIDADE_AGENTES_SUSCETIVEIS_CRIANCA_MASCULINO(i, j) +
+                      QUANTIDADE_AGENTES_EXPOSTOS_CRIANCA_MASCULINO(i, j) +
+                      QUANTIDADE_AGENTES_INFECTADOS_CRIANCA_MASCULINO(i, j) +
+                      QUANTIDADE_AGENTES_RECUPERADOS_CRIANCA_MASCULINO(i, j) + 
+                      QUANTIDADE_AGENTES_SUSCETIVEIS_CRIANCA_FEMININO(i, j) +
+                      QUANTIDADE_AGENTES_EXPOSTOS_CRIANCA_FEMININO(i, j) +
+                      QUANTIDADE_AGENTES_INFECTADOS_CRIANCA_FEMININO(i, j) +
+                      QUANTIDADE_AGENTES_RECUPERADOS_CRIANCA_FEMININO(i, j) + 
                       
-                      QUANTIDADE_HUMANOS_SUSCETIVEIS_JOVEM_MASCULINO(i, j) +
-                      QUANTIDADE_HUMANOS_EXPOSTOS_JOVEM_MASCULINO(i, j) +
-                      QUANTIDADE_HUMANOS_INFECTADOS_JOVEM_MASCULINO(i, j) +
-                      QUANTIDADE_HUMANOS_RECUPERADOS_JOVEM_MASCULINO(i, j) + 
-                      QUANTIDADE_HUMANOS_SUSCETIVEIS_JOVEM_FEMININO(i, j) +
-                      QUANTIDADE_HUMANOS_EXPOSTOS_JOVEM_FEMININO(i, j) +
-                      QUANTIDADE_HUMANOS_INFECTADOS_JOVEM_FEMININO(i, j) +
-                      QUANTIDADE_HUMANOS_RECUPERADOS_JOVEM_FEMININO(i, j) + 
+                      QUANTIDADE_AGENTES_SUSCETIVEIS_JOVEM_MASCULINO(i, j) +
+                      QUANTIDADE_AGENTES_EXPOSTOS_JOVEM_MASCULINO(i, j) +
+                      QUANTIDADE_AGENTES_INFECTADOS_JOVEM_MASCULINO(i, j) +
+                      QUANTIDADE_AGENTES_RECUPERADOS_JOVEM_MASCULINO(i, j) + 
+                      QUANTIDADE_AGENTES_SUSCETIVEIS_JOVEM_FEMININO(i, j) +
+                      QUANTIDADE_AGENTES_EXPOSTOS_JOVEM_FEMININO(i, j) +
+                      QUANTIDADE_AGENTES_INFECTADOS_JOVEM_FEMININO(i, j) +
+                      QUANTIDADE_AGENTES_RECUPERADOS_JOVEM_FEMININO(i, j) + 
                       
-                      QUANTIDADE_HUMANOS_SUSCETIVEIS_ADULTO_MASCULINO(i, j) +
-                      QUANTIDADE_HUMANOS_EXPOSTOS_ADULTO_MASCULINO(i, j) +
-                      QUANTIDADE_HUMANOS_INFECTADOS_ADULTO_MASCULINO(i, j) +
-                      QUANTIDADE_HUMANOS_RECUPERADOS_ADULTO_MASCULINO(i, j) + 
-                      QUANTIDADE_HUMANOS_SUSCETIVEIS_ADULTO_FEMININO(i, j) +
-                      QUANTIDADE_HUMANOS_EXPOSTOS_ADULTO_FEMININO(i, j) +
-                      QUANTIDADE_HUMANOS_INFECTADOS_ADULTO_FEMININO(i, j) +
-                      QUANTIDADE_HUMANOS_RECUPERADOS_ADULTO_FEMININO(i, j) +
+                      QUANTIDADE_AGENTES_SUSCETIVEIS_ADULTO_MASCULINO(i, j) +
+                      QUANTIDADE_AGENTES_EXPOSTOS_ADULTO_MASCULINO(i, j) +
+                      QUANTIDADE_AGENTES_INFECTADOS_ADULTO_MASCULINO(i, j) +
+                      QUANTIDADE_AGENTES_RECUPERADOS_ADULTO_MASCULINO(i, j) + 
+                      QUANTIDADE_AGENTES_SUSCETIVEIS_ADULTO_FEMININO(i, j) +
+                      QUANTIDADE_AGENTES_EXPOSTOS_ADULTO_FEMININO(i, j) +
+                      QUANTIDADE_AGENTES_INFECTADOS_ADULTO_FEMININO(i, j) +
+                      QUANTIDADE_AGENTES_RECUPERADOS_ADULTO_FEMININO(i, j) +
                       
-                      QUANTIDADE_HUMANOS_SUSCETIVEIS_IDOSO_MASCULINO(i, j) +
-                      QUANTIDADE_HUMANOS_EXPOSTOS_IDOSO_MASCULINO(i, j) +
-                      QUANTIDADE_HUMANOS_INFECTADOS_IDOSO_MASCULINO(i, j) +
-                      QUANTIDADE_HUMANOS_RECUPERADOS_IDOSO_MASCULINO(i, j) + 
-                      QUANTIDADE_HUMANOS_SUSCETIVEIS_IDOSO_FEMININO(i, j) +
-                      QUANTIDADE_HUMANOS_EXPOSTOS_IDOSO_FEMININO(i, j) +
-                      QUANTIDADE_HUMANOS_INFECTADOS_IDOSO_FEMININO(i, j) +
-                      QUANTIDADE_HUMANOS_RECUPERADOS_IDOSO_FEMININO(i, j);
+                      QUANTIDADE_AGENTES_SUSCETIVEIS_IDOSO_MASCULINO(i, j) +
+                      QUANTIDADE_AGENTES_EXPOSTOS_IDOSO_MASCULINO(i, j) +
+                      QUANTIDADE_AGENTES_INFECTADOS_IDOSO_MASCULINO(i, j) +
+                      QUANTIDADE_AGENTES_RECUPERADOS_IDOSO_MASCULINO(i, j) + 
+                      QUANTIDADE_AGENTES_SUSCETIVEIS_IDOSO_FEMININO(i, j) +
+                      QUANTIDADE_AGENTES_EXPOSTOS_IDOSO_FEMININO(i, j) +
+                      QUANTIDADE_AGENTES_INFECTADOS_IDOSO_FEMININO(i, j) +
+                      QUANTIDADE_AGENTES_RECUPERADOS_IDOSO_FEMININO(i, j);
     }
   }
   return quantAgentes;
@@ -405,28 +405,28 @@ gerarSaidaQuantidadeQuadras(const TIPO_AGENTE *agentes, int quantAgentes,
   if (i < quantAgentes) {
     if (GET_S(i) == MASCULINO) {
       switch(GET_I(i)) {
-        case CRIANCA: atomicAdd(&saidaQuantidadeQuadras[VEC(ciclo, 1 + GET_E(i), COLUNAS_SAIDAS_QUANTIDADES)], 1);
+        case CRIANCA: atomicAdd(&saidaQuantidadeQuadras[indexSaidaQuantidadeQuadras[GET_Q(i)] + VEC(ciclo, 1 + GET_E(i), COLUNAS_SAIDAS_QUANTIDADES)], 1);
         break;
-        case JOVEM: atomicAdd(&saidaQuantidadeQuadras[VEC(ciclo, 5 + GET_E(i), COLUNAS_SAIDAS_QUANTIDADES)], 1);
+        case JOVEM: atomicAdd(&saidaQuantidadeQuadras[indexSaidaQuantidadeQuadras[GET_Q(i)] + VEC(ciclo, 5 + GET_E(i), COLUNAS_SAIDAS_QUANTIDADES)], 1);
         break;
-        case ADULTO: atomicAdd(&saidaQuantidadeQuadras[VEC(ciclo, 9 + GET_E(i), COLUNAS_SAIDAS_QUANTIDADES)], 1);
+        case ADULTO: atomicAdd(&saidaQuantidadeQuadras[indexSaidaQuantidadeQuadras[GET_Q(i)] + VEC(ciclo, 9 + GET_E(i), COLUNAS_SAIDAS_QUANTIDADES)], 1);
         break;
-        case IDOSO: atomicAdd(&saidaQuantidadeQuadras[VEC(ciclo, 13 + GET_E(i), COLUNAS_SAIDAS_QUANTIDADES)], 1);
+        case IDOSO: atomicAdd(&saidaQuantidadeQuadras[indexSaidaQuantidadeQuadras[GET_Q(i)] + VEC(ciclo, 13 + GET_E(i), COLUNAS_SAIDAS_QUANTIDADES)], 1);
         break;
       }
     } else {
       switch(GET_I(i)) {
-        case CRIANCA: atomicAdd(&saidaQuantidadeQuadras[VEC(ciclo, 17 + GET_E(i), COLUNAS_SAIDAS_QUANTIDADES)], 1);
+        case CRIANCA: atomicAdd(&saidaQuantidadeQuadras[indexSaidaQuantidadeQuadras[GET_Q(i)] + VEC(ciclo, 17 + GET_E(i), COLUNAS_SAIDAS_QUANTIDADES)], 1);
         break;
-        case JOVEM: atomicAdd(&saidaQuantidadeQuadras[VEC(ciclo, 21 + GET_E(i), COLUNAS_SAIDAS_QUANTIDADES)], 1);
+        case JOVEM: atomicAdd(&saidaQuantidadeQuadras[indexSaidaQuantidadeQuadras[GET_Q(i)] + VEC(ciclo, 21 + GET_E(i), COLUNAS_SAIDAS_QUANTIDADES)], 1);
         break;
-        case ADULTO: atomicAdd(&saidaQuantidadeQuadras[VEC(ciclo, 25 + GET_E(i), COLUNAS_SAIDAS_QUANTIDADES)], 1);
+        case ADULTO: atomicAdd(&saidaQuantidadeQuadras[indexSaidaQuantidadeQuadras[GET_Q(i)] + VEC(ciclo, 25 + GET_E(i), COLUNAS_SAIDAS_QUANTIDADES)], 1);
         break;
-        case IDOSO: atomicAdd(&saidaQuantidadeQuadras[VEC(ciclo, 29 + GET_E(i), COLUNAS_SAIDAS_QUANTIDADES)], 1);
+        case IDOSO: atomicAdd(&saidaQuantidadeQuadras[indexSaidaQuantidadeQuadras[GET_Q(i)] + VEC(ciclo, 29 + GET_E(i), COLUNAS_SAIDAS_QUANTIDADES)], 1);
         break;
       }
     }
-    atomicAdd(&saidaQuantidadeQuadras[VEC(ciclo, 33, COLUNAS_SAIDAS_QUANTIDADES)],
+    atomicAdd(&saidaQuantidadeQuadras[indexSaidaQuantidadeQuadras[GET_Q(i)] + VEC(ciclo, 33, COLUNAS_SAIDAS_QUANTIDADES)],
               1);
   }
 }
@@ -518,44 +518,44 @@ void gerarSaidaQuantidadeQuadras(const TIPO_AGENTE *agentes, int quantAgentes,
       switch(GET_I(i)) {
         case CRIANCA: {
           #pragma omp atomic
-          saidaQuantidadeQuadras[VEC(ciclo, 1 + GET_E(i), COLUNAS_SAIDAS_QUANTIDADES)]++;
+          saidaQuantidadeQuadras[indexSaidaQuantidadeQuadras[GET_Q(i)] + VEC(ciclo, 1 + GET_E(i), COLUNAS_SAIDAS_QUANTIDADES)]++;
         } break;
         case JOVEM: { 
           #pragma omp atomic
-          saidaQuantidadeQuadras[VEC(ciclo, 5 + GET_E(i), COLUNAS_SAIDAS_QUANTIDADES)]++;
+          saidaQuantidadeQuadras[indexSaidaQuantidadeQuadras[GET_Q(i)] + VEC(ciclo, 5 + GET_E(i), COLUNAS_SAIDAS_QUANTIDADES)]++;
         } break;
         case ADULTO: { 
           #pragma omp atomic
-          saidaQuantidadeQuadras[VEC(ciclo, 9 + GET_E(i), COLUNAS_SAIDAS_QUANTIDADES)]++;
+          saidaQuantidadeQuadras[indexSaidaQuantidadeQuadras[GET_Q(i)] + VEC(ciclo, 9 + GET_E(i), COLUNAS_SAIDAS_QUANTIDADES)]++;
         } break;
         case IDOSO: { 
           #pragma omp atomic
-          saidaQuantidadeQuadras[VEC(ciclo, 13 + GET_E(i), COLUNAS_SAIDAS_QUANTIDADES)]++;
+          saidaQuantidadeQuadras[indexSaidaQuantidadeQuadras[GET_Q(i)] + VEC(ciclo, 13 + GET_E(i), COLUNAS_SAIDAS_QUANTIDADES)]++;
         } break;
       }
     } else {
       switch(GET_I(i)) {
         case CRIANCA: { 
           #pragma omp atomic
-          saidaQuantidadeQuadras[VEC(ciclo, 17 + GET_E(i), COLUNAS_SAIDAS_QUANTIDADES)]++;
+          saidaQuantidadeQuadras[indexSaidaQuantidadeQuadras[GET_Q(i)] + VEC(ciclo, 17 + GET_E(i), COLUNAS_SAIDAS_QUANTIDADES)]++;
         } break;
         case JOVEM: {
           #pragma omp atomic
-          saidaQuantidadeQuadras[VEC(ciclo, 21 + GET_E(i), COLUNAS_SAIDAS_QUANTIDADES)]++;
+          saidaQuantidadeQuadras[indexSaidaQuantidadeQuadras[GET_Q(i)] + VEC(ciclo, 21 + GET_E(i), COLUNAS_SAIDAS_QUANTIDADES)]++;
         } break;
         case ADULTO: {
           #pragma omp atomic
-          saidaQuantidadeQuadras[VEC(ciclo, 25 + GET_E(i), COLUNAS_SAIDAS_QUANTIDADES)]++;
+          saidaQuantidadeQuadras[indexSaidaQuantidadeQuadras[GET_Q(i)] + VEC(ciclo, 25 + GET_E(i), COLUNAS_SAIDAS_QUANTIDADES)]++;
         } break;
         case IDOSO: {
           #pragma omp atomic
-          saidaQuantidadeQuadras[VEC(ciclo, 29 + GET_E(i), COLUNAS_SAIDAS_QUANTIDADES)]++;
+          saidaQuantidadeQuadras[indexSaidaQuantidadeQuadras[GET_Q(i)] + VEC(ciclo, 29 + GET_E(i), COLUNAS_SAIDAS_QUANTIDADES)]++;
         } break;
       }
     }
+    #pragma omp atomic
+    saidaQuantidadeQuadras[indexSaidaQuantidadeQuadras[GET_Q(i)] + VEC(ciclo, 33, COLUNAS_SAIDAS_QUANTIDADES)]++;
   }
-  #pragma omp atomic
-  saidaQuantidadeQuadras[VEC(ciclo, 33, COLUNAS_SAIDAS_QUANTIDADES)]++;
 }
 
 void gerarSaidaEspacial(const TIPO_AGENTE *agentes, int quantAgentes,
