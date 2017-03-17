@@ -5,14 +5,14 @@ from multiprocessing import Pool
 from pathlib import Path
 import matplotlib.pyplot as plt
 
-def criar_grafico(nome_arquivo):
+def criar_grafico(nome_arquivo, ind):
     with open(nome_arquivo, 'r') as arquivo:
         linhas = [linha.split(';') for linha in arquivo]
         x = [int(i[0]) for i in linhas]
-        s = [int(i[1]) for i in linhas]
-        e = [int(i[2]) for i in linhas]
-        i = [int(i[3]) for i in linhas]
-        r = [int(i[4]) for i in linhas]
+        s = [int(i[ind]) for i in linhas]
+        e = [int(i[ind + 1]) for i in linhas]
+        i = [int(i[ind + 2]) for i in linhas]
+        r = [int(i[ind + 3]) for i in linhas]
         plt.plot(x, s, color="green", label="S", linewidth=2)
         plt.plot(x, e, color="yellow", label="E", linewidth=2)
         plt.plot(x, i, color="red", label="I", linewidth=2)
@@ -20,9 +20,32 @@ def criar_grafico(nome_arquivo):
         plt.legend(loc="upper right")
 
 def plot(arquivo):
-    criar_grafico(str(arquivo.absolute()))
-    plt.savefig(str(arquivo.absolute()).replace(".csv", ".png"), dpi=400)
+    criar_grafico(str(arquivo.absolute()), 1)
+    plt.savefig(str(arquivo.absolute()).replace(".csv", "_Crianca_Masculino.png"), dpi=400)
     plt.close()
+    criar_grafico(str(arquivo.absolute()), 5)
+    plt.savefig(str(arquivo.absolute()).replace(".csv", "_Jovem_Masculino.png"), dpi=400)
+    plt.close()
+    criar_grafico(str(arquivo.absolute()), 9)
+    plt.savefig(str(arquivo.absolute()).replace(".csv", "_Adulto_Masculino.png"), dpi=400)
+    plt.close()
+    criar_grafico(str(arquivo.absolute()), 13)
+    plt.savefig(str(arquivo.absolute()).replace(".csv", "_Idoso_Masculino.png"), dpi=400)
+    plt.close()
+    
+    criar_grafico(str(arquivo.absolute()), 17)
+    plt.savefig(str(arquivo.absolute()).replace(".csv", "_Crianca_Feminino.png"), dpi=400)
+    plt.close()
+    criar_grafico(str(arquivo.absolute()), 21)
+    plt.savefig(str(arquivo.absolute()).replace(".csv", "_Jovem_Feminino.png"), dpi=400)
+    plt.close()
+    criar_grafico(str(arquivo.absolute()), 25)
+    plt.savefig(str(arquivo.absolute()).replace(".csv", "_Adulto_Feminino.png"), dpi=400)
+    plt.close()
+    criar_grafico(str(arquivo.absolute()), 29)
+    plt.savefig(str(arquivo.absolute()).replace(".csv", "_Idoso_Feminino.png"), dpi=400)
+    plt.close()
+    
 
 if len(argv) == 2:
     nome_arquivo = argv[1]
@@ -30,9 +53,7 @@ if len(argv) == 2:
         pool = Pool()
         pool.map(plot, Path(nome_arquivo).rglob('*.csv'))
     else:
-        criar_grafico(nome_arquivo)
-        plt.show()
-        plt.close()
+        plot(Path(nome_arquivo))
         
 else:
     print("Use:")
