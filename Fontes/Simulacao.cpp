@@ -31,7 +31,8 @@ TIPO_AGENTE *criarAgentes(int quantAgentes, const double *parametros,
         p = ENTRE_FAIXA(0, posicoesLote, randomizarPercentual());
         x = posicoes[indexPosicoes[indexQuadras[q * 2] + l] + p * 4 + 0];
         y = posicoes[indexPosicoes[indexQuadras[q * 2] + l] + p * 4 + 1];
-        inicializarAgente(agentes, i, SUSCETIVEL, x, y, l, q, MASCULINO, CRIANCA);
+        inicializarAgente(agentes, i, SUSCETIVEL, x, y, l, q, MASCULINO,
+                          CRIANCA);
         i++;
       }
       expostos = QUANTIDADE_AGENTES_EXPOSTOS_CRIANCA_MASCULINO(l, q);
@@ -47,7 +48,8 @@ TIPO_AGENTE *criarAgentes(int quantAgentes, const double *parametros,
         p = ENTRE_FAIXA(0, posicoesLote, randomizarPercentual());
         x = posicoes[indexPosicoes[indexQuadras[q * 2] + l] + p * 4 + 0];
         y = posicoes[indexPosicoes[indexQuadras[q * 2] + l] + p * 4 + 1];
-        inicializarAgente(agentes, i, INFECTADO, x, y, l, q, MASCULINO, CRIANCA);
+        inicializarAgente(agentes, i, INFECTADO, x, y, l, q, MASCULINO,
+                          CRIANCA);
         i++;
       }
       recuperados = QUANTIDADE_AGENTES_RECUPERADOS_CRIANCA_MASCULINO(l, q);
@@ -55,16 +57,18 @@ TIPO_AGENTE *criarAgentes(int quantAgentes, const double *parametros,
         p = ENTRE_FAIXA(0, posicoesLote, randomizarPercentual());
         x = posicoes[indexPosicoes[indexQuadras[q * 2] + l] + p * 4 + 0];
         y = posicoes[indexPosicoes[indexQuadras[q * 2] + l] + p * 4 + 1];
-        inicializarAgente(agentes, i, RECUPERADO, x, y, l, q, MASCULINO, CRIANCA);
+        inicializarAgente(agentes, i, RECUPERADO, x, y, l, q, MASCULINO,
+                          CRIANCA);
         i++;
       }
-      
+
       suscetiveis = QUANTIDADE_AGENTES_SUSCETIVEIS_CRIANCA_FEMININO(l, q);
       for (int j = 0; j < suscetiveis; ++j) {
         p = ENTRE_FAIXA(0, posicoesLote, randomizarPercentual());
         x = posicoes[indexPosicoes[indexQuadras[q * 2] + l] + p * 4 + 0];
         y = posicoes[indexPosicoes[indexQuadras[q * 2] + l] + p * 4 + 1];
-        inicializarAgente(agentes, i, SUSCETIVEL, x, y, l, q, FEMININO, CRIANCA);
+        inicializarAgente(agentes, i, SUSCETIVEL, x, y, l, q, FEMININO,
+                          CRIANCA);
         i++;
       }
       expostos = QUANTIDADE_AGENTES_EXPOSTOS_CRIANCA_FEMININO(l, q);
@@ -88,10 +92,11 @@ TIPO_AGENTE *criarAgentes(int quantAgentes, const double *parametros,
         p = ENTRE_FAIXA(0, posicoesLote, randomizarPercentual());
         x = posicoes[indexPosicoes[indexQuadras[q * 2] + l] + p * 4 + 0];
         y = posicoes[indexPosicoes[indexQuadras[q * 2] + l] + p * 4 + 1];
-        inicializarAgente(agentes, i, RECUPERADO, x, y, l, q, FEMININO, CRIANCA);
+        inicializarAgente(agentes, i, RECUPERADO, x, y, l, q, FEMININO,
+                          CRIANCA);
         i++;
       }
-      
+
       suscetiveis = QUANTIDADE_AGENTES_SUSCETIVEIS_JOVEM_MASCULINO(l, q);
       for (int j = 0; j < suscetiveis; ++j) {
         p = ENTRE_FAIXA(0, posicoesLote, randomizarPercentual());
@@ -124,7 +129,7 @@ TIPO_AGENTE *criarAgentes(int quantAgentes, const double *parametros,
         inicializarAgente(agentes, i, RECUPERADO, x, y, l, q, MASCULINO, JOVEM);
         i++;
       }
-      
+
       suscetiveis = QUANTIDADE_AGENTES_SUSCETIVEIS_JOVEM_FEMININO(l, q);
       for (int j = 0; j < suscetiveis; ++j) {
         p = ENTRE_FAIXA(0, posicoesLote, randomizarPercentual());
@@ -157,13 +162,14 @@ TIPO_AGENTE *criarAgentes(int quantAgentes, const double *parametros,
         inicializarAgente(agentes, i, RECUPERADO, x, y, l, q, FEMININO, JOVEM);
         i++;
       }
-      
+
       suscetiveis = QUANTIDADE_AGENTES_SUSCETIVEIS_ADULTO_MASCULINO(l, q);
       for (int j = 0; j < suscetiveis; ++j) {
         p = ENTRE_FAIXA(0, posicoesLote, randomizarPercentual());
         x = posicoes[indexPosicoes[indexQuadras[q * 2] + l] + p * 4 + 0];
         y = posicoes[indexPosicoes[indexQuadras[q * 2] + l] + p * 4 + 1];
-        inicializarAgente(agentes, i, SUSCETIVEL, x, y, l, q, MASCULINO, ADULTO);
+        inicializarAgente(agentes, i, SUSCETIVEL, x, y, l, q, MASCULINO,
+                          ADULTO);
         i++;
       }
       expostos = QUANTIDADE_AGENTES_EXPOSTOS_ADULTO_MASCULINO(l, q);
@@ -187,10 +193,11 @@ TIPO_AGENTE *criarAgentes(int quantAgentes, const double *parametros,
         p = ENTRE_FAIXA(0, posicoesLote, randomizarPercentual());
         x = posicoes[indexPosicoes[indexQuadras[q * 2] + l] + p * 4 + 0];
         y = posicoes[indexPosicoes[indexQuadras[q * 2] + l] + p * 4 + 1];
-        inicializarAgente(agentes, i, RECUPERADO, x, y, l, q, MASCULINO, ADULTO);
+        inicializarAgente(agentes, i, RECUPERADO, x, y, l, q, MASCULINO,
+                          ADULTO);
         i++;
       }
-      
+
       suscetiveis = QUANTIDADE_AGENTES_SUSCETIVEIS_ADULTO_FEMININO(l, q);
       for (int j = 0; j < suscetiveis; ++j) {
         p = ENTRE_FAIXA(0, posicoesLote, randomizarPercentual());
@@ -223,7 +230,7 @@ TIPO_AGENTE *criarAgentes(int quantAgentes, const double *parametros,
         inicializarAgente(agentes, i, RECUPERADO, x, y, l, q, FEMININO, ADULTO);
         i++;
       }
-      
+
       suscetiveis = QUANTIDADE_AGENTES_SUSCETIVEIS_IDOSO_MASCULINO(l, q);
       for (int j = 0; j < suscetiveis; ++j) {
         p = ENTRE_FAIXA(0, posicoesLote, randomizarPercentual());
@@ -256,7 +263,7 @@ TIPO_AGENTE *criarAgentes(int quantAgentes, const double *parametros,
         inicializarAgente(agentes, i, RECUPERADO, x, y, l, q, MASCULINO, IDOSO);
         i++;
       }
-      
+
       suscetiveis = QUANTIDADE_AGENTES_SUSCETIVEIS_IDOSO_FEMININO(l, q);
       for (int j = 0; j < suscetiveis; ++j) {
         p = ENTRE_FAIXA(0, posicoesLote, randomizarPercentual());
@@ -302,34 +309,34 @@ int contarTotalAgentes(const int *quantLotes, int quantQuadras,
       quantAgentes += QUANTIDADE_AGENTES_SUSCETIVEIS_CRIANCA_MASCULINO(i, j) +
                       QUANTIDADE_AGENTES_EXPOSTOS_CRIANCA_MASCULINO(i, j) +
                       QUANTIDADE_AGENTES_INFECTADOS_CRIANCA_MASCULINO(i, j) +
-                      QUANTIDADE_AGENTES_RECUPERADOS_CRIANCA_MASCULINO(i, j) + 
+                      QUANTIDADE_AGENTES_RECUPERADOS_CRIANCA_MASCULINO(i, j) +
                       QUANTIDADE_AGENTES_SUSCETIVEIS_CRIANCA_FEMININO(i, j) +
                       QUANTIDADE_AGENTES_EXPOSTOS_CRIANCA_FEMININO(i, j) +
                       QUANTIDADE_AGENTES_INFECTADOS_CRIANCA_FEMININO(i, j) +
-                      QUANTIDADE_AGENTES_RECUPERADOS_CRIANCA_FEMININO(i, j) + 
-                      
+                      QUANTIDADE_AGENTES_RECUPERADOS_CRIANCA_FEMININO(i, j) +
+
                       QUANTIDADE_AGENTES_SUSCETIVEIS_JOVEM_MASCULINO(i, j) +
                       QUANTIDADE_AGENTES_EXPOSTOS_JOVEM_MASCULINO(i, j) +
                       QUANTIDADE_AGENTES_INFECTADOS_JOVEM_MASCULINO(i, j) +
-                      QUANTIDADE_AGENTES_RECUPERADOS_JOVEM_MASCULINO(i, j) + 
+                      QUANTIDADE_AGENTES_RECUPERADOS_JOVEM_MASCULINO(i, j) +
                       QUANTIDADE_AGENTES_SUSCETIVEIS_JOVEM_FEMININO(i, j) +
                       QUANTIDADE_AGENTES_EXPOSTOS_JOVEM_FEMININO(i, j) +
                       QUANTIDADE_AGENTES_INFECTADOS_JOVEM_FEMININO(i, j) +
-                      QUANTIDADE_AGENTES_RECUPERADOS_JOVEM_FEMININO(i, j) + 
-                      
+                      QUANTIDADE_AGENTES_RECUPERADOS_JOVEM_FEMININO(i, j) +
+
                       QUANTIDADE_AGENTES_SUSCETIVEIS_ADULTO_MASCULINO(i, j) +
                       QUANTIDADE_AGENTES_EXPOSTOS_ADULTO_MASCULINO(i, j) +
                       QUANTIDADE_AGENTES_INFECTADOS_ADULTO_MASCULINO(i, j) +
-                      QUANTIDADE_AGENTES_RECUPERADOS_ADULTO_MASCULINO(i, j) + 
+                      QUANTIDADE_AGENTES_RECUPERADOS_ADULTO_MASCULINO(i, j) +
                       QUANTIDADE_AGENTES_SUSCETIVEIS_ADULTO_FEMININO(i, j) +
                       QUANTIDADE_AGENTES_EXPOSTOS_ADULTO_FEMININO(i, j) +
                       QUANTIDADE_AGENTES_INFECTADOS_ADULTO_FEMININO(i, j) +
                       QUANTIDADE_AGENTES_RECUPERADOS_ADULTO_FEMININO(i, j) +
-                      
+
                       QUANTIDADE_AGENTES_SUSCETIVEIS_IDOSO_MASCULINO(i, j) +
                       QUANTIDADE_AGENTES_EXPOSTOS_IDOSO_MASCULINO(i, j) +
                       QUANTIDADE_AGENTES_INFECTADOS_IDOSO_MASCULINO(i, j) +
-                      QUANTIDADE_AGENTES_RECUPERADOS_IDOSO_MASCULINO(i, j) + 
+                      QUANTIDADE_AGENTES_RECUPERADOS_IDOSO_MASCULINO(i, j) +
                       QUANTIDADE_AGENTES_SUSCETIVEIS_IDOSO_FEMININO(i, j) +
                       QUANTIDADE_AGENTES_EXPOSTOS_IDOSO_FEMININO(i, j) +
                       QUANTIDADE_AGENTES_INFECTADOS_IDOSO_FEMININO(i, j) +
@@ -366,29 +373,54 @@ void salvarSaidaEspacial(string pastaSaida, const int *saidaEspacial,
 
 __global__ void gerarSaidaQuantidadeTotal(const TIPO_AGENTE *agentes,
                                           int quantAgentes,
-                                          int *saidaQuantidadeTotal, int ciclo, int chunk) {
+                                          int *saidaQuantidadeTotal, int ciclo,
+                                          int chunk) {
   int i = (threadIdx.x + blockIdx.x * blockDim.x) + chunk;
   if (i < quantAgentes) {
     if (GET_S(i) == MASCULINO) {
-      switch(GET_I(i)) {
-        case CRIANCA: atomicAdd(&saidaQuantidadeTotal[VEC(ciclo, 1 + GET_E(i), COLUNAS_SAIDAS_QUANTIDADES)], 1);
+      switch (GET_I(i)) {
+      case CRIANCA:
+        atomicAdd(&saidaQuantidadeTotal[VEC(ciclo, 1 + GET_E(i),
+                                            COLUNAS_SAIDAS_QUANTIDADES)],
+                  1);
         break;
-        case JOVEM: atomicAdd(&saidaQuantidadeTotal[VEC(ciclo, 5 + GET_E(i), COLUNAS_SAIDAS_QUANTIDADES)], 1);
+      case JOVEM:
+        atomicAdd(&saidaQuantidadeTotal[VEC(ciclo, 5 + GET_E(i),
+                                            COLUNAS_SAIDAS_QUANTIDADES)],
+                  1);
         break;
-        case ADULTO: atomicAdd(&saidaQuantidadeTotal[VEC(ciclo, 9 + GET_E(i), COLUNAS_SAIDAS_QUANTIDADES)], 1);
+      case ADULTO:
+        atomicAdd(&saidaQuantidadeTotal[VEC(ciclo, 9 + GET_E(i),
+                                            COLUNAS_SAIDAS_QUANTIDADES)],
+                  1);
         break;
-        case IDOSO: atomicAdd(&saidaQuantidadeTotal[VEC(ciclo, 13 + GET_E(i), COLUNAS_SAIDAS_QUANTIDADES)], 1);
+      case IDOSO:
+        atomicAdd(&saidaQuantidadeTotal[VEC(ciclo, 13 + GET_E(i),
+                                            COLUNAS_SAIDAS_QUANTIDADES)],
+                  1);
         break;
       }
     } else {
-      switch(GET_I(i)) {
-        case CRIANCA: atomicAdd(&saidaQuantidadeTotal[VEC(ciclo, 17 + GET_E(i), COLUNAS_SAIDAS_QUANTIDADES)], 1);
+      switch (GET_I(i)) {
+      case CRIANCA:
+        atomicAdd(&saidaQuantidadeTotal[VEC(ciclo, 17 + GET_E(i),
+                                            COLUNAS_SAIDAS_QUANTIDADES)],
+                  1);
         break;
-        case JOVEM: atomicAdd(&saidaQuantidadeTotal[VEC(ciclo, 21 + GET_E(i), COLUNAS_SAIDAS_QUANTIDADES)], 1);
+      case JOVEM:
+        atomicAdd(&saidaQuantidadeTotal[VEC(ciclo, 21 + GET_E(i),
+                                            COLUNAS_SAIDAS_QUANTIDADES)],
+                  1);
         break;
-        case ADULTO: atomicAdd(&saidaQuantidadeTotal[VEC(ciclo, 25 + GET_E(i), COLUNAS_SAIDAS_QUANTIDADES)], 1);
+      case ADULTO:
+        atomicAdd(&saidaQuantidadeTotal[VEC(ciclo, 25 + GET_E(i),
+                                            COLUNAS_SAIDAS_QUANTIDADES)],
+                  1);
         break;
-        case IDOSO: atomicAdd(&saidaQuantidadeTotal[VEC(ciclo, 29 + GET_E(i), COLUNAS_SAIDAS_QUANTIDADES)], 1);
+      case IDOSO:
+        atomicAdd(&saidaQuantidadeTotal[VEC(ciclo, 29 + GET_E(i),
+                                            COLUNAS_SAIDAS_QUANTIDADES)],
+                  1);
         break;
       }
     }
@@ -404,30 +436,72 @@ gerarSaidaQuantidadeQuadras(const TIPO_AGENTE *agentes, int quantAgentes,
   int i = (threadIdx.x + blockIdx.x * blockDim.x) + chunk;
   if (i < quantAgentes) {
     if (GET_S(i) == MASCULINO) {
-      switch(GET_I(i)) {
-        case CRIANCA: atomicAdd(&saidaQuantidadeQuadras[indexSaidaQuantidadeQuadras[GET_Q(i)] + VEC(ciclo, 1 + GET_E(i), COLUNAS_SAIDAS_QUANTIDADES)], 1);
+      switch (GET_I(i)) {
+      case CRIANCA:
+        atomicAdd(
+            &saidaQuantidadeQuadras[indexSaidaQuantidadeQuadras[GET_Q(i)] +
+                                    VEC(ciclo, 1 + GET_E(i),
+                                        COLUNAS_SAIDAS_QUANTIDADES)],
+            1);
         break;
-        case JOVEM: atomicAdd(&saidaQuantidadeQuadras[indexSaidaQuantidadeQuadras[GET_Q(i)] + VEC(ciclo, 5 + GET_E(i), COLUNAS_SAIDAS_QUANTIDADES)], 1);
+      case JOVEM:
+        atomicAdd(
+            &saidaQuantidadeQuadras[indexSaidaQuantidadeQuadras[GET_Q(i)] +
+                                    VEC(ciclo, 5 + GET_E(i),
+                                        COLUNAS_SAIDAS_QUANTIDADES)],
+            1);
         break;
-        case ADULTO: atomicAdd(&saidaQuantidadeQuadras[indexSaidaQuantidadeQuadras[GET_Q(i)] + VEC(ciclo, 9 + GET_E(i), COLUNAS_SAIDAS_QUANTIDADES)], 1);
+      case ADULTO:
+        atomicAdd(
+            &saidaQuantidadeQuadras[indexSaidaQuantidadeQuadras[GET_Q(i)] +
+                                    VEC(ciclo, 9 + GET_E(i),
+                                        COLUNAS_SAIDAS_QUANTIDADES)],
+            1);
         break;
-        case IDOSO: atomicAdd(&saidaQuantidadeQuadras[indexSaidaQuantidadeQuadras[GET_Q(i)] + VEC(ciclo, 13 + GET_E(i), COLUNAS_SAIDAS_QUANTIDADES)], 1);
+      case IDOSO:
+        atomicAdd(
+            &saidaQuantidadeQuadras[indexSaidaQuantidadeQuadras[GET_Q(i)] +
+                                    VEC(ciclo, 13 + GET_E(i),
+                                        COLUNAS_SAIDAS_QUANTIDADES)],
+            1);
         break;
       }
     } else {
-      switch(GET_I(i)) {
-        case CRIANCA: atomicAdd(&saidaQuantidadeQuadras[indexSaidaQuantidadeQuadras[GET_Q(i)] + VEC(ciclo, 17 + GET_E(i), COLUNAS_SAIDAS_QUANTIDADES)], 1);
+      switch (GET_I(i)) {
+      case CRIANCA:
+        atomicAdd(
+            &saidaQuantidadeQuadras[indexSaidaQuantidadeQuadras[GET_Q(i)] +
+                                    VEC(ciclo, 17 + GET_E(i),
+                                        COLUNAS_SAIDAS_QUANTIDADES)],
+            1);
         break;
-        case JOVEM: atomicAdd(&saidaQuantidadeQuadras[indexSaidaQuantidadeQuadras[GET_Q(i)] + VEC(ciclo, 21 + GET_E(i), COLUNAS_SAIDAS_QUANTIDADES)], 1);
+      case JOVEM:
+        atomicAdd(
+            &saidaQuantidadeQuadras[indexSaidaQuantidadeQuadras[GET_Q(i)] +
+                                    VEC(ciclo, 21 + GET_E(i),
+                                        COLUNAS_SAIDAS_QUANTIDADES)],
+            1);
         break;
-        case ADULTO: atomicAdd(&saidaQuantidadeQuadras[indexSaidaQuantidadeQuadras[GET_Q(i)] + VEC(ciclo, 25 + GET_E(i), COLUNAS_SAIDAS_QUANTIDADES)], 1);
+      case ADULTO:
+        atomicAdd(
+            &saidaQuantidadeQuadras[indexSaidaQuantidadeQuadras[GET_Q(i)] +
+                                    VEC(ciclo, 25 + GET_E(i),
+                                        COLUNAS_SAIDAS_QUANTIDADES)],
+            1);
         break;
-        case IDOSO: atomicAdd(&saidaQuantidadeQuadras[indexSaidaQuantidadeQuadras[GET_Q(i)] + VEC(ciclo, 29 + GET_E(i), COLUNAS_SAIDAS_QUANTIDADES)], 1);
+      case IDOSO:
+        atomicAdd(
+            &saidaQuantidadeQuadras[indexSaidaQuantidadeQuadras[GET_Q(i)] +
+                                    VEC(ciclo, 29 + GET_E(i),
+                                        COLUNAS_SAIDAS_QUANTIDADES)],
+            1);
         break;
       }
     }
-    atomicAdd(&saidaQuantidadeQuadras[indexSaidaQuantidadeQuadras[GET_Q(i)] + VEC(ciclo, 33, COLUNAS_SAIDAS_QUANTIDADES)],
-              1);
+    atomicAdd(
+        &saidaQuantidadeQuadras[indexSaidaQuantidadeQuadras[GET_Q(i)] +
+                                VEC(ciclo, 33, COLUNAS_SAIDAS_QUANTIDADES)],
+        1);
   }
 }
 
@@ -466,45 +540,53 @@ void gerarSaidaQuantidadeTotal(const TIPO_AGENTE *agentes, int quantAgentes,
 #pragma omp parallel for
   for (int i = 0; i < quantAgentes; i++) {
     if (GET_S(i) == MASCULINO) {
-      switch(GET_I(i)) {
-        case CRIANCA: {
-          #pragma omp atomic
-          saidaQuantidadeTotal[VEC(ciclo, 1 + GET_E(i), COLUNAS_SAIDAS_QUANTIDADES)]++;
-        } break;
-        case JOVEM: { 
-          #pragma omp atomic
-          saidaQuantidadeTotal[VEC(ciclo, 5 + GET_E(i), COLUNAS_SAIDAS_QUANTIDADES)]++;
-        } break;
-        case ADULTO: { 
-          #pragma omp atomic
-          saidaQuantidadeTotal[VEC(ciclo, 9 + GET_E(i), COLUNAS_SAIDAS_QUANTIDADES)]++;
-        } break;
-        case IDOSO: { 
-          #pragma omp atomic
-          saidaQuantidadeTotal[VEC(ciclo, 13 + GET_E(i), COLUNAS_SAIDAS_QUANTIDADES)]++;
-        } break;
+      switch (GET_I(i)) {
+      case CRIANCA: {
+#pragma omp atomic
+        saidaQuantidadeTotal[VEC(ciclo, 1 + GET_E(i),
+                                 COLUNAS_SAIDAS_QUANTIDADES)]++;
+      } break;
+      case JOVEM: {
+#pragma omp atomic
+        saidaQuantidadeTotal[VEC(ciclo, 5 + GET_E(i),
+                                 COLUNAS_SAIDAS_QUANTIDADES)]++;
+      } break;
+      case ADULTO: {
+#pragma omp atomic
+        saidaQuantidadeTotal[VEC(ciclo, 9 + GET_E(i),
+                                 COLUNAS_SAIDAS_QUANTIDADES)]++;
+      } break;
+      case IDOSO: {
+#pragma omp atomic
+        saidaQuantidadeTotal[VEC(ciclo, 13 + GET_E(i),
+                                 COLUNAS_SAIDAS_QUANTIDADES)]++;
+      } break;
       }
     } else {
-      switch(GET_I(i)) {
-        case CRIANCA: { 
-          #pragma omp atomic
-          saidaQuantidadeTotal[VEC(ciclo, 17 + GET_E(i), COLUNAS_SAIDAS_QUANTIDADES)]++;
-        } break;
-        case JOVEM: {
-          #pragma omp atomic
-          saidaQuantidadeTotal[VEC(ciclo, 21 + GET_E(i), COLUNAS_SAIDAS_QUANTIDADES)]++;
-        } break;
-        case ADULTO: {
-          #pragma omp atomic
-          saidaQuantidadeTotal[VEC(ciclo, 25 + GET_E(i), COLUNAS_SAIDAS_QUANTIDADES)]++;
-        } break;
-        case IDOSO: {
-          #pragma omp atomic
-          saidaQuantidadeTotal[VEC(ciclo, 29 + GET_E(i), COLUNAS_SAIDAS_QUANTIDADES)]++;
-        } break;
+      switch (GET_I(i)) {
+      case CRIANCA: {
+#pragma omp atomic
+        saidaQuantidadeTotal[VEC(ciclo, 17 + GET_E(i),
+                                 COLUNAS_SAIDAS_QUANTIDADES)]++;
+      } break;
+      case JOVEM: {
+#pragma omp atomic
+        saidaQuantidadeTotal[VEC(ciclo, 21 + GET_E(i),
+                                 COLUNAS_SAIDAS_QUANTIDADES)]++;
+      } break;
+      case ADULTO: {
+#pragma omp atomic
+        saidaQuantidadeTotal[VEC(ciclo, 25 + GET_E(i),
+                                 COLUNAS_SAIDAS_QUANTIDADES)]++;
+      } break;
+      case IDOSO: {
+#pragma omp atomic
+        saidaQuantidadeTotal[VEC(ciclo, 29 + GET_E(i),
+                                 COLUNAS_SAIDAS_QUANTIDADES)]++;
+      } break;
       }
     }
-    #pragma omp atomic
+#pragma omp atomic
     saidaQuantidadeTotal[VEC(ciclo, 33, COLUNAS_SAIDAS_QUANTIDADES)]++;
   }
 }
@@ -515,46 +597,63 @@ void gerarSaidaQuantidadeQuadras(const TIPO_AGENTE *agentes, int quantAgentes,
 #pragma omp parallel for
   for (int i = 0; i < quantAgentes; i++) {
     if (GET_S(i) == MASCULINO) {
-      switch(GET_I(i)) {
-        case CRIANCA: {
-          #pragma omp atomic
-          saidaQuantidadeQuadras[indexSaidaQuantidadeQuadras[GET_Q(i)] + VEC(ciclo, 1 + GET_E(i), COLUNAS_SAIDAS_QUANTIDADES)]++;
-        } break;
-        case JOVEM: { 
-          #pragma omp atomic
-          saidaQuantidadeQuadras[indexSaidaQuantidadeQuadras[GET_Q(i)] + VEC(ciclo, 5 + GET_E(i), COLUNAS_SAIDAS_QUANTIDADES)]++;
-        } break;
-        case ADULTO: { 
-          #pragma omp atomic
-          saidaQuantidadeQuadras[indexSaidaQuantidadeQuadras[GET_Q(i)] + VEC(ciclo, 9 + GET_E(i), COLUNAS_SAIDAS_QUANTIDADES)]++;
-        } break;
-        case IDOSO: { 
-          #pragma omp atomic
-          saidaQuantidadeQuadras[indexSaidaQuantidadeQuadras[GET_Q(i)] + VEC(ciclo, 13 + GET_E(i), COLUNAS_SAIDAS_QUANTIDADES)]++;
-        } break;
+      switch (GET_I(i)) {
+      case CRIANCA: {
+#pragma omp atomic
+        saidaQuantidadeQuadras[indexSaidaQuantidadeQuadras[GET_Q(i)] +
+                               VEC(ciclo, 1 + GET_E(i),
+                                   COLUNAS_SAIDAS_QUANTIDADES)]++;
+      } break;
+      case JOVEM: {
+#pragma omp atomic
+        saidaQuantidadeQuadras[indexSaidaQuantidadeQuadras[GET_Q(i)] +
+                               VEC(ciclo, 5 + GET_E(i),
+                                   COLUNAS_SAIDAS_QUANTIDADES)]++;
+      } break;
+      case ADULTO: {
+#pragma omp atomic
+        saidaQuantidadeQuadras[indexSaidaQuantidadeQuadras[GET_Q(i)] +
+                               VEC(ciclo, 9 + GET_E(i),
+                                   COLUNAS_SAIDAS_QUANTIDADES)]++;
+      } break;
+      case IDOSO: {
+#pragma omp atomic
+        saidaQuantidadeQuadras[indexSaidaQuantidadeQuadras[GET_Q(i)] +
+                               VEC(ciclo, 13 + GET_E(i),
+                                   COLUNAS_SAIDAS_QUANTIDADES)]++;
+      } break;
       }
     } else {
-      switch(GET_I(i)) {
-        case CRIANCA: { 
-          #pragma omp atomic
-          saidaQuantidadeQuadras[indexSaidaQuantidadeQuadras[GET_Q(i)] + VEC(ciclo, 17 + GET_E(i), COLUNAS_SAIDAS_QUANTIDADES)]++;
-        } break;
-        case JOVEM: {
-          #pragma omp atomic
-          saidaQuantidadeQuadras[indexSaidaQuantidadeQuadras[GET_Q(i)] + VEC(ciclo, 21 + GET_E(i), COLUNAS_SAIDAS_QUANTIDADES)]++;
-        } break;
-        case ADULTO: {
-          #pragma omp atomic
-          saidaQuantidadeQuadras[indexSaidaQuantidadeQuadras[GET_Q(i)] + VEC(ciclo, 25 + GET_E(i), COLUNAS_SAIDAS_QUANTIDADES)]++;
-        } break;
-        case IDOSO: {
-          #pragma omp atomic
-          saidaQuantidadeQuadras[indexSaidaQuantidadeQuadras[GET_Q(i)] + VEC(ciclo, 29 + GET_E(i), COLUNAS_SAIDAS_QUANTIDADES)]++;
-        } break;
+      switch (GET_I(i)) {
+      case CRIANCA: {
+#pragma omp atomic
+        saidaQuantidadeQuadras[indexSaidaQuantidadeQuadras[GET_Q(i)] +
+                               VEC(ciclo, 17 + GET_E(i),
+                                   COLUNAS_SAIDAS_QUANTIDADES)]++;
+      } break;
+      case JOVEM: {
+#pragma omp atomic
+        saidaQuantidadeQuadras[indexSaidaQuantidadeQuadras[GET_Q(i)] +
+                               VEC(ciclo, 21 + GET_E(i),
+                                   COLUNAS_SAIDAS_QUANTIDADES)]++;
+      } break;
+      case ADULTO: {
+#pragma omp atomic
+        saidaQuantidadeQuadras[indexSaidaQuantidadeQuadras[GET_Q(i)] +
+                               VEC(ciclo, 25 + GET_E(i),
+                                   COLUNAS_SAIDAS_QUANTIDADES)]++;
+      } break;
+      case IDOSO: {
+#pragma omp atomic
+        saidaQuantidadeQuadras[indexSaidaQuantidadeQuadras[GET_Q(i)] +
+                               VEC(ciclo, 29 + GET_E(i),
+                                   COLUNAS_SAIDAS_QUANTIDADES)]++;
+      } break;
       }
     }
-    #pragma omp atomic
-    saidaQuantidadeQuadras[indexSaidaQuantidadeQuadras[GET_Q(i)] + VEC(ciclo, 33, COLUNAS_SAIDAS_QUANTIDADES)]++;
+#pragma omp atomic
+    saidaQuantidadeQuadras[indexSaidaQuantidadeQuadras[GET_Q(i)] +
+                           VEC(ciclo, 33, COLUNAS_SAIDAS_QUANTIDADES)]++;
   }
 }
 
@@ -602,14 +701,18 @@ __global__ void movimentacao(curandState *seeds, TIPO_AGENTE *agentes,
     int x = GET_X(id);
     int y = GET_Y(id);
     double taxa;
-    switch(GET_I(id)) {
-      case CRIANCA: taxa = TAXA_MOBILIDADE_CRIANCA(l, q, curand_uniform_double(&seeds[id]));
+    switch (GET_I(id)) {
+    case CRIANCA:
+      taxa = TAXA_MOBILIDADE_CRIANCA(l, q, curand_uniform_double(&seeds[id]));
       break;
-      case JOVEM: taxa = TAXA_MOBILIDADE_JOVEM(l, q, curand_uniform_double(&seeds[id]));
+    case JOVEM:
+      taxa = TAXA_MOBILIDADE_JOVEM(l, q, curand_uniform_double(&seeds[id]));
       break;
-      case ADULTO: taxa = TAXA_MOBILIDADE_ADULTO(l, q, curand_uniform_double(&seeds[id]));
+    case ADULTO:
+      taxa = TAXA_MOBILIDADE_ADULTO(l, q, curand_uniform_double(&seeds[id]));
       break;
-      case IDOSO: taxa = TAXA_MOBILIDADE_IDOSO(l, q, curand_uniform_double(&seeds[id]));
+    case IDOSO:
+      taxa = TAXA_MOBILIDADE_IDOSO(l, q, curand_uniform_double(&seeds[id]));
       break;
     }
     if (curand_uniform_double(&seeds[id]) <= taxa) {
@@ -652,7 +755,8 @@ __global__ void contato(curandState *seeds, TIPO_AGENTE *agentes,
                         int quantAgentes, const int *quantLotes,
                         int quantQuadras, const double *parametros,
                         const int *indexParametros, const int *indexQuadras,
-                        const int *indexPosicoes, const int *posicoes, int chunk) {
+                        const int *indexPosicoes, const int *posicoes,
+                        int chunk) {
   int pos = (threadIdx.x + blockIdx.x * blockDim.x) + chunk;
   if (pos < indexPosicoes[indexQuadras[quantQuadras * 2 - 1]] / 4) {
     int x = posicoes[pos * 4 + 0];
@@ -676,18 +780,25 @@ __global__ void contato(curandState *seeds, TIPO_AGENTE *agentes,
         if (GET_Q(i) == q && GET_L(i) == l && GET_X(i) == x && GET_Y(i) == y) {
           if (GET_E(i) == SUSCETIVEL) {
             double taxa;
-            switch(GET_I(i)) {
-              case CRIANCA: taxa = TAXA_INFECCAO_CRIANCA(l, q, curand_uniform_double(&seeds[pos]));
+            switch (GET_I(i)) {
+            case CRIANCA:
+              taxa = TAXA_INFECCAO_CRIANCA(l, q,
+                                           curand_uniform_double(&seeds[pos]));
               break;
-              case JOVEM: taxa = TAXA_INFECCAO_JOVEM(l, q, curand_uniform_double(&seeds[pos]));
+            case JOVEM:
+              taxa =
+                  TAXA_INFECCAO_JOVEM(l, q, curand_uniform_double(&seeds[pos]));
               break;
-              case ADULTO: taxa = TAXA_INFECCAO_ADULTO(l, q, curand_uniform_double(&seeds[pos]));
+            case ADULTO:
+              taxa = TAXA_INFECCAO_ADULTO(l, q,
+                                          curand_uniform_double(&seeds[pos]));
               break;
-              case IDOSO: taxa = TAXA_INFECCAO_IDOSO(l, q, curand_uniform_double(&seeds[pos]));
+            case IDOSO:
+              taxa =
+                  TAXA_INFECCAO_IDOSO(l, q, curand_uniform_double(&seeds[pos]));
               break;
             }
-            if (curand_uniform_double(&seeds[pos]) <=
-                taxa) {
+            if (curand_uniform_double(&seeds[pos]) <= taxa) {
               SET_E(i, EXPOSTO);
             }
           }
@@ -708,14 +819,22 @@ __global__ void transicao(curandState *seeds, TIPO_AGENTE *agentes,
     switch (GET_E(i)) {
     case EXPOSTO: {
       double periodo;
-      switch(GET_I(i)) {
-        case CRIANCA: periodo = PERIODO_EXPOSTO_CRIANCA(idLote, idQuadra, curand_uniform_double(&seeds[i]));
+      switch (GET_I(i)) {
+      case CRIANCA:
+        periodo = PERIODO_EXPOSTO_CRIANCA(idLote, idQuadra,
+                                          curand_uniform_double(&seeds[i]));
         break;
-        case JOVEM: periodo = PERIODO_EXPOSTO_JOVEM(idLote, idQuadra, curand_uniform_double(&seeds[i]));
+      case JOVEM:
+        periodo = PERIODO_EXPOSTO_JOVEM(idLote, idQuadra,
+                                        curand_uniform_double(&seeds[i]));
         break;
-        case ADULTO: periodo = PERIODO_EXPOSTO_ADULTO(idLote, idQuadra, curand_uniform_double(&seeds[i]));
+      case ADULTO:
+        periodo = PERIODO_EXPOSTO_ADULTO(idLote, idQuadra,
+                                         curand_uniform_double(&seeds[i]));
         break;
-        case IDOSO: periodo = PERIODO_EXPOSTO_IDOSO(idLote, idQuadra, curand_uniform_double(&seeds[i]));
+      case IDOSO:
+        periodo = PERIODO_EXPOSTO_IDOSO(idLote, idQuadra,
+                                        curand_uniform_double(&seeds[i]));
         break;
       }
       if (c >= periodo) {
@@ -727,14 +846,22 @@ __global__ void transicao(curandState *seeds, TIPO_AGENTE *agentes,
     } break;
     case INFECTADO: {
       double periodo;
-      switch(GET_I(i)) {
-        case CRIANCA: periodo = PERIODO_INFECTADO_CRIANCA(idLote, idQuadra, curand_uniform_double(&seeds[i]));
+      switch (GET_I(i)) {
+      case CRIANCA:
+        periodo = PERIODO_INFECTADO_CRIANCA(idLote, idQuadra,
+                                            curand_uniform_double(&seeds[i]));
         break;
-        case JOVEM: periodo = PERIODO_INFECTADO_JOVEM(idLote, idQuadra, curand_uniform_double(&seeds[i]));
+      case JOVEM:
+        periodo = PERIODO_INFECTADO_JOVEM(idLote, idQuadra,
+                                          curand_uniform_double(&seeds[i]));
         break;
-        case ADULTO: periodo = PERIODO_INFECTADO_ADULTO(idLote, idQuadra, curand_uniform_double(&seeds[i]));
+      case ADULTO:
+        periodo = PERIODO_INFECTADO_ADULTO(idLote, idQuadra,
+                                           curand_uniform_double(&seeds[i]));
         break;
-        case IDOSO: periodo = PERIODO_INFECTADO_IDOSO(idLote, idQuadra, curand_uniform_double(&seeds[i]));
+      case IDOSO:
+        periodo = PERIODO_INFECTADO_IDOSO(idLote, idQuadra,
+                                          curand_uniform_double(&seeds[i]));
         break;
       }
       if (c >= periodo) {
@@ -746,14 +873,22 @@ __global__ void transicao(curandState *seeds, TIPO_AGENTE *agentes,
     } break;
     case RECUPERADO: {
       double periodo;
-      switch(GET_I(i)) {
-        case CRIANCA: periodo = PERIODO_RECUPERADO_CRIANCA(idLote, idQuadra, curand_uniform_double(&seeds[i]));
+      switch (GET_I(i)) {
+      case CRIANCA:
+        periodo = PERIODO_RECUPERADO_CRIANCA(idLote, idQuadra,
+                                             curand_uniform_double(&seeds[i]));
         break;
-        case JOVEM: periodo = PERIODO_RECUPERADO_JOVEM(idLote, idQuadra, curand_uniform_double(&seeds[i]));
+      case JOVEM:
+        periodo = PERIODO_RECUPERADO_JOVEM(idLote, idQuadra,
+                                           curand_uniform_double(&seeds[i]));
         break;
-        case ADULTO: periodo = PERIODO_RECUPERADO_ADULTO(idLote, idQuadra, curand_uniform_double(&seeds[i]));
+      case ADULTO:
+        periodo = PERIODO_RECUPERADO_ADULTO(idLote, idQuadra,
+                                            curand_uniform_double(&seeds[i]));
         break;
-        case IDOSO: periodo = PERIODO_RECUPERADO_IDOSO(idLote, idQuadra, curand_uniform_double(&seeds[i]));
+      case IDOSO:
+        periodo = PERIODO_RECUPERADO_IDOSO(idLote, idQuadra,
+                                           curand_uniform_double(&seeds[i]));
         break;
       }
       if (c >= periodo) {
@@ -790,14 +925,18 @@ void movimentacao(TIPO_AGENTE *agentes, int quantAgentes,
     int x = GET_X(id);
     int y = GET_Y(id);
     double taxa;
-    switch(GET_I(id)) {
-      case CRIANCA: taxa = TAXA_MOBILIDADE_CRIANCA(l, q, randomizarPercentual());
+    switch (GET_I(id)) {
+    case CRIANCA:
+      taxa = TAXA_MOBILIDADE_CRIANCA(l, q, randomizarPercentual());
       break;
-      case JOVEM: taxa = TAXA_MOBILIDADE_JOVEM(l, q, randomizarPercentual());
+    case JOVEM:
+      taxa = TAXA_MOBILIDADE_JOVEM(l, q, randomizarPercentual());
       break;
-      case ADULTO: taxa = TAXA_MOBILIDADE_ADULTO(l, q, randomizarPercentual());
+    case ADULTO:
+      taxa = TAXA_MOBILIDADE_ADULTO(l, q, randomizarPercentual());
       break;
-      case IDOSO: taxa = TAXA_MOBILIDADE_IDOSO(l, q, randomizarPercentual());
+    case IDOSO:
+      taxa = TAXA_MOBILIDADE_IDOSO(l, q, randomizarPercentual());
       break;
     }
     if (randomizarPercentual() <= taxa) {
@@ -864,18 +1003,21 @@ void contato(TIPO_AGENTE *agentes, int quantAgentes, const int *quantLotes,
         if (GET_Q(i) == q && GET_L(i) == l && GET_X(i) == x && GET_Y(i) == y) {
           if (GET_E(i) == SUSCETIVEL) {
             double taxa;
-            switch(GET_I(i)) {
-              case CRIANCA: taxa = TAXA_INFECCAO_CRIANCA(l, q, randomizarPercentual());
+            switch (GET_I(i)) {
+            case CRIANCA:
+              taxa = TAXA_INFECCAO_CRIANCA(l, q, randomizarPercentual());
               break;
-              case JOVEM: taxa = TAXA_INFECCAO_JOVEM(l, q, randomizarPercentual());
+            case JOVEM:
+              taxa = TAXA_INFECCAO_JOVEM(l, q, randomizarPercentual());
               break;
-              case ADULTO: taxa = TAXA_INFECCAO_ADULTO(l, q, randomizarPercentual());
+            case ADULTO:
+              taxa = TAXA_INFECCAO_ADULTO(l, q, randomizarPercentual());
               break;
-              case IDOSO: taxa = TAXA_INFECCAO_IDOSO(l, q, randomizarPercentual());
+            case IDOSO:
+              taxa = TAXA_INFECCAO_IDOSO(l, q, randomizarPercentual());
               break;
             }
-            if (randomizarPercentual() <=
-                taxa) {
+            if (randomizarPercentual() <= taxa) {
               SET_E(i, EXPOSTO);
             }
           }
@@ -895,14 +1037,22 @@ void transicao(TIPO_AGENTE *agentes, int quantAgentes, const double *parametros,
     switch (GET_E(i)) {
     case EXPOSTO: {
       double periodo;
-      switch(GET_I(i)) {
-        case CRIANCA: periodo = PERIODO_EXPOSTO_CRIANCA(idLote, idQuadra, randomizarPercentual());
+      switch (GET_I(i)) {
+      case CRIANCA:
+        periodo =
+            PERIODO_EXPOSTO_CRIANCA(idLote, idQuadra, randomizarPercentual());
         break;
-        case JOVEM: periodo = PERIODO_EXPOSTO_JOVEM(idLote, idQuadra, randomizarPercentual());
+      case JOVEM:
+        periodo =
+            PERIODO_EXPOSTO_JOVEM(idLote, idQuadra, randomizarPercentual());
         break;
-        case ADULTO: periodo = PERIODO_EXPOSTO_ADULTO(idLote, idQuadra, randomizarPercentual());
+      case ADULTO:
+        periodo =
+            PERIODO_EXPOSTO_ADULTO(idLote, idQuadra, randomizarPercentual());
         break;
-        case IDOSO: periodo = PERIODO_EXPOSTO_IDOSO(idLote, idQuadra, randomizarPercentual());
+      case IDOSO:
+        periodo =
+            PERIODO_EXPOSTO_IDOSO(idLote, idQuadra, randomizarPercentual());
         break;
       }
       if (c >= periodo) {
@@ -914,14 +1064,22 @@ void transicao(TIPO_AGENTE *agentes, int quantAgentes, const double *parametros,
     } break;
     case INFECTADO: {
       double periodo;
-      switch(GET_I(i)) {
-        case CRIANCA: periodo = PERIODO_INFECTADO_CRIANCA(idLote, idQuadra, randomizarPercentual());
+      switch (GET_I(i)) {
+      case CRIANCA:
+        periodo =
+            PERIODO_INFECTADO_CRIANCA(idLote, idQuadra, randomizarPercentual());
         break;
-        case JOVEM: periodo = PERIODO_INFECTADO_JOVEM(idLote, idQuadra, randomizarPercentual());
+      case JOVEM:
+        periodo =
+            PERIODO_INFECTADO_JOVEM(idLote, idQuadra, randomizarPercentual());
         break;
-        case ADULTO: periodo = PERIODO_INFECTADO_ADULTO(idLote, idQuadra, randomizarPercentual());
+      case ADULTO:
+        periodo =
+            PERIODO_INFECTADO_ADULTO(idLote, idQuadra, randomizarPercentual());
         break;
-        case IDOSO: periodo = PERIODO_INFECTADO_IDOSO(idLote, idQuadra, randomizarPercentual());
+      case IDOSO:
+        periodo =
+            PERIODO_INFECTADO_IDOSO(idLote, idQuadra, randomizarPercentual());
         break;
       }
       if (c >= periodo) {
@@ -933,14 +1091,22 @@ void transicao(TIPO_AGENTE *agentes, int quantAgentes, const double *parametros,
     } break;
     case RECUPERADO: {
       double periodo;
-      switch(GET_I(i)) {
-        case CRIANCA: periodo = PERIODO_RECUPERADO_CRIANCA(idLote, idQuadra, randomizarPercentual());
+      switch (GET_I(i)) {
+      case CRIANCA:
+        periodo = PERIODO_RECUPERADO_CRIANCA(idLote, idQuadra,
+                                             randomizarPercentual());
         break;
-        case JOVEM: periodo = PERIODO_RECUPERADO_JOVEM(idLote, idQuadra, randomizarPercentual());
+      case JOVEM:
+        periodo =
+            PERIODO_RECUPERADO_JOVEM(idLote, idQuadra, randomizarPercentual());
         break;
-        case ADULTO: periodo = PERIODO_RECUPERADO_ADULTO(idLote, idQuadra, randomizarPercentual());
+      case ADULTO:
+        periodo =
+            PERIODO_RECUPERADO_ADULTO(idLote, idQuadra, randomizarPercentual());
         break;
-        case IDOSO: periodo = PERIODO_RECUPERADO_IDOSO(idLote, idQuadra, randomizarPercentual());
+      case IDOSO:
+        periodo =
+            PERIODO_RECUPERADO_IDOSO(idLote, idQuadra, randomizarPercentual());
         break;
       }
       if (c >= periodo) {
@@ -1088,51 +1254,47 @@ void iniciarSimulacao(int idSimulacao, const double *parametros,
 #ifdef __GPU__
 
   cudaStream_t stream0, stream1;
-  
+
   cudaStreamCreate(&stream0);
   cudaStreamCreate(&stream1);
 
   int b1 = f1 / 2 + 1;
   int c1 = b1 * numThreads;
   int d1 = f1 - b1;
-  
+
   int b2 = f2 / 2 + 1;
   int c2 = b2 * numThreads;
   int d2 = f2 - b2;
-  
-  SaidasSimulacao::
-      gerarSaidaQuantidadeTotal<<<b1, numThreads, 0, stream0>>>(
-          agentesDev, quantAgentes, saidaQuantidadeTotalDev, 0, 0);
-  SaidasSimulacao::
-      gerarSaidaQuantidadeTotal<<<d1, numThreads, 0, stream1>>>(
-          agentesDev, quantAgentes, saidaQuantidadeTotalDev, 0, c1);
 
-  SaidasSimulacao::
-      gerarSaidaQuantidadeQuadras<<<b1, numThreads, 0, stream0>>>(
-          agentesDev, quantAgentes, indexSaidaQuantidadeQuadrasDev,
-          saidaQuantidadeQuadrasDev, 0, 0);
-  SaidasSimulacao::
-      gerarSaidaQuantidadeQuadras<<<d1, numThreads, 0, stream1>>>(
-          agentesDev, quantAgentes, indexSaidaQuantidadeQuadrasDev,
-          saidaQuantidadeQuadrasDev, 0, c1);
+  SaidasSimulacao::gerarSaidaQuantidadeTotal<<<b1, numThreads, 0, stream0>>>(
+      agentesDev, quantAgentes, saidaQuantidadeTotalDev, 0, 0);
+  SaidasSimulacao::gerarSaidaQuantidadeTotal<<<d1, numThreads, 0, stream1>>>(
+      agentesDev, quantAgentes, saidaQuantidadeTotalDev, 0, c1);
 
-  SaidasSimulacao::
-      gerarSaidaEspacial<<<b2, numThreads, 0, stream0>>>(
-          agentesDev, quantAgentes, saidaEspacialDev, 0, quantQuadras, ciclos,
-          indexQuadrasDev, indexPosicoesDev, posicoesDev, 0);
-  SaidasSimulacao::
-    gerarSaidaEspacial<<<d2, numThreads, 0, stream1>>>(
-        agentesDev, quantAgentes, saidaEspacialDev, 0, quantQuadras, ciclos,
-        indexQuadrasDev, indexPosicoesDev, posicoesDev, c2);
-  
+  SaidasSimulacao::gerarSaidaQuantidadeQuadras<<<b1, numThreads, 0, stream0>>>(
+      agentesDev, quantAgentes, indexSaidaQuantidadeQuadrasDev,
+      saidaQuantidadeQuadrasDev, 0, 0);
+  SaidasSimulacao::gerarSaidaQuantidadeQuadras<<<d1, numThreads, 0, stream1>>>(
+      agentesDev, quantAgentes, indexSaidaQuantidadeQuadrasDev,
+      saidaQuantidadeQuadrasDev, 0, c1);
+
+  SaidasSimulacao::gerarSaidaEspacial<<<b2, numThreads, 0, stream0>>>(
+      agentesDev, quantAgentes, saidaEspacialDev, 0, quantQuadras, ciclos,
+      indexQuadrasDev, indexPosicoesDev, posicoesDev, 0);
+  SaidasSimulacao::gerarSaidaEspacial<<<d2, numThreads, 0, stream1>>>(
+      agentesDev, quantAgentes, saidaEspacialDev, 0, quantQuadras, ciclos,
+      indexQuadrasDev, indexPosicoesDev, posicoesDev, c2);
+
   for (int ciclo = 1; ciclo < ciclos; ++ciclo) {
 
     movimentacao<<<b1, numThreads, 0, stream0>>>(
         seedsDev, agentesDev, quantAgentes, indexQuadrasDev,
-        indexVizinhancasDev, vizinhancasDev, parametros, indexParametros, 0);
+        indexVizinhancasDev, vizinhancasDev, parametrosDev, indexParametrosDev,
+        0);
     movimentacao<<<d1, numThreads, 0, stream1>>>(
         seedsDev, agentesDev, quantAgentes, indexQuadrasDev,
-        indexVizinhancasDev, vizinhancasDev, parametros, indexParametros, c1);
+        indexVizinhancasDev, vizinhancasDev, parametrosDev, indexParametrosDev,
+        c1);
 
     contato<<<b2, numThreads, 0, stream0>>>(
         seedsDev, agentesDev, quantAgentes, quantLotesDev, quantQuadras,
@@ -1143,17 +1305,17 @@ void iniciarSimulacao(int idSimulacao, const double *parametros,
         parametrosDev, indexParametrosDev, indexQuadrasDev, indexPosicoesDev,
         posicoesDev, c2);
 
-    transicao<<<b1, numThreads, 0, stream0>>>(
-        seedsDev, agentesDev, quantAgentes, parametrosDev, indexParametrosDev, 0);
-    transicao<<<d1, numThreads, 0, stream1>>>(
-        seedsDev, agentesDev, quantAgentes, parametrosDev, indexParametrosDev, c1);
+    transicao<<<b1, numThreads, 0, stream0>>>(seedsDev, agentesDev,
+                                              quantAgentes, parametrosDev,
+                                              indexParametrosDev, 0);
+    transicao<<<d1, numThreads, 0, stream1>>>(seedsDev, agentesDev,
+                                              quantAgentes, parametrosDev,
+                                              indexParametrosDev, c1);
 
-    SaidasSimulacao::
-        gerarSaidaQuantidadeTotal<<<b1, numThreads, 0, stream0>>>(
-            agentesDev, quantAgentes, saidaQuantidadeTotalDev, ciclo, 0);
-    SaidasSimulacao::
-        gerarSaidaQuantidadeTotal<<<d1, numThreads, 0, stream1>>>(
-            agentesDev, quantAgentes, saidaQuantidadeTotalDev, ciclo, c1);
+    SaidasSimulacao::gerarSaidaQuantidadeTotal<<<b1, numThreads, 0, stream0>>>(
+        agentesDev, quantAgentes, saidaQuantidadeTotalDev, ciclo, 0);
+    SaidasSimulacao::gerarSaidaQuantidadeTotal<<<d1, numThreads, 0, stream1>>>(
+        agentesDev, quantAgentes, saidaQuantidadeTotalDev, ciclo, c1);
 
     SaidasSimulacao::
         gerarSaidaQuantidadeQuadras<<<b1, numThreads, 0, stream0>>>(
@@ -1164,16 +1326,14 @@ void iniciarSimulacao(int idSimulacao, const double *parametros,
             agentesDev, quantAgentes, indexSaidaQuantidadeQuadrasDev,
             saidaQuantidadeQuadrasDev, ciclo, c1);
 
-    SaidasSimulacao::
-        gerarSaidaEspacial<<<b2, numThreads, 0, stream0>>>(
-            agentesDev, quantAgentes, saidaEspacialDev, ciclo, quantQuadras, ciclos,
-            indexQuadrasDev, indexPosicoesDev, posicoesDev, 0);
-    SaidasSimulacao::
-      gerarSaidaEspacial<<<d2, numThreads, 0, stream1>>>(
-          agentesDev, quantAgentes, saidaEspacialDev, ciclo, quantQuadras, ciclos,
-          indexQuadrasDev, indexPosicoesDev, posicoesDev, c2);
+    SaidasSimulacao::gerarSaidaEspacial<<<b2, numThreads, 0, stream0>>>(
+        agentesDev, quantAgentes, saidaEspacialDev, ciclo, quantQuadras, ciclos,
+        indexQuadrasDev, indexPosicoesDev, posicoesDev, 0);
+    SaidasSimulacao::gerarSaidaEspacial<<<d2, numThreads, 0, stream1>>>(
+        agentesDev, quantAgentes, saidaEspacialDev, ciclo, quantQuadras, ciclos,
+        indexQuadrasDev, indexPosicoesDev, posicoesDev, c2);
   }
-  
+
   cudaStreamSynchronize(stream0);
   cudaStreamSynchronize(stream1);
 
