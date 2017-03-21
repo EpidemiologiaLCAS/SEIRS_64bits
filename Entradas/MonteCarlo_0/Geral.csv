@@ -1,3 +1,55 @@
 Min;Max;Descricao
 1.0;1.0;Quantidade de Simulacoes
 500.0;500.0;Numero de Ciclos por Simulacao
+100;100;Quantidade de Agentes Suscetiveis Crianca Masculino
+100;100;Quantidade de Agentes Expostos Crianca Masculino
+100;100;Quantidade de Agentes Infectados Crianca Masculino
+100;100;Quantidade de Agentes Recuperados Crianca Masculino
+100;100;Quantidade de Agentes Suscetiveis Crianca Feminino
+100;100;Quantidade de Agentes Expostos Crianca Feminino 
+100;100;Quantidade de Agentes Infectados Crianca Feminino
+100;100;Quantidade de Agentes Recuperados Crianca Feminino
+100;100;Quantidade de Agentes Suscetiveis Jovem Masculino
+100;100;Quantidade de Agentes Expostos Jovem Masculino
+100;100;Quantidade de Agentes Infectados Jovem Masculino
+100;100;Quantidade de Agentes Recuperados Jovem Masculino
+100;100;Quantidade de Agentes Suscetiveis Jovem Feminino
+100;100;Quantidade de Agentes Expostos Jovem Feminino
+100;100;Quantidade de Agentes Infectados Jovem Feminino
+100;100;Quantidade de Agentes Recuperados Jovem Feminino
+100;100;Quantidade de Agentes Suscetiveis Adulto Masculino
+100;100;Quantidade de Agentes Expostos Adulto Masculino
+100;100;Quantidade de Agentes Infectados Adulto Masculino
+100;100;Quantidade de Agentes Recuperados Adulto Masculino
+100;100;Quantidade de Agentes Suscetiveis Adulto Feminino
+100;100;Quantidade de Agentes Expostos Adulto Feminino
+100;100;Quantidade de Agentes Infectados Adulto Feminino
+100;100;Quantidade de Agentes Recuperados Adulto Feminino
+100;100;Quantidade de Agentes Suscetiveis Idoso Masculino
+100;100;Quantidade de Agentes Expostos Idoso Masculino
+100;100;Quantidade de Agentes Infectados Idoso Masculino
+100;100;Quantidade de Agentes Recuperados Idoso Masculino
+100;100;Quantidade de Agentes Suscetiveis Idoso Feminino
+100;100;Quantidade de Agentes Expostos Idoso Feminino
+100;100;Quantidade de Agentes Infectados Idoso Feminino
+100;100;Quantidade de Agentes Recuperados Idoso Feminino
+0.64;0.95;Taxa de Infeccao Crianca
+3;5;Numero de Ciclos para Agente Exposto Crianca
+4;6;Numero de Ciclos para Agente Infectado Crianca
+40;45;Numero de Ciclos para Agente Recuperado Crianca
+0.64;0.95;Taxa de Infeccao Jovem
+3;5;Numero de Ciclos para Agente Exposto Jovem
+4;6;Numero de Ciclos para Agente Infectado Jovem
+40;45;Numero de Ciclos para Agente Recuperado Jovem
+0.64;0.95;Taxa de Infeccao Adulto
+3;5;Numero de Ciclos para Agente Exposto Adulto
+4;6;Numero de Ciclos para Agente Infectado Adulto
+40;45;Numero de Ciclos para Agente Recuperado Adulto
+0.64;0.95;Taxa de Infeccao Idoso
+3;5;Numero de Ciclos para Agente Exposto Idoso
+4;6;Numero de Ciclos para Agente Infectado Idoso
+40;45;Numero de Ciclos para Agente Recuperado Idoso
+0.40;0.50;Taxa de Mobilidade para Agente Crianca
+0.90;0.95;Taxa de Mobilidade para Agente Jovem
+0.95;0.99;Taxa de Mobilidade para Agente Adulto
+0.50;0.60;Taxa de Mobilidade para Agente Idoso
