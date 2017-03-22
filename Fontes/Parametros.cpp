@@ -8,150 +8,90 @@
 #define QUANTIDADE_SIMULACOES (int)(parametros[0])
 #define NUMERO_CICLOS_SIMULACAO (int)(parametros[2])
 
-#define QUANTIDADE_AGENTES_SUSCETIVEIS_CRIANCA_MASCULINO     \
-  (int)(parametros[4])
-#define QUANTIDADE_AGENTES_EXPOSTOS_CRIANCA_MASCULINO        \
-  (int)(parametros[6])
-#define QUANTIDADE_AGENTES_INFECTADOS_CRIANCA_MASCULINO      \
-  (int)(parametros[8])
-#define QUANTIDADE_AGENTES_RECUPERADOS_CRIANCA_MASCULINO     \
-  (int)(parametros[10])
+#define QUANTIDADE_AGENTES_SUSCETIVEIS_CRIANCA_MASCULINO (int)(parametros[4])
+#define QUANTIDADE_AGENTES_EXPOSTOS_CRIANCA_MASCULINO (int)(parametros[6])
+#define QUANTIDADE_AGENTES_INFECTADOS_CRIANCA_MASCULINO (int)(parametros[8])
+#define QUANTIDADE_AGENTES_RECUPERADOS_CRIANCA_MASCULINO (int)(parametros[10])
 
-#define QUANTIDADE_AGENTES_SUSCETIVEIS_CRIANCA_FEMININO      \
-  (int)(parametros[12])
-#define QUANTIDADE_AGENTES_EXPOSTOS_CRIANCA_FEMININO         \
-  (int)(parametros[14])
-#define QUANTIDADE_AGENTES_INFECTADOS_CRIANCA_FEMININO       \
-  (int)(parametros[16])
-#define QUANTIDADE_AGENTES_RECUPERADOS_CRIANCA_FEMININO      \
-  (int)(parametros[18])
+#define QUANTIDADE_AGENTES_SUSCETIVEIS_CRIANCA_FEMININO (int)(parametros[12])
+#define QUANTIDADE_AGENTES_EXPOSTOS_CRIANCA_FEMININO (int)(parametros[14])
+#define QUANTIDADE_AGENTES_INFECTADOS_CRIANCA_FEMININO (int)(parametros[16])
+#define QUANTIDADE_AGENTES_RECUPERADOS_CRIANCA_FEMININO (int)(parametros[18])
 
-#define QUANTIDADE_AGENTES_SUSCETIVEIS_JOVEM_MASCULINO       \
-  (int)(parametros[20])
-#define QUANTIDADE_AGENTES_EXPOSTOS_JOVEM_MASCULINO          \
-  (int)(parametros[22])
-#define QUANTIDADE_AGENTES_INFECTADOS_JOVEM_MASCULINO        \
-  (int)(parametros[24])
-#define QUANTIDADE_AGENTES_RECUPERADOS_JOVEM_MASCULINO       \
-  (int)(parametros[26])
+#define QUANTIDADE_AGENTES_SUSCETIVEIS_JOVEM_MASCULINO (int)(parametros[20])
+#define QUANTIDADE_AGENTES_EXPOSTOS_JOVEM_MASCULINO (int)(parametros[22])
+#define QUANTIDADE_AGENTES_INFECTADOS_JOVEM_MASCULINO (int)(parametros[24])
+#define QUANTIDADE_AGENTES_RECUPERADOS_JOVEM_MASCULINO (int)(parametros[26])
 
-#define QUANTIDADE_AGENTES_SUSCETIVEIS_JOVEM_FEMININO        \
-  (int)(parametros[28])
-#define QUANTIDADE_AGENTES_EXPOSTOS_JOVEM_FEMININO           \
-  (int)(parametros[30])
-#define QUANTIDADE_AGENTES_INFECTADOS_JOVEM_FEMININO         \
-  (int)(parametros[32])
-#define QUANTIDADE_AGENTES_RECUPERADOS_JOVEM_FEMININO        \
-  (int)(parametros[34])
+#define QUANTIDADE_AGENTES_SUSCETIVEIS_JOVEM_FEMININO (int)(parametros[28])
+#define QUANTIDADE_AGENTES_EXPOSTOS_JOVEM_FEMININO (int)(parametros[30])
+#define QUANTIDADE_AGENTES_INFECTADOS_JOVEM_FEMININO (int)(parametros[32])
+#define QUANTIDADE_AGENTES_RECUPERADOS_JOVEM_FEMININO (int)(parametros[34])
 
-#define QUANTIDADE_AGENTES_SUSCETIVEIS_ADULTO_MASCULINO      \
-  (int)(parametros[36])
-#define QUANTIDADE_AGENTES_EXPOSTOS_ADULTO_MASCULINO         \
-  (int)(parametros[38])
-#define QUANTIDADE_AGENTES_INFECTADOS_ADULTO_MASCULINO       \
-  (int)(parametros[40])
-#define QUANTIDADE_AGENTES_RECUPERADOS_ADULTO_MASCULINO      \
-  (int)(parametros[42])
+#define QUANTIDADE_AGENTES_SUSCETIVEIS_ADULTO_MASCULINO (int)(parametros[36])
+#define QUANTIDADE_AGENTES_EXPOSTOS_ADULTO_MASCULINO (int)(parametros[38])
+#define QUANTIDADE_AGENTES_INFECTADOS_ADULTO_MASCULINO (int)(parametros[40])
+#define QUANTIDADE_AGENTES_RECUPERADOS_ADULTO_MASCULINO (int)(parametros[42])
 
-#define QUANTIDADE_AGENTES_SUSCETIVEIS_ADULTO_FEMININO       \
-  (int)(parametros[44])
-#define QUANTIDADE_AGENTES_EXPOSTOS_ADULTO_FEMININO          \
-  (int)(parametros[46])
-#define QUANTIDADE_AGENTES_INFECTADOS_ADULTO_FEMININO        \
-  (int)(parametros[48])
-#define QUANTIDADE_AGENTES_RECUPERADOS_ADULTO_FEMININO       \
-  (int)(parametros[50])
+#define QUANTIDADE_AGENTES_SUSCETIVEIS_ADULTO_FEMININO (int)(parametros[44])
+#define QUANTIDADE_AGENTES_EXPOSTOS_ADULTO_FEMININO (int)(parametros[46])
+#define QUANTIDADE_AGENTES_INFECTADOS_ADULTO_FEMININO (int)(parametros[48])
+#define QUANTIDADE_AGENTES_RECUPERADOS_ADULTO_FEMININO (int)(parametros[50])
 
-#define QUANTIDADE_AGENTES_SUSCETIVEIS_IDOSO_MASCULINO       \
-  (int)(parametros[52])
-#define QUANTIDADE_AGENTES_EXPOSTOS_IDOSO_MASCULINO          \
-  (int)(parametros[54])
-#define QUANTIDADE_AGENTES_INFECTADOS_IDOSO_MASCULINO        \
-  (int)(parametros[56])
-#define QUANTIDADE_AGENTES_RECUPERADOS_IDOSO_MASCULINO       \
-  (int)(parametros[58])
+#define QUANTIDADE_AGENTES_SUSCETIVEIS_IDOSO_MASCULINO (int)(parametros[52])
+#define QUANTIDADE_AGENTES_EXPOSTOS_IDOSO_MASCULINO (int)(parametros[54])
+#define QUANTIDADE_AGENTES_INFECTADOS_IDOSO_MASCULINO (int)(parametros[56])
+#define QUANTIDADE_AGENTES_RECUPERADOS_IDOSO_MASCULINO (int)(parametros[58])
 
-#define QUANTIDADE_AGENTES_SUSCETIVEIS_IDOSO_FEMININO        \
-  (int)(parametros[60])
-#define QUANTIDADE_AGENTES_EXPOSTOS_IDOSO_FEMININO           \
-  (int)(parametros[62])
-#define QUANTIDADE_AGENTES_INFECTADOS_IDOSO_FEMININO         \
-  (int)(parametros[64])
-#define QUANTIDADE_AGENTES_RECUPERADOS_IDOSO_FEMININO        \
-  (int)(parametros[66])
+#define QUANTIDADE_AGENTES_SUSCETIVEIS_IDOSO_FEMININO (int)(parametros[60])
+#define QUANTIDADE_AGENTES_EXPOSTOS_IDOSO_FEMININO (int)(parametros[62])
+#define QUANTIDADE_AGENTES_INFECTADOS_IDOSO_FEMININO (int)(parametros[64])
+#define QUANTIDADE_AGENTES_RECUPERADOS_IDOSO_FEMININO (int)(parametros[66])
 
-#define TAXA_INFECCAO_CRIANCA(percentual)                    \
-  (double)(ENTRE_FAIXA(parametros[68],           \
-                       parametros[69],           \
-                       percentual))
-#define PERIODO_EXPOSTO_CRIANCA(percentual)                  \
-  (int)(ENTRE_FAIXA(parametros[70],              \
-                    parametros[71], percentual))
-#define PERIODO_INFECTADO_CRIANCA(percentual)                \
-  (int)(ENTRE_FAIXA(parametros[72],              \
-                    parametros[73], percentual))
-#define PERIODO_RECUPERADO_CRIANCA(percentual)               \
-  (int)(ENTRE_FAIXA(parametros[74],              \
-                    parametros[75], percentual))
+#define TAXA_INFECCAO_CRIANCA(percentual)                                      \
+  (double)(ENTRE_FAIXA(parametros[68], parametros[69], percentual))
+#define PERIODO_EXPOSTO_CRIANCA(percentual)                                    \
+  (int)(ENTRE_FAIXA(parametros[70], parametros[71], percentual))
+#define PERIODO_INFECTADO_CRIANCA(percentual)                                  \
+  (int)(ENTRE_FAIXA(parametros[72], parametros[73], percentual))
+#define PERIODO_RECUPERADO_CRIANCA(percentual)                                 \
+  (int)(ENTRE_FAIXA(parametros[74], parametros[75], percentual))
 
-#define TAXA_INFECCAO_JOVEM(percentual)                      \
-  (double)(ENTRE_FAIXA(parametros[76],           \
-                       parametros[77],           \
-                       percentual))
-#define PERIODO_EXPOSTO_JOVEM(percentual)                    \
-  (int)(ENTRE_FAIXA(parametros[78],              \
-                    parametros[79], percentual))
-#define PERIODO_INFECTADO_JOVEM(percentual)                  \
-  (int)(ENTRE_FAIXA(parametros[80],              \
-                    parametros[81], percentual))
-#define PERIODO_RECUPERADO_JOVEM(percentual)                 \
-  (int)(ENTRE_FAIXA(parametros[82],              \
-                    parametros[83], percentual))
+#define TAXA_INFECCAO_JOVEM(percentual)                                        \
+  (double)(ENTRE_FAIXA(parametros[76], parametros[77], percentual))
+#define PERIODO_EXPOSTO_JOVEM(percentual)                                      \
+  (int)(ENTRE_FAIXA(parametros[78], parametros[79], percentual))
+#define PERIODO_INFECTADO_JOVEM(percentual)                                    \
+  (int)(ENTRE_FAIXA(parametros[80], parametros[81], percentual))
+#define PERIODO_RECUPERADO_JOVEM(percentual)                                   \
+  (int)(ENTRE_FAIXA(parametros[82], parametros[83], percentual))
 
-#define TAXA_INFECCAO_ADULTO(percentual)                     \
-  (double)(ENTRE_FAIXA(parametros[84],           \
-                       parametros[85],           \
-                       percentual))
-#define PERIODO_EXPOSTO_ADULTO(percentual)                   \
-  (int)(ENTRE_FAIXA(parametros[86],              \
-                    parametros[87], percentual))
-#define PERIODO_INFECTADO_ADULTO(percentual)                 \
-  (int)(ENTRE_FAIXA(parametros[88],              \
-                    parametros[89], percentual))
-#define PERIODO_RECUPERADO_ADULTO(percentual)                \
-  (int)(ENTRE_FAIXA(parametros[90],              \
-                    parametros[91], percentual))
+#define TAXA_INFECCAO_ADULTO(percentual)                                       \
+  (double)(ENTRE_FAIXA(parametros[84], parametros[85], percentual))
+#define PERIODO_EXPOSTO_ADULTO(percentual)                                     \
+  (int)(ENTRE_FAIXA(parametros[86], parametros[87], percentual))
+#define PERIODO_INFECTADO_ADULTO(percentual)                                   \
+  (int)(ENTRE_FAIXA(parametros[88], parametros[89], percentual))
+#define PERIODO_RECUPERADO_ADULTO(percentual)                                  \
+  (int)(ENTRE_FAIXA(parametros[90], parametros[91], percentual))
 
-#define TAXA_INFECCAO_IDOSO(percentual)                      \
-  (double)(ENTRE_FAIXA(parametros[92],           \
-                       parametros[93],           \
-                       percentual))
-#define PERIODO_EXPOSTO_IDOSO(percentual)                    \
-  (int)(ENTRE_FAIXA(parametros[94],              \
-                    parametros[95], percentual))
-#define PERIODO_INFECTADO_IDOSO(percentual)                  \
-  (int)(ENTRE_FAIXA(parametros[96],              \
-                    parametros[97], percentual))
-#define PERIODO_RECUPERADO_IDOSO(percentual)                 \
-  (int)(ENTRE_FAIXA(parametros[98],              \
-                    parametros[99], percentual))
+#define TAXA_INFECCAO_IDOSO(percentual)                                        \
+  (double)(ENTRE_FAIXA(parametros[92], parametros[93], percentual))
+#define PERIODO_EXPOSTO_IDOSO(percentual)                                      \
+  (int)(ENTRE_FAIXA(parametros[94], parametros[95], percentual))
+#define PERIODO_INFECTADO_IDOSO(percentual)                                    \
+  (int)(ENTRE_FAIXA(parametros[96], parametros[97], percentual))
+#define PERIODO_RECUPERADO_IDOSO(percentual)                                   \
+  (int)(ENTRE_FAIXA(parametros[98], parametros[99], percentual))
 
-#define TAXA_MOBILIDADE_CRIANCA(percentual)                  \
-  (double)(ENTRE_FAIXA(parametros[100],           \
-                       parametros[101],           \
-                       percentual))
-#define TAXA_MOBILIDADE_JOVEM(percentual)                    \
-  (double)(ENTRE_FAIXA(parametros[102],           \
-                       parametros[103],           \
-                       percentual))
-#define TAXA_MOBILIDADE_ADULTO(percentual)                   \
-  (double)(ENTRE_FAIXA(parametros[104],          \
-                       parametros[105],          \
-                       percentual))
-#define TAXA_MOBILIDADE_IDOSO(percentual)                    \
-  (double)(ENTRE_FAIXA(parametros[106],          \
-                       parametros[107],          \
-                       percentual))
+#define TAXA_MOBILIDADE_CRIANCA(percentual)                                    \
+  (double)(ENTRE_FAIXA(parametros[100], parametros[101], percentual))
+#define TAXA_MOBILIDADE_JOVEM(percentual)                                      \
+  (double)(ENTRE_FAIXA(parametros[102], parametros[103], percentual))
+#define TAXA_MOBILIDADE_ADULTO(percentual)                                     \
+  (double)(ENTRE_FAIXA(parametros[104], parametros[105], percentual))
+#define TAXA_MOBILIDADE_IDOSO(percentual)                                      \
+  (double)(ENTRE_FAIXA(parametros[106], parametros[107], percentual))
 
 default_random_engine
     gen(chrono::system_clock::now().time_since_epoch().count());
