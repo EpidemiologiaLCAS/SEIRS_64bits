@@ -15,27 +15,27 @@ void inicializarAgente(TIPO_AGENTE *agentes, int id, int e, int x, int y, int l,
   SET_E(id, e);
 }
 
-void inserirAgentes(int quantAgentes, TIPO_AGENTE *agentes, const double *parametros,
-                          const int *indexParametros, const int *quantLotes,
-                          int quantQuadras, const int *indexQuadras,
-                          const int *indexPosicoes, const int *posicoes, int quantidade, 
-                          int estado, int sexo, int idade, int *i) {
+void inserirAgentes(int quantAgentes, TIPO_AGENTE *agentes,
+                    const double *parametros, const int *indexParametros,
+                    const int *quantLotes, int quantQuadras,
+                    const int *indexQuadras, const int *indexPosicoes,
+                    const int *posicoes, int quantidade, int estado, int sexo,
+                    int idade, int *i) {
   int q, l, posicoesLote, p, x, y;
   for (int j = 0; j < quantidade; ++j) {
-    q = (int) (randomizarPercentual() * quantQuadras);
-    l = (int) (randomizarPercentual() * quantLotes[q]);
+    q = (int)(randomizarPercentual() * quantQuadras);
+    l = (int)(randomizarPercentual() * quantLotes[q]);
     if (q == 0 || quantLotes[q] < 3) {
       j--;
       continue;
     }
     posicoesLote = (indexPosicoes[indexQuadras[2 * q] + l + 1] -
-                      indexPosicoes[indexQuadras[2 * q] + l]) /
-                     4;
+                    indexPosicoes[indexQuadras[2 * q] + l]) /
+                   4;
     p = ENTRE_FAIXA(0, posicoesLote, randomizarPercentual());
     x = posicoes[indexPosicoes[indexQuadras[q * 2] + l] + p * 4 + 0];
     y = posicoes[indexPosicoes[indexQuadras[q * 2] + l] + p * 4 + 1];
-    inicializarAgente(agentes, *i, estado, x, y, l, q, sexo,
-                      idade);
+    inicializarAgente(agentes, *i, estado, x, y, l, q, sexo, idade);
     (*i)++;
   }
 }
@@ -46,105 +46,137 @@ TIPO_AGENTE *criarAgentes(int quantAgentes, const double *parametros,
                           const int *indexPosicoes, const int *posicoes) {
   int i = 0;
   TIPO_AGENTE *agentes = new TIPO_AGENTE[quantAgentes * ATRIBUTOS_AGENTE];
-  inserirAgentes(quantAgentes, agentes, parametros, indexParametros, quantLotes, quantQuadras, 
-                 indexQuadras, indexPosicoes, posicoes, QUANTIDADE_AGENTES_SUSCETIVEIS_CRIANCA_MASCULINO, 
-                 SUSCETIVEL, MASCULINO, CRIANCA, &i);
-  inserirAgentes(quantAgentes, agentes, parametros, indexParametros, quantLotes, quantQuadras, 
-                 indexQuadras, indexPosicoes, posicoes, QUANTIDADE_AGENTES_EXPOSTOS_CRIANCA_MASCULINO, 
-                 EXPOSTO, MASCULINO, CRIANCA, &i);
-  inserirAgentes(quantAgentes, agentes, parametros, indexParametros, quantLotes, quantQuadras, 
-                 indexQuadras, indexPosicoes, posicoes, QUANTIDADE_AGENTES_INFECTADOS_CRIANCA_MASCULINO, 
-                 INFECTADO, MASCULINO, CRIANCA, &i);
-  inserirAgentes(quantAgentes, agentes, parametros, indexParametros, quantLotes, quantQuadras, 
-                 indexQuadras, indexPosicoes, posicoes, QUANTIDADE_AGENTES_RECUPERADOS_CRIANCA_MASCULINO, 
-                 RECUPERADO, MASCULINO, CRIANCA, &i);
-  inserirAgentes(quantAgentes, agentes, parametros, indexParametros, quantLotes, quantQuadras, 
-                 indexQuadras, indexPosicoes, posicoes, QUANTIDADE_AGENTES_SUSCETIVEIS_CRIANCA_FEMININO, 
-                 SUSCETIVEL, FEMININO, CRIANCA, &i);
-  inserirAgentes(quantAgentes, agentes, parametros, indexParametros, quantLotes, quantQuadras, 
-                 indexQuadras, indexPosicoes, posicoes, QUANTIDADE_AGENTES_EXPOSTOS_CRIANCA_FEMININO, 
-                 EXPOSTO, FEMININO, CRIANCA, &i);
-  inserirAgentes(quantAgentes, agentes, parametros, indexParametros, quantLotes, quantQuadras, 
-                 indexQuadras, indexPosicoes, posicoes, QUANTIDADE_AGENTES_INFECTADOS_CRIANCA_FEMININO, 
-                 INFECTADO, FEMININO, CRIANCA, &i);
-  inserirAgentes(quantAgentes, agentes, parametros, indexParametros, quantLotes, quantQuadras, 
-                 indexQuadras, indexPosicoes, posicoes, QUANTIDADE_AGENTES_RECUPERADOS_CRIANCA_FEMININO, 
-                 RECUPERADO, FEMININO, CRIANCA, &i);    
-                 
-  inserirAgentes(quantAgentes, agentes, parametros, indexParametros, quantLotes, quantQuadras, 
-                 indexQuadras, indexPosicoes, posicoes, QUANTIDADE_AGENTES_SUSCETIVEIS_JOVEM_MASCULINO, 
-                 SUSCETIVEL, MASCULINO, JOVEM, &i);
-  inserirAgentes(quantAgentes, agentes, parametros, indexParametros, quantLotes, quantQuadras, 
-                 indexQuadras, indexPosicoes, posicoes, QUANTIDADE_AGENTES_EXPOSTOS_JOVEM_MASCULINO, 
-                 EXPOSTO, MASCULINO, JOVEM, &i);
-  inserirAgentes(quantAgentes, agentes, parametros, indexParametros, quantLotes, quantQuadras, 
-                 indexQuadras, indexPosicoes, posicoes, QUANTIDADE_AGENTES_INFECTADOS_JOVEM_MASCULINO, 
-                 INFECTADO, MASCULINO, JOVEM, &i);
-  inserirAgentes(quantAgentes, agentes, parametros, indexParametros, quantLotes, quantQuadras, 
-                 indexQuadras, indexPosicoes, posicoes, QUANTIDADE_AGENTES_RECUPERADOS_JOVEM_MASCULINO, 
-                 RECUPERADO, MASCULINO, JOVEM, &i);
-  inserirAgentes(quantAgentes, agentes, parametros, indexParametros, quantLotes, quantQuadras, 
-                 indexQuadras, indexPosicoes, posicoes, QUANTIDADE_AGENTES_SUSCETIVEIS_JOVEM_FEMININO, 
-                 SUSCETIVEL, FEMININO, JOVEM, &i);
-  inserirAgentes(quantAgentes, agentes, parametros, indexParametros, quantLotes, quantQuadras, 
-                 indexQuadras, indexPosicoes, posicoes, QUANTIDADE_AGENTES_EXPOSTOS_JOVEM_FEMININO, 
-                 EXPOSTO, FEMININO, JOVEM, &i);
-  inserirAgentes(quantAgentes, agentes, parametros, indexParametros, quantLotes, quantQuadras, 
-                 indexQuadras, indexPosicoes, posicoes, QUANTIDADE_AGENTES_INFECTADOS_JOVEM_FEMININO, 
-                 INFECTADO, FEMININO, JOVEM, &i);
-  inserirAgentes(quantAgentes, agentes, parametros, indexParametros, quantLotes, quantQuadras, 
-                 indexQuadras, indexPosicoes, posicoes, QUANTIDADE_AGENTES_RECUPERADOS_JOVEM_FEMININO, 
-                 RECUPERADO, FEMININO, JOVEM, &i);  
-                 
-  inserirAgentes(quantAgentes, agentes, parametros, indexParametros, quantLotes, quantQuadras, 
-                 indexQuadras, indexPosicoes, posicoes, QUANTIDADE_AGENTES_SUSCETIVEIS_ADULTO_MASCULINO, 
-                 SUSCETIVEL, MASCULINO, ADULTO, &i);
-  inserirAgentes(quantAgentes, agentes, parametros, indexParametros, quantLotes, quantQuadras, 
-                 indexQuadras, indexPosicoes, posicoes, QUANTIDADE_AGENTES_EXPOSTOS_ADULTO_MASCULINO, 
-                 EXPOSTO, MASCULINO, ADULTO, &i);
-  inserirAgentes(quantAgentes, agentes, parametros, indexParametros, quantLotes, quantQuadras, 
-                 indexQuadras, indexPosicoes, posicoes, QUANTIDADE_AGENTES_INFECTADOS_ADULTO_MASCULINO, 
-                 INFECTADO, MASCULINO, ADULTO, &i);
-  inserirAgentes(quantAgentes, agentes, parametros, indexParametros, quantLotes, quantQuadras, 
-                 indexQuadras, indexPosicoes, posicoes, QUANTIDADE_AGENTES_RECUPERADOS_ADULTO_MASCULINO, 
-                 RECUPERADO, MASCULINO, ADULTO, &i);
-  inserirAgentes(quantAgentes, agentes, parametros, indexParametros, quantLotes, quantQuadras, 
-                 indexQuadras, indexPosicoes, posicoes, QUANTIDADE_AGENTES_SUSCETIVEIS_ADULTO_FEMININO, 
-                 SUSCETIVEL, FEMININO, ADULTO, &i);
-  inserirAgentes(quantAgentes, agentes, parametros, indexParametros, quantLotes, quantQuadras, 
-                 indexQuadras, indexPosicoes, posicoes, QUANTIDADE_AGENTES_EXPOSTOS_ADULTO_FEMININO, 
-                 EXPOSTO, FEMININO, ADULTO, &i);
-  inserirAgentes(quantAgentes, agentes, parametros, indexParametros, quantLotes, quantQuadras, 
-                 indexQuadras, indexPosicoes, posicoes, QUANTIDADE_AGENTES_INFECTADOS_ADULTO_FEMININO, 
-                 INFECTADO, FEMININO, ADULTO, &i);
-  inserirAgentes(quantAgentes, agentes, parametros, indexParametros, quantLotes, quantQuadras, 
-                 indexQuadras, indexPosicoes, posicoes, QUANTIDADE_AGENTES_RECUPERADOS_ADULTO_FEMININO, 
-                 RECUPERADO, FEMININO, ADULTO, &i);  
-                 
-  inserirAgentes(quantAgentes, agentes, parametros, indexParametros, quantLotes, quantQuadras, 
-                 indexQuadras, indexPosicoes, posicoes, QUANTIDADE_AGENTES_SUSCETIVEIS_IDOSO_MASCULINO, 
-                 SUSCETIVEL, MASCULINO, IDOSO, &i);
-  inserirAgentes(quantAgentes, agentes, parametros, indexParametros, quantLotes, quantQuadras, 
-                 indexQuadras, indexPosicoes, posicoes, QUANTIDADE_AGENTES_EXPOSTOS_IDOSO_MASCULINO, 
-                 EXPOSTO, MASCULINO, IDOSO, &i);
-  inserirAgentes(quantAgentes, agentes, parametros, indexParametros, quantLotes, quantQuadras, 
-                 indexQuadras, indexPosicoes, posicoes, QUANTIDADE_AGENTES_INFECTADOS_IDOSO_MASCULINO, 
-                 INFECTADO, MASCULINO, IDOSO, &i);
-  inserirAgentes(quantAgentes, agentes, parametros, indexParametros, quantLotes, quantQuadras, 
-                 indexQuadras, indexPosicoes, posicoes, QUANTIDADE_AGENTES_RECUPERADOS_IDOSO_MASCULINO, 
-                 RECUPERADO, MASCULINO, IDOSO, &i);
-  inserirAgentes(quantAgentes, agentes, parametros, indexParametros, quantLotes, quantQuadras, 
-                 indexQuadras, indexPosicoes, posicoes, QUANTIDADE_AGENTES_SUSCETIVEIS_IDOSO_FEMININO, 
-                 SUSCETIVEL, FEMININO, IDOSO, &i);
-  inserirAgentes(quantAgentes, agentes, parametros, indexParametros, quantLotes, quantQuadras, 
-                 indexQuadras, indexPosicoes, posicoes, QUANTIDADE_AGENTES_EXPOSTOS_IDOSO_FEMININO, 
-                 EXPOSTO, FEMININO, IDOSO, &i);
-  inserirAgentes(quantAgentes, agentes, parametros, indexParametros, quantLotes, quantQuadras, 
-                 indexQuadras, indexPosicoes, posicoes, QUANTIDADE_AGENTES_INFECTADOS_IDOSO_FEMININO, 
-                 INFECTADO, FEMININO, IDOSO, &i);
-  inserirAgentes(quantAgentes, agentes, parametros, indexParametros, quantLotes, quantQuadras, 
-                 indexQuadras, indexPosicoes, posicoes, QUANTIDADE_AGENTES_RECUPERADOS_IDOSO_FEMININO, 
-                 RECUPERADO, FEMININO, IDOSO, &i);  
+  inserirAgentes(quantAgentes, agentes, parametros, indexParametros, quantLotes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 QUANTIDADE_AGENTES_SUSCETIVEIS_CRIANCA_MASCULINO, SUSCETIVEL,
+                 MASCULINO, CRIANCA, &i);
+  inserirAgentes(quantAgentes, agentes, parametros, indexParametros, quantLotes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 QUANTIDADE_AGENTES_EXPOSTOS_CRIANCA_MASCULINO, EXPOSTO,
+                 MASCULINO, CRIANCA, &i);
+  inserirAgentes(quantAgentes, agentes, parametros, indexParametros, quantLotes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 QUANTIDADE_AGENTES_INFECTADOS_CRIANCA_MASCULINO, INFECTADO,
+                 MASCULINO, CRIANCA, &i);
+  inserirAgentes(quantAgentes, agentes, parametros, indexParametros, quantLotes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 QUANTIDADE_AGENTES_RECUPERADOS_CRIANCA_MASCULINO, RECUPERADO,
+                 MASCULINO, CRIANCA, &i);
+  inserirAgentes(quantAgentes, agentes, parametros, indexParametros, quantLotes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 QUANTIDADE_AGENTES_SUSCETIVEIS_CRIANCA_FEMININO, SUSCETIVEL,
+                 FEMININO, CRIANCA, &i);
+  inserirAgentes(quantAgentes, agentes, parametros, indexParametros, quantLotes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 QUANTIDADE_AGENTES_EXPOSTOS_CRIANCA_FEMININO, EXPOSTO,
+                 FEMININO, CRIANCA, &i);
+  inserirAgentes(quantAgentes, agentes, parametros, indexParametros, quantLotes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 QUANTIDADE_AGENTES_INFECTADOS_CRIANCA_FEMININO, INFECTADO,
+                 FEMININO, CRIANCA, &i);
+  inserirAgentes(quantAgentes, agentes, parametros, indexParametros, quantLotes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 QUANTIDADE_AGENTES_RECUPERADOS_CRIANCA_FEMININO, RECUPERADO,
+                 FEMININO, CRIANCA, &i);
+
+  inserirAgentes(quantAgentes, agentes, parametros, indexParametros, quantLotes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 QUANTIDADE_AGENTES_SUSCETIVEIS_JOVEM_MASCULINO, SUSCETIVEL,
+                 MASCULINO, JOVEM, &i);
+  inserirAgentes(quantAgentes, agentes, parametros, indexParametros, quantLotes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 QUANTIDADE_AGENTES_EXPOSTOS_JOVEM_MASCULINO, EXPOSTO,
+                 MASCULINO, JOVEM, &i);
+  inserirAgentes(quantAgentes, agentes, parametros, indexParametros, quantLotes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 QUANTIDADE_AGENTES_INFECTADOS_JOVEM_MASCULINO, INFECTADO,
+                 MASCULINO, JOVEM, &i);
+  inserirAgentes(quantAgentes, agentes, parametros, indexParametros, quantLotes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 QUANTIDADE_AGENTES_RECUPERADOS_JOVEM_MASCULINO, RECUPERADO,
+                 MASCULINO, JOVEM, &i);
+  inserirAgentes(quantAgentes, agentes, parametros, indexParametros, quantLotes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 QUANTIDADE_AGENTES_SUSCETIVEIS_JOVEM_FEMININO, SUSCETIVEL,
+                 FEMININO, JOVEM, &i);
+  inserirAgentes(quantAgentes, agentes, parametros, indexParametros, quantLotes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 QUANTIDADE_AGENTES_EXPOSTOS_JOVEM_FEMININO, EXPOSTO, FEMININO,
+                 JOVEM, &i);
+  inserirAgentes(quantAgentes, agentes, parametros, indexParametros, quantLotes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 QUANTIDADE_AGENTES_INFECTADOS_JOVEM_FEMININO, INFECTADO,
+                 FEMININO, JOVEM, &i);
+  inserirAgentes(quantAgentes, agentes, parametros, indexParametros, quantLotes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 QUANTIDADE_AGENTES_RECUPERADOS_JOVEM_FEMININO, RECUPERADO,
+                 FEMININO, JOVEM, &i);
+
+  inserirAgentes(quantAgentes, agentes, parametros, indexParametros, quantLotes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 QUANTIDADE_AGENTES_SUSCETIVEIS_ADULTO_MASCULINO, SUSCETIVEL,
+                 MASCULINO, ADULTO, &i);
+  inserirAgentes(quantAgentes, agentes, parametros, indexParametros, quantLotes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 QUANTIDADE_AGENTES_EXPOSTOS_ADULTO_MASCULINO, EXPOSTO,
+                 MASCULINO, ADULTO, &i);
+  inserirAgentes(quantAgentes, agentes, parametros, indexParametros, quantLotes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 QUANTIDADE_AGENTES_INFECTADOS_ADULTO_MASCULINO, INFECTADO,
+                 MASCULINO, ADULTO, &i);
+  inserirAgentes(quantAgentes, agentes, parametros, indexParametros, quantLotes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 QUANTIDADE_AGENTES_RECUPERADOS_ADULTO_MASCULINO, RECUPERADO,
+                 MASCULINO, ADULTO, &i);
+  inserirAgentes(quantAgentes, agentes, parametros, indexParametros, quantLotes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 QUANTIDADE_AGENTES_SUSCETIVEIS_ADULTO_FEMININO, SUSCETIVEL,
+                 FEMININO, ADULTO, &i);
+  inserirAgentes(quantAgentes, agentes, parametros, indexParametros, quantLotes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 QUANTIDADE_AGENTES_EXPOSTOS_ADULTO_FEMININO, EXPOSTO, FEMININO,
+                 ADULTO, &i);
+  inserirAgentes(quantAgentes, agentes, parametros, indexParametros, quantLotes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 QUANTIDADE_AGENTES_INFECTADOS_ADULTO_FEMININO, INFECTADO,
+                 FEMININO, ADULTO, &i);
+  inserirAgentes(quantAgentes, agentes, parametros, indexParametros, quantLotes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 QUANTIDADE_AGENTES_RECUPERADOS_ADULTO_FEMININO, RECUPERADO,
+                 FEMININO, ADULTO, &i);
+
+  inserirAgentes(quantAgentes, agentes, parametros, indexParametros, quantLotes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 QUANTIDADE_AGENTES_SUSCETIVEIS_IDOSO_MASCULINO, SUSCETIVEL,
+                 MASCULINO, IDOSO, &i);
+  inserirAgentes(quantAgentes, agentes, parametros, indexParametros, quantLotes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 QUANTIDADE_AGENTES_EXPOSTOS_IDOSO_MASCULINO, EXPOSTO,
+                 MASCULINO, IDOSO, &i);
+  inserirAgentes(quantAgentes, agentes, parametros, indexParametros, quantLotes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 QUANTIDADE_AGENTES_INFECTADOS_IDOSO_MASCULINO, INFECTADO,
+                 MASCULINO, IDOSO, &i);
+  inserirAgentes(quantAgentes, agentes, parametros, indexParametros, quantLotes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 QUANTIDADE_AGENTES_RECUPERADOS_IDOSO_MASCULINO, RECUPERADO,
+                 MASCULINO, IDOSO, &i);
+  inserirAgentes(quantAgentes, agentes, parametros, indexParametros, quantLotes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 QUANTIDADE_AGENTES_SUSCETIVEIS_IDOSO_FEMININO, SUSCETIVEL,
+                 FEMININO, IDOSO, &i);
+  inserirAgentes(quantAgentes, agentes, parametros, indexParametros, quantLotes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 QUANTIDADE_AGENTES_EXPOSTOS_IDOSO_FEMININO, EXPOSTO, FEMININO,
+                 IDOSO, &i);
+  inserirAgentes(quantAgentes, agentes, parametros, indexParametros, quantLotes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 QUANTIDADE_AGENTES_INFECTADOS_IDOSO_FEMININO, INFECTADO,
+                 FEMININO, IDOSO, &i);
+  inserirAgentes(quantAgentes, agentes, parametros, indexParametros, quantLotes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 QUANTIDADE_AGENTES_RECUPERADOS_IDOSO_FEMININO, RECUPERADO,
+                 FEMININO, IDOSO, &i);
   return agentes;
 }
 
@@ -625,20 +657,16 @@ __global__ void contato(curandState *seeds, TIPO_AGENTE *agentes,
             double taxa;
             switch (GET_I(i)) {
             case CRIANCA:
-              taxa = TAXA_INFECCAO_CRIANCA(
-                                           curand_uniform_double(&seeds[pos]));
+              taxa = TAXA_INFECCAO_CRIANCA(curand_uniform_double(&seeds[pos]));
               break;
             case JOVEM:
-              taxa =
-                  TAXA_INFECCAO_JOVEM(curand_uniform_double(&seeds[pos]));
+              taxa = TAXA_INFECCAO_JOVEM(curand_uniform_double(&seeds[pos]));
               break;
             case ADULTO:
-              taxa = TAXA_INFECCAO_ADULTO(
-                                          curand_uniform_double(&seeds[pos]));
+              taxa = TAXA_INFECCAO_ADULTO(curand_uniform_double(&seeds[pos]));
               break;
             case IDOSO:
-              taxa =
-                  TAXA_INFECCAO_IDOSO(curand_uniform_double(&seeds[pos]));
+              taxa = TAXA_INFECCAO_IDOSO(curand_uniform_double(&seeds[pos]));
               break;
             }
             if (curand_uniform_double(&seeds[pos]) <= taxa) {
@@ -662,20 +690,16 @@ __global__ void transicao(curandState *seeds, TIPO_AGENTE *agentes,
       double periodo;
       switch (GET_I(i)) {
       case CRIANCA:
-        periodo = PERIODO_EXPOSTO_CRIANCA(
-                                          curand_uniform_double(&seeds[i]));
+        periodo = PERIODO_EXPOSTO_CRIANCA(curand_uniform_double(&seeds[i]));
         break;
       case JOVEM:
-        periodo = PERIODO_EXPOSTO_JOVEM(
-                                        curand_uniform_double(&seeds[i]));
+        periodo = PERIODO_EXPOSTO_JOVEM(curand_uniform_double(&seeds[i]));
         break;
       case ADULTO:
-        periodo = PERIODO_EXPOSTO_ADULTO(
-                                         curand_uniform_double(&seeds[i]));
+        periodo = PERIODO_EXPOSTO_ADULTO(curand_uniform_double(&seeds[i]));
         break;
       case IDOSO:
-        periodo = PERIODO_EXPOSTO_IDOSO(
-                                        curand_uniform_double(&seeds[i]));
+        periodo = PERIODO_EXPOSTO_IDOSO(curand_uniform_double(&seeds[i]));
         break;
       }
       if (c >= periodo) {
@@ -689,20 +713,16 @@ __global__ void transicao(curandState *seeds, TIPO_AGENTE *agentes,
       double periodo;
       switch (GET_I(i)) {
       case CRIANCA:
-        periodo = PERIODO_INFECTADO_CRIANCA(
-                                            curand_uniform_double(&seeds[i]));
+        periodo = PERIODO_INFECTADO_CRIANCA(curand_uniform_double(&seeds[i]));
         break;
       case JOVEM:
-        periodo = PERIODO_INFECTADO_JOVEM(
-                                          curand_uniform_double(&seeds[i]));
+        periodo = PERIODO_INFECTADO_JOVEM(curand_uniform_double(&seeds[i]));
         break;
       case ADULTO:
-        periodo = PERIODO_INFECTADO_ADULTO(
-                                           curand_uniform_double(&seeds[i]));
+        periodo = PERIODO_INFECTADO_ADULTO(curand_uniform_double(&seeds[i]));
         break;
       case IDOSO:
-        periodo = PERIODO_INFECTADO_IDOSO(
-                                          curand_uniform_double(&seeds[i]));
+        periodo = PERIODO_INFECTADO_IDOSO(curand_uniform_double(&seeds[i]));
         break;
       }
       if (c >= periodo) {
@@ -716,20 +736,16 @@ __global__ void transicao(curandState *seeds, TIPO_AGENTE *agentes,
       double periodo;
       switch (GET_I(i)) {
       case CRIANCA:
-        periodo = PERIODO_RECUPERADO_CRIANCA(
-                                             curand_uniform_double(&seeds[i]));
+        periodo = PERIODO_RECUPERADO_CRIANCA(curand_uniform_double(&seeds[i]));
         break;
       case JOVEM:
-        periodo = PERIODO_RECUPERADO_JOVEM(
-                                           curand_uniform_double(&seeds[i]));
+        periodo = PERIODO_RECUPERADO_JOVEM(curand_uniform_double(&seeds[i]));
         break;
       case ADULTO:
-        periodo = PERIODO_RECUPERADO_ADULTO(
-                                            curand_uniform_double(&seeds[i]));
+        periodo = PERIODO_RECUPERADO_ADULTO(curand_uniform_double(&seeds[i]));
         break;
       case IDOSO:
-        periodo = PERIODO_RECUPERADO_IDOSO(
-                                           curand_uniform_double(&seeds[i]));
+        periodo = PERIODO_RECUPERADO_IDOSO(curand_uniform_double(&seeds[i]));
         break;
       }
       if (c >= periodo) {
@@ -878,20 +894,16 @@ void transicao(TIPO_AGENTE *agentes, int quantAgentes, const double *parametros,
       double periodo;
       switch (GET_I(i)) {
       case CRIANCA:
-        periodo =
-            PERIODO_EXPOSTO_CRIANCA(randomizarPercentual());
+        periodo = PERIODO_EXPOSTO_CRIANCA(randomizarPercentual());
         break;
       case JOVEM:
-        periodo =
-            PERIODO_EXPOSTO_JOVEM(randomizarPercentual());
+        periodo = PERIODO_EXPOSTO_JOVEM(randomizarPercentual());
         break;
       case ADULTO:
-        periodo =
-            PERIODO_EXPOSTO_ADULTO(randomizarPercentual());
+        periodo = PERIODO_EXPOSTO_ADULTO(randomizarPercentual());
         break;
       case IDOSO:
-        periodo =
-            PERIODO_EXPOSTO_IDOSO(randomizarPercentual());
+        periodo = PERIODO_EXPOSTO_IDOSO(randomizarPercentual());
         break;
       }
       if (c >= periodo) {
@@ -905,20 +917,16 @@ void transicao(TIPO_AGENTE *agentes, int quantAgentes, const double *parametros,
       double periodo;
       switch (GET_I(i)) {
       case CRIANCA:
-        periodo =
-            PERIODO_INFECTADO_CRIANCA(randomizarPercentual());
+        periodo = PERIODO_INFECTADO_CRIANCA(randomizarPercentual());
         break;
       case JOVEM:
-        periodo =
-            PERIODO_INFECTADO_JOVEM(randomizarPercentual());
+        periodo = PERIODO_INFECTADO_JOVEM(randomizarPercentual());
         break;
       case ADULTO:
-        periodo =
-            PERIODO_INFECTADO_ADULTO(randomizarPercentual());
+        periodo = PERIODO_INFECTADO_ADULTO(randomizarPercentual());
         break;
       case IDOSO:
-        periodo =
-            PERIODO_INFECTADO_IDOSO(randomizarPercentual());
+        periodo = PERIODO_INFECTADO_IDOSO(randomizarPercentual());
         break;
       }
       if (c >= periodo) {
@@ -932,20 +940,16 @@ void transicao(TIPO_AGENTE *agentes, int quantAgentes, const double *parametros,
       double periodo;
       switch (GET_I(i)) {
       case CRIANCA:
-        periodo = PERIODO_RECUPERADO_CRIANCA(
-                                             randomizarPercentual());
+        periodo = PERIODO_RECUPERADO_CRIANCA(randomizarPercentual());
         break;
       case JOVEM:
-        periodo =
-            PERIODO_RECUPERADO_JOVEM(randomizarPercentual());
+        periodo = PERIODO_RECUPERADO_JOVEM(randomizarPercentual());
         break;
       case ADULTO:
-        periodo =
-            PERIODO_RECUPERADO_ADULTO(randomizarPercentual());
+        periodo = PERIODO_RECUPERADO_ADULTO(randomizarPercentual());
         break;
       case IDOSO:
-        periodo =
-            PERIODO_RECUPERADO_IDOSO(randomizarPercentual());
+        periodo = PERIODO_RECUPERADO_IDOSO(randomizarPercentual());
         break;
       }
       if (c >= periodo) {
