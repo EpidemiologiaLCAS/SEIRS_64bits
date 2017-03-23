@@ -101,7 +101,7 @@ double randomizarPercentual() { return dis(gen); }
 
 namespace Parametros {
 
-tuple<int, int *, int *, int *, int *, int *, int *> lerVetores() {
+tuple<int, int *, int *, int *, int *, int *, int *, int *, int *> lerVetores() {
   int quantQuadras;
   int *quantLotes;
   int *indexQuadras;
@@ -109,6 +109,8 @@ tuple<int, int *, int *, int *, int *, int *, int *> lerVetores() {
   int *vizinhancas;
   int *indexPosicoes;
   int *posicoes;
+  int *indexFronteiras;
+  int *fronteiras;
   string nomeArquivoEntrada =
       string("Entradas") + SEPARADOR + string("Vetores.csv");
   ifstream arquivoEntrada(nomeArquivoEntrada);
@@ -147,13 +149,24 @@ tuple<int, int *, int *, int *, int *, int *, int *> lerVetores() {
       arquivoEntrada >> posicoes[i];
       arquivoEntrada.get();
     }
+    indexFronteiras = new int[indexQuadras[quantQuadras * 2 - 1] + 1];
+    for (int i = 0; i < indexQuadras[quantQuadras * 2 - 1] + 1; ++i) {
+      arquivoEntrada >> indexFronteiras[i];
+      arquivoEntrada.get();
+    }
+    fronteiras = new int[indexFronteiras[indexQuadras[quantQuadras * 2 - 1]]];
+    for (int i = 0; i < indexFronteiras[indexQuadras[quantQuadras * 2 - 1]];
+         ++i) {
+      arquivoEntrada >> fronteiras[i];
+      arquivoEntrada.get();
+    }
     arquivoEntrada.close();
   } else {
     cerr << "Arquivo: " << nomeArquivoEntrada << " nao foi aberto!" << endl;
     exit(1);
   }
   return make_tuple(quantQuadras, quantLotes, indexQuadras, indexVizinhancas,
-                    vizinhancas, indexPosicoes, posicoes);
+                    vizinhancas, indexPosicoes, posicoes, indexFronteiras, fronteiras);
 }
 
 tuple<int, double *> lerParametros(string pastaEntrada, const int *quantLotes,
