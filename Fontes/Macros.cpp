@@ -27,6 +27,21 @@
 #define COLUNAS_SAIDAS_QUANTIDADES 34
 #define VEC(i, j, num_colunas) (((i) * (num_colunas)) + (j))
 
+#define RUA 0
+
+#define Q_ORIGEM 11
+#define L_ORIGEM 2
+#define X_ORIGEM 251345
+#define Y_ORIGEM 7237341
+
+#define Q_DESTINO 14
+#define L_DESTINO 0
+#define X_DESTINO 251329
+#define Y_DESTINO 7237128
+
+#define ABS(x) (x < 0 ? (-1 * x) : x)
+#define DIST(x1, y1, x2, y2) (double)(sqrt(pow(x1 - x2, 2.0) + pow(y1 - y2, 2.0)))
+
 #ifdef __CONVENCIONAL__
 
 #define TIPO_AGENTE int

@@ -5,6 +5,8 @@
 #include <iostream>
 #include <random>
 #include <tuple>
+#include <climits>
+#include <cmath>
 
 #if defined(__GPU__)
 

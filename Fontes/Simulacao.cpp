@@ -46,7 +46,12 @@ TIPO_AGENTE *criarAgentes(int quantAgentes, const double *parametros,
                           const int *indexPosicoes, const int *posicoes) {
   int i = 0;
   TIPO_AGENTE *agentes = new TIPO_AGENTE[quantAgentes * ATRIBUTOS_AGENTE];
-  inserirAgentes(quantAgentes, agentes, parametros, indexParametros, quantLotes,
+  
+  
+  inicializarAgente(agentes, i, SUSCETIVEL, X_ORIGEM, Y_ORIGEM, L_ORIGEM, Q_ORIGEM, MASCULINO, ADULTO);
+  
+  
+  /*inserirAgentes(quantAgentes, agentes, parametros, indexParametros, quantLotes,
                  quantQuadras, indexQuadras, indexPosicoes, posicoes,
                  QUANTIDADE_AGENTES_SUSCETIVEIS_CRIANCA_MASCULINO, SUSCETIVEL,
                  MASCULINO, CRIANCA, &i);
@@ -176,14 +181,19 @@ TIPO_AGENTE *criarAgentes(int quantAgentes, const double *parametros,
   inserirAgentes(quantAgentes, agentes, parametros, indexParametros, quantLotes,
                  quantQuadras, indexQuadras, indexPosicoes, posicoes,
                  QUANTIDADE_AGENTES_RECUPERADOS_IDOSO_FEMININO, RECUPERADO,
-                 FEMININO, IDOSO, &i);
+                 FEMININO, IDOSO, &i);*/
   return agentes;
 }
 
 int contarTotalAgentes(const int *quantLotes, int quantQuadras,
                        const double *parametros, const int *indexParametros) {
   int quantAgentes = 0;
-  quantAgentes += QUANTIDADE_AGENTES_SUSCETIVEIS_CRIANCA_MASCULINO +
+  
+  
+  quantAgentes = 1;
+  
+  
+  /*quantAgentes += QUANTIDADE_AGENTES_SUSCETIVEIS_CRIANCA_MASCULINO +
                   QUANTIDADE_AGENTES_EXPOSTOS_CRIANCA_MASCULINO +
                   QUANTIDADE_AGENTES_INFECTADOS_CRIANCA_MASCULINO +
                   QUANTIDADE_AGENTES_RECUPERADOS_CRIANCA_MASCULINO +
@@ -217,7 +227,7 @@ int contarTotalAgentes(const int *quantLotes, int quantQuadras,
                   QUANTIDADE_AGENTES_SUSCETIVEIS_IDOSO_FEMININO +
                   QUANTIDADE_AGENTES_EXPOSTOS_IDOSO_FEMININO +
                   QUANTIDADE_AGENTES_INFECTADOS_IDOSO_FEMININO +
-                  QUANTIDADE_AGENTES_RECUPERADOS_IDOSO_FEMININO;
+                  QUANTIDADE_AGENTES_RECUPERADOS_IDOSO_FEMININO;*/
   return quantAgentes;
 }
 }
@@ -392,7 +402,7 @@ __global__ void gerarSaidaEspacial(const TIPO_AGENTE *agentes, int quantAgentes,
     int y = posicoes[pos * 4 + 1];
     int l = posicoes[pos * 4 + 2];
     int q = posicoes[pos * 4 + 3];
-    int e;
+    int e;    
     for (int i = 0; i < quantAgentes; ++i) {
       if (GET_Q(i) == q && GET_L(i) == l && GET_X(i) == x && GET_Y(i) == y) {
         e = 2000;
@@ -543,7 +553,7 @@ void gerarSaidaEspacial(const TIPO_AGENTE *agentes, int quantAgentes,
     int y = posicoes[pos * 4 + 1];
     int l = posicoes[pos * 4 + 2];
     int q = posicoes[pos * 4 + 3];
-    int e;
+    int e;    
     for (int i = 0; i < quantAgentes; ++i) {
       if (GET_Q(i) == q && GET_L(i) == l && GET_X(i) == x && GET_Y(i) == y) {
         e = 2000;
@@ -570,7 +580,7 @@ __global__ void movimentacao(curandState *seeds, TIPO_AGENTE *agentes,
                              const int *vizinhancas, const double *parametros,
                              const int *indexParametros, const int *indexFronteiras, 
                              const int *fronteiras, int chunk) {
-  int id = (threadIdx.x + blockIdx.x * blockDim.x) + chunk;
+  int id = (threadIdx.x + blockIdx.x * blockDim.x) + chunk;  
   if (id < quantAgentes) {
     int q = GET_Q(id);
     int l = GET_L(id);
@@ -777,8 +787,9 @@ void movimentacao(TIPO_AGENTE *agentes, int quantAgentes,
                   const int *vizinhancas, const double *parametros,
                   const int *indexParametros, const int *indexFronteiras, 
                   const int *fronteiras) {
+
 #pragma omp parallel for
-  for (int id = 0; id < quantAgentes; id++) {
+  for (int id = 0; id < quantAgentes; ++id) {
     int q = GET_Q(id);
     int l = GET_L(id);
     int x = GET_X(id);
@@ -799,6 +810,7 @@ void movimentacao(TIPO_AGENTE *agentes, int quantAgentes,
       break;
     }
     if (randomizarPercentual() <= taxa) {
+      // Conta quantas posições de vizinhança o agente possui
       int quantidade = 0;
       for (int i = indexVizinhancas[indexQuadras[2 * q] + l];
            i < indexVizinhancas[indexQuadras[2 * q] + l + 1]; i += 6) {
@@ -806,7 +818,9 @@ void movimentacao(TIPO_AGENTE *agentes, int quantAgentes,
           quantidade++;
         }
       }
+      // Se o agente possuir posições de vizinhanças
       if (quantidade > 0) {
+        // Coleta as posições da vizinhança do agente
         int *posicoes = new int[quantidade * 4];
         int k = 0;
         for (int i = indexVizinhancas[indexQuadras[2 * q] + l];
@@ -819,18 +833,172 @@ void movimentacao(TIPO_AGENTE *agentes, int quantAgentes,
             k++;
           }
         }
-        int indice = (int)(randomizarPercentual() * quantidade);
-        x = posicoes[4 * indice + 0];
-        y = posicoes[4 * indice + 1];
-        l = posicoes[4 * indice + 2];
-        q = posicoes[4 * indice + 3];
-        delete[](posicoes);
-        SET_X(id, x);
-        SET_Y(id, y);
-        SET_L(id, l);
-        SET_Q(id, q);
+        // O agente está na quadra e no lote de origem
+        if (q == Q_ORIGEM && l == L_ORIGEM) {
+            // Conta quantas posições vizinhas pertencem à uma rua
+            int pontosRuas = 0;
+            for (int i = 0; i < quantidade; i++) { 
+              if (posicoes[4 * i + 3] == RUA) {
+                  pontosRuas++;
+              }
+            }
+            // Se a vizinhança do agente tem uma posição vizinha que pertence a uma rua
+            // (O agente está na fronteira do lote)
+            // Move o agente para esta posição  
+            if (pontosRuas > 0) {          
+              for (int i = 0; i < quantidade; i++) {
+                if (posicoes[4 * i + 3] == RUA) {
+                    x = posicoes[4 * i + 0];
+                    y = posicoes[4 * i + 1];
+                    l = posicoes[4 * i + 2];
+                    q = posicoes[4 * i + 3];
+                    delete[](posicoes);
+                    SET_X(id, x);
+                    SET_Y(id, y);
+                    SET_L(id, l);
+                    SET_Q(id, q);
+                    break;
+                }
+              }
+            } else {
+              // Se a vizinhança do agente não tem uma posição vizinha que pertence a uma rua
+              // (O agente está no interior do lote)
+              // Encontra na lista de pontos de fronteira o ponto com menor distância ao destino
+              int indMenorFront = 0;
+              double distMenorFront = INT_MAX;
+              for (int i = indexFronteiras[indexQuadras[2 * q] + l];
+                 i < indexFronteiras[indexQuadras[2 * q] + l + 1]; i += 2) {
+                double dist = DIST(fronteiras[i + 0], fronteiras[i + 1], X_DESTINO, Y_DESTINO);
+                if (dist < distMenorFront) {
+                  distMenorFront = dist;
+                  indMenorFront = i;
+                }
+              }
+              // Encontra na vizinhança do agente o ponto com menor distância ao ponto de fronteira
+              int indMenorViz = 0;
+              double distMenorViz = INT_MAX;
+              for (int i = 0; i < quantidade; i++) { 
+                double dist = DIST(posicoes[4 * i + 0], posicoes[4 * i + 1], fronteiras[indMenorFront + 0], fronteiras[indMenorFront + 1]);
+                if (dist < distMenorViz) {
+                    distMenorViz = dist;
+                    indMenorViz = i;
+                }
+              }
+              // Move o agente
+              x = posicoes[4 * indMenorViz + 0];
+              y = posicoes[4 * indMenorViz + 1];
+              l = posicoes[4 * indMenorViz + 2];
+              q = posicoes[4 * indMenorViz + 3];
+              delete[](posicoes);
+              SET_X(id, x);
+              SET_Y(id, y);
+              SET_L(id, l);
+              SET_Q(id, q);
+            }
+        } else {
+          // O agente está na rua
+          if (q == RUA) {
+            // Conta quantas posições vizinhas pertencem à quadra e lote destino
+            int pontosLoteDestino = 0;
+            for (int i = 0; i < quantidade; i++) { 
+              if (posicoes[4 * i + 2] == L_DESTINO && posicoes[4 * i + 3] == Q_DESTINO) {
+                  pontosLoteDestino++;
+              }
+            }
+            // Se a vizinhança do agente tem uma posição vizinha com o lote destino
+            // Move para esta posição  
+            if (pontosLoteDestino > 0) {         
+              for (int i = 0; i < quantidade; i++) {
+                if (posicoes[4 * i + 2] == L_DESTINO && posicoes[4 * i + 3] == Q_DESTINO) {
+                    x = posicoes[4 * i + 0];
+                    y = posicoes[4 * i + 1];
+                    l = posicoes[4 * i + 2];
+                    q = posicoes[4 * i + 3];
+                    delete[](posicoes);
+                    SET_X(id, x);
+                    SET_Y(id, y);
+                    SET_L(id, l);
+                    SET_Q(id, q);
+                    break;
+                }
+              }
+            } else {
+              // Se a vizinhança do agente não tem uma posição vizinha com o lote destino
+              // Encontra na vizinhança do agente o ponto de rua com menor distância ao destino
+              int indMenorViz = 0;
+              double distMenorViz = INT_MAX;
+              for (int i = 0; i < quantidade; i++) { 
+                if (posicoes[4 * i + 3] == RUA) {
+                  double dist = DIST(posicoes[4 * i + 0], posicoes[4 * i + 1], X_DESTINO, Y_DESTINO);
+                  if (dist < distMenorViz) {
+                      distMenorViz = dist;
+                      indMenorViz = i;
+                  }
+                }
+              }
+              // Move o agente
+              x = posicoes[4 * indMenorViz + 0];
+              y = posicoes[4 * indMenorViz + 1];
+              l = posicoes[4 * indMenorViz + 2];
+              q = posicoes[4 * indMenorViz + 3];
+              delete[](posicoes);
+              SET_X(id, x);
+              SET_Y(id, y);
+              SET_L(id, l);
+              SET_Q(id, q);
+            }
+          } else {
+            // O agente está na quadra e no lote de destino
+            if (q == Q_DESTINO && l == L_DESTINO) { 
+              // Se o agente não estiver na posição destino
+              if (x != X_DESTINO && y != Y_DESTINO) {
+                // Verifica se a vizinhança do agente contém o ponto destino
+                bool pontoDestino = false;
+                for (int i = 0; i < quantidade; i++) { 
+                  if (posicoes[4 * i + 0] == X_DESTINO && posicoes[4 * i + 1] == Y_DESTINO && posicoes[4 * i + 2] == L_DESTINO && posicoes[4 * i + 3] == Q_DESTINO) {
+                      pontoDestino = true;
+                      break;
+                  }
+                }
+                // Se a vizinhança do agente contém o ponto destino
+                // Move o agente para o ponto destino  
+                if (pontoDestino) {        
+                    delete[](posicoes);
+                    SET_X(id, X_DESTINO);
+                    SET_Y(id, Y_DESTINO);
+                    SET_L(id, L_DESTINO);
+                    SET_Q(id, Q_DESTINO);
+                } else {
+                  // Se a vizinhança do agente não contém o ponto destino
+                  // Encontra na vizinhança do agente o ponto com menor distância ao destino
+                  int indMenorViz = 0;
+                  double distMenorViz = INT_MAX;
+                  for (int i = 0; i < quantidade; i++) { 
+                    if (posicoes[4 * i + 2] == L_DESTINO && posicoes[4 * i + 3] == Q_DESTINO) {
+                      double dist = DIST(posicoes[4 * i + 0], posicoes[4 * i + 1], X_DESTINO, Y_DESTINO);
+                      if (dist < distMenorViz) {
+                          distMenorViz = dist;
+                          indMenorViz = i;
+                      }
+                    }
+                  }
+                  // Move o agente
+                  x = posicoes[4 * indMenorViz + 0];
+                  y = posicoes[4 * indMenorViz + 1];
+                  l = posicoes[4 * indMenorViz + 2];
+                  q = posicoes[4 * indMenorViz + 3];
+                  delete[](posicoes);
+                  SET_X(id, x);
+                  SET_Y(id, y);
+                  SET_L(id, l);
+                  SET_Q(id, q);
+                }
+              } else cout << 'a' << endl;
+            }
+          }
+        }
       }
-    }
+    }    
   }
 }
 
