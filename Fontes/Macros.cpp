@@ -29,15 +29,15 @@
 
 #define RUA 0
 
-#define Q_ORIGEM 11
-#define L_ORIGEM 2
-#define X_ORIGEM 251345
-#define Y_ORIGEM 7237341
+#define Q_ORIGEM 1
+#define L_ORIGEM 10
+#define X_ORIGEM 251222
+#define Y_ORIGEM 7237644
 
-#define Q_DESTINO 14
-#define L_DESTINO 0
-#define X_DESTINO 251329
-#define Y_DESTINO 7237128
+#define Q_DESTINO 11
+#define L_DESTINO 5
+#define X_DESTINO 251388
+#define Y_DESTINO 7237304
 
 #define ABS(x) (x < 0 ? (-1 * x) : x)
 #define DIST(x1, y1, x2, y2) (double)(sqrt(pow(x1 - x2, 2.0) + pow(y1 - y2, 2.0)))
@@ -46,7 +46,7 @@
 
 #define TIPO_AGENTE int
 
-#define ATRIBUTOS_AGENTE 8
+#define ATRIBUTOS_AGENTE 10
 
 // Gets
 #define GET_Q(i) (int)(agentes[(i)*ATRIBUTOS_AGENTE + 0])
@@ -57,6 +57,8 @@
 #define GET_Y(i) (int)(agentes[(i)*ATRIBUTOS_AGENTE + 5])
 #define GET_C(i) (int)(agentes[(i)*ATRIBUTOS_AGENTE + 6])
 #define GET_E(i) (int)(agentes[(i)*ATRIBUTOS_AGENTE + 7])
+#define GET_M(i) (int)(agentes[(i)*ATRIBUTOS_AGENTE + 8])
+#define GET_F(i) (int)(agentes[(i)*ATRIBUTOS_AGENTE + 9])
 
 // Sets
 #define SET_Q(i, novo) (agentes[(i)*ATRIBUTOS_AGENTE + 0] = (novo))
@@ -67,6 +69,8 @@
 #define SET_Y(i, novo) (agentes[(i)*ATRIBUTOS_AGENTE + 5] = (novo))
 #define SET_C(i, novo) (agentes[(i)*ATRIBUTOS_AGENTE + 6] = (novo))
 #define SET_E(i, novo) (agentes[(i)*ATRIBUTOS_AGENTE + 7] = (novo))
+#define SET_M(i, novo) (agentes[(i)*ATRIBUTOS_AGENTE + 8] = (novo))
+#define SET_F(i, novo) (agentes[(i)*ATRIBUTOS_AGENTE + 9] = (novo))
 
 #endif
 

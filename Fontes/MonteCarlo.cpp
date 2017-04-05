@@ -110,8 +110,11 @@ void iniciarSimulacao(int idMonteCarlo, string pastaEntrada,
   int *posicoes;
   int *indexFronteiras;
   int *fronteiras;
+  int *indexEsquinas;
+  int *esquinas;
   tie(quantQuadras, quantLotes, indexQuadras, indexVizinhancas, vizinhancas,
-      indexPosicoes, posicoes, indexFronteiras, fronteiras) = Parametros::lerVetores();
+      indexPosicoes, posicoes, indexFronteiras, fronteiras, 
+      indexEsquinas, esquinas) = Parametros::lerVetores();
   int sizeParametros;
   double *parametros;
   tie(sizeParametros, parametros) = Parametros::lerParametros(
@@ -136,7 +139,7 @@ void iniciarSimulacao(int idMonteCarlo, string pastaEntrada,
         idSimulacao, parametros, sizeParametros, indexParametros,
         pastaSaidaSimulacao, saidaQuantidadeTotal, quantLotes, quantQuadras,
         indexQuadras, indexVizinhancas, vizinhancas, indexPosicoes, posicoes, 
-        indexFronteiras, fronteiras,
+        indexFronteiras, fronteiras, indexEsquinas, esquinas, 
         indexSaidaQuantidadeQuadras, saidaQuantidadeQuadras);
   }
 
@@ -154,6 +157,8 @@ void iniciarSimulacao(int idMonteCarlo, string pastaEntrada,
   delete[](posicoes);
   delete[](indexFronteiras);
   delete[](fronteiras);
+  delete[](indexEsquinas);
+  delete[](esquinas);
   delete[](indexSaidaQuantidadeQuadras);
   delete[](saidaQuantidadeQuadras);
   delete[](parametros);
