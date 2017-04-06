@@ -29,15 +29,15 @@
 
 #define RUA 0
 
-#define Q_ORIGEM 1
-#define L_ORIGEM 10
-#define X_ORIGEM 251222
-#define Y_ORIGEM 7237644
+#define Q_ORIGEM 3
+#define L_ORIGEM 3
+#define X_ORIGEM 251466
+#define Y_ORIGEM 7237700
 
-#define Q_DESTINO 11
-#define L_DESTINO 5
-#define X_DESTINO 251388
-#define Y_DESTINO 7237304
+#define Q_DESTINO 13
+#define L_DESTINO 8
+#define X_DESTINO 251266
+#define Y_DESTINO 7237116
 
 #define ABS(x) (x < 0 ? (-1 * x) : x)
 #define DIST(x1, y1, x2, y2) (double)(sqrt(pow(x1 - x2, 2.0) + pow(y1 - y2, 2.0)))
