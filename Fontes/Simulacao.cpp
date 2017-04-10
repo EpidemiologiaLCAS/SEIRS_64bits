@@ -791,7 +791,7 @@ void movimentacao(TIPO_AGENTE *agentes, int quantAgentes,
                   const int *vizinhancas, const double *parametros,
                   const int *indexParametros, const int *indexFronteiras, 
                   const int *fronteiras, const int *indexEsquinas, 
-                  const int *esquinas, int ciclo) {
+                  const int *esquinas, const int *indexCentrosEsquinas, const int *centrosEsquinas) {
 
 #pragma omp parallel for
   for (int id = 0; id < quantAgentes; ++id) {
@@ -936,9 +936,6 @@ void movimentacao(TIPO_AGENTE *agentes, int quantAgentes,
                 }
               }
             } else {
-              
-              
-              
               // Se a vizinhança do agente não tem uma posição vizinha com o lote destino
               // Se contador de movimentação do agente é maior que zero
               if (m > 0) {
@@ -1091,9 +1088,6 @@ void movimentacao(TIPO_AGENTE *agentes, int quantAgentes,
                 }
               }
             }
-            
-            
-            
           } else {
             // O AGENTE ESTÁ NA QUADRA E NO LOTE DE DESTINO
             if (q == Q_DESTINO && l == L_DESTINO) { 
@@ -1162,10 +1156,8 @@ void movimentacao(TIPO_AGENTE *agentes, int quantAgentes,
                   const int *vizinhancas, const double *parametros,
                   const int *indexParametros, const int *indexFronteiras, 
                   const int *fronteiras, const int *indexEsquinas, 
-                  const int *esquinas, int ciclo) {
-
-//int rota[] = {1, 5, 0};
-//int n_rota = 3;
+                  const int *esquinas, const int *indexCentrosEsquinas, 
+                  const int *centrosEsquinas) {
 
 int rota[] = {1, 2, 0, 4, 1, 5, 0};
 int n_rota = 7;
@@ -1178,6 +1170,7 @@ int n_rota = 7;
     int x = GET_X(id);
     int y = GET_Y(id);
     int m = GET_M(id);
+    //cout << q << " " << l << " " << m << endl;
     double taxa;
     switch (GET_I(id)) {
     case CRIANCA:
@@ -1339,24 +1332,36 @@ int n_rota = 7;
                 SET_Y(id, y);
                 SET_L(id, l);
                 SET_Q(id, q);
-              } else {                
-                // Procura um ponto na vizinhança que pertença a próxima rua da rota
+              } else {
+                // Procura um ponto central de esquina que pertença a próxima rua da rota
                 int pontoCentral;
-                bool vizPontoCentral = false;
-                for (int i = 0; i < quantidade; i++) {
-                  if (posicoes[4 * i + 2] == rota[m + 1]
-                    && posicoes[4 * i + 3] == RUA) {
-                    vizPontoCentral = true;
+                for (int i = indexCentrosEsquinas[l]; i < indexCentrosEsquinas[l + 1]; i += 3) {
+                  if (centrosEsquinas[i + 2] == rota[m + 1]) {
                     pontoCentral = i;
                     break;
                   }
                 }
-                // Se a vizinhança do agente contém o ponto
-                if (vizPontoCentral) {
+                // Encontra na vizinhança do agente o ponto mais próximo ao ponto 
+                // central da esquina que pertença a próxima rua da rota
+                int indMenorViz = 0;
+                double distMenorViz = INT_MAX;
+                for (int i = 0; i < quantidade; i++) { 
+                  if (posicoes[4 * i + 2] == rota[m + 1] && posicoes[4 * i + 3] == RUA) {
+                    double dist = DIST(posicoes[4 * i + 0], posicoes[4 * i + 1], 
+                    centrosEsquinas[pontoCentral + 0], centrosEsquinas[pontoCentral + 1]);
+                    if (dist < distMenorViz) {
+                        distMenorViz = dist;
+                        indMenorViz = i;
+                    }
+                  }
+                }
+                // Se a distância entre a posição do agente e a posição próxima ao centro da esquina
+                // for menor que 2
+                if (distMenorViz < 2) {
                   // Move o agente
-                  x = posicoes[4 * pontoCentral + 0];
-                  y = posicoes[4 * pontoCentral + 1];
-                  l = posicoes[4 * pontoCentral + 2];                  
+                  x = posicoes[4 * indMenorViz + 0];
+                  y = posicoes[4 * indMenorViz + 1];
+                  l = posicoes[4 * indMenorViz + 2];                  
                   delete[](posicoes);
                   SET_X(id, x);
                   SET_Y(id, y);
@@ -1364,21 +1369,14 @@ int n_rota = 7;
                   // incrementa o contador de movimentação
                   SET_M(id, m + 1);
                 } else {
-                  // Procura um ponto de esquina que pertença a próxima rua da rota
-                  int pontoCentral;
-                  for (int i = indexEsquinas[l]; i < indexEsquinas[l + 1]; i += 3) {
-                    if (esquinas[i + 2] == rota[m + 1]) {
-                      pontoCentral = i;
-                      break;
-                    }
-                  }
-                  // Encontra na vizinhança do agente o ponto mais próximo ao ponto da esquina
+                  // Encontra na vizinhança do agente o ponto mais próximo ao 
+                  // ponto central da esquina que pertença a mesma rua do agente
                   int indMenorViz = 0;
                   double distMenorViz = INT_MAX;
                   for (int i = 0; i < quantidade; i++) { 
                     if (posicoes[4 * i + 2] == l && posicoes[4 * i + 3] == RUA) {
                       double dist = DIST(posicoes[4 * i + 0], posicoes[4 * i + 1], 
-                      esquinas[pontoCentral + 0], esquinas[pontoCentral + 1]);
+                      centrosEsquinas[pontoCentral + 0], centrosEsquinas[pontoCentral + 1]);
                       if (dist < distMenorViz) {
                           distMenorViz = dist;
                           indMenorViz = i;
@@ -1600,6 +1598,7 @@ void iniciarSimulacao(int idSimulacao, const double *parametros,
                       const int *vizinhancas, const int *indexPosicoes,
                       const int *posicoes, const int *indexFronteiras, 
                       const int *fronteiras, const int *indexEsquinas, const int *esquinas, 
+                      const int *indexCentrosEsquinas, const int *centrosEsquinas,
                       const int *indexSaidaQuantidadeQuadras,
                       int *saidaQuantidadeQuadras) {
   int ciclos = NUMERO_CICLOS_SIMULACAO + 1;
@@ -1841,7 +1840,7 @@ void iniciarSimulacao(int idSimulacao, const double *parametros,
   for (int ciclo = 1; ciclo < ciclos; ++ciclo) {
     movimentacao(agentes, quantAgentes, indexQuadras, indexVizinhancas,
                  vizinhancas, parametros, indexParametros, indexFronteiras, 
-                 fronteiras, indexEsquinas, esquinas, ciclo);
+                 fronteiras, indexEsquinas, esquinas, indexCentrosEsquinas, centrosEsquinas);
     contato(agentes, quantAgentes, quantLotes, quantQuadras, parametros,
             indexParametros, indexQuadras, indexPosicoes, posicoes);
     transicao(agentes, quantAgentes, parametros, indexParametros);
