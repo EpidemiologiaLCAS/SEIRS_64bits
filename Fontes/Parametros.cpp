@@ -101,7 +101,9 @@ double randomizarPercentual() { return dis(gen); }
 
 namespace Parametros {
 
-tuple<int, int *, int *, int *, int *, int *, int *, int *, int *, int *, int *, int *, int *> lerVetores() {
+tuple<int, int *, int *, int *, int *, int *, int *, int *, int *, int *, int *,
+      int *, int *>
+lerVetores() {
   int quantQuadras;
   int *quantLotes;
   int *indexQuadras;
@@ -190,8 +192,9 @@ tuple<int, int *, int *, int *, int *, int *, int *, int *, int *, int *, int *,
     exit(1);
   }
   return make_tuple(quantQuadras, quantLotes, indexQuadras, indexVizinhancas,
-                    vizinhancas, indexPosicoes, posicoes, indexFronteiras, fronteiras, 
-                    indexEsquinas, esquinas, indexCentrosEsquinas, centrosEsquinas);
+                    vizinhancas, indexPosicoes, posicoes, indexFronteiras,
+                    fronteiras, indexEsquinas, esquinas, indexCentrosEsquinas,
+                    centrosEsquinas);
 }
 
 tuple<int, double *> lerParametros(string pastaEntrada, const int *quantLotes,

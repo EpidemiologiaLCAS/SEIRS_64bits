@@ -40,7 +40,8 @@
 #define Y_DESTINO 7237116
 
 #define ABS(x) (x < 0 ? (-1 * x) : x)
-#define DIST(x1, y1, x2, y2) (double)(sqrt(pow(x1 - x2, 2.0) + pow(y1 - y2, 2.0)))
+#define DIST(x1, y1, x2, y2)                                                   \
+  (double)(sqrt(pow(x1 - x2, 2.0) + pow(y1 - y2, 2.0)))
 
 #ifdef __CONVENCIONAL__
 
