@@ -39,8 +39,10 @@ int main(int argc, char **argv) {
 
 #if defined(__GPU__)
 
-  cudaSetDevice(atoi(argv[1]));
-
+  if (argc == 2) {
+    cudaSetDevice(atoi(argv[1]));
+  }
+  
 #endif
 
   string pastaEntrada, pastaSaida;

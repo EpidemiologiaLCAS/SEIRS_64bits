@@ -29,25 +29,18 @@
 
 #define RUA 0
 
-#define Q_ORIGEM 3
-#define L_ORIGEM 3
-#define X_ORIGEM 251466
-#define Y_ORIGEM 7237700
-
-#define Q_DESTINO 13
-#define L_DESTINO 8
-#define X_DESTINO 251266
-#define Y_DESTINO 7237116
+#define TRAJETO int trajeto[] = {0, 1, 2, 3}
+#define N_TRAJETO int n_trajeto = 4
+#define TEMPO 10
 
 #define ABS(x) (x < 0 ? (-1 * x) : x)
-#define DIST(x1, y1, x2, y2)                                                   \
-  (double)(sqrt(pow(x1 - x2, 2.0) + pow(y1 - y2, 2.0)))
+#define DIST(x1, y1, x2, y2) (double)(sqrt(pow(x1 - x2, 2.0) + pow(y1 - y2, 2.0)))
 
 #ifdef __CONVENCIONAL__
 
 #define TIPO_AGENTE int
 
-#define ATRIBUTOS_AGENTE 10
+#define ATRIBUTOS_AGENTE 11
 
 // Gets
 #define GET_Q(i) (int)(agentes[(i)*ATRIBUTOS_AGENTE + 0])
@@ -60,6 +53,7 @@
 #define GET_E(i) (int)(agentes[(i)*ATRIBUTOS_AGENTE + 7])
 #define GET_M(i) (int)(agentes[(i)*ATRIBUTOS_AGENTE + 8])
 #define GET_F(i) (int)(agentes[(i)*ATRIBUTOS_AGENTE + 9])
+#define GET_R(i) (int)(agentes[(i)*ATRIBUTOS_AGENTE + 10])
 
 // Sets
 #define SET_Q(i, novo) (agentes[(i)*ATRIBUTOS_AGENTE + 0] = (novo))
@@ -72,6 +66,7 @@
 #define SET_E(i, novo) (agentes[(i)*ATRIBUTOS_AGENTE + 7] = (novo))
 #define SET_M(i, novo) (agentes[(i)*ATRIBUTOS_AGENTE + 8] = (novo))
 #define SET_F(i, novo) (agentes[(i)*ATRIBUTOS_AGENTE + 9] = (novo))
+#define SET_R(i, novo) (agentes[(i)*ATRIBUTOS_AGENTE + 10] = (novo))
 
 #endif
 

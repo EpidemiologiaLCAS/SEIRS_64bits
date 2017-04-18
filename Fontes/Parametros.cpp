@@ -102,7 +102,7 @@ double randomizarPercentual() { return dis(gen); }
 namespace Parametros {
 
 tuple<int, int *, int *, int *, int *, int *, int *, int *, int *, int *, int *,
-      int *, int *>
+      int *, int *, int, int *, int *>
 lerVetores() {
   int quantQuadras;
   int *quantLotes;
@@ -117,6 +117,9 @@ lerVetores() {
   int *esquinas;
   int *indexCentrosEsquinas;
   int *centrosEsquinas;
+  int quantRotas;
+  int *indexRotas;
+  int *rotas;
   string nomeArquivoEntrada =
       string("Entradas") + SEPARADOR + string("Vetores.csv");
   ifstream arquivoEntrada(nomeArquivoEntrada);
@@ -186,6 +189,18 @@ lerVetores() {
       arquivoEntrada >> centrosEsquinas[i];
       arquivoEntrada.get();
     }
+    arquivoEntrada >> quantRotas;
+    arquivoEntrada.get();
+    indexRotas = new int[quantRotas + 1];
+    for (int i = 0; i < quantRotas + 1; ++i) {
+      arquivoEntrada >> indexRotas[i];
+      arquivoEntrada.get();
+    }
+    rotas = new int[indexRotas[quantRotas]];
+    for (int i = 0; i < indexRotas[quantRotas]; ++i) {
+      arquivoEntrada >> rotas[i];
+      arquivoEntrada.get();
+    }
     arquivoEntrada.close();
   } else {
     cerr << "Arquivo: " << nomeArquivoEntrada << " nao foi aberto!" << endl;
@@ -194,7 +209,7 @@ lerVetores() {
   return make_tuple(quantQuadras, quantLotes, indexQuadras, indexVizinhancas,
                     vizinhancas, indexPosicoes, posicoes, indexFronteiras,
                     fronteiras, indexEsquinas, esquinas, indexCentrosEsquinas,
-                    centrosEsquinas);
+                    centrosEsquinas, quantRotas, indexRotas, rotas);
 }
 
 tuple<int, double *> lerParametros(string pastaEntrada, const int *quantLotes,
