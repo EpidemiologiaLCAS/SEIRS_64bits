@@ -4,7 +4,7 @@
 namespace Agentes {
 
 void inicializarAgente(TIPO_AGENTE *agentes, int id, int e, int x, int y, int l,
-                       int q, int s, int i) {
+                       int q, int s, int i, int t) {
   SET_Q(id, q);
   SET_S(id, s);
   SET_I(id, i);
@@ -16,29 +16,28 @@ void inicializarAgente(TIPO_AGENTE *agentes, int id, int e, int x, int y, int l,
   SET_M(id, 0);
   SET_F(id, 1);
   SET_R(id, 0);
+  SET_T(id, t);
 }
 
 void inserirAgentes(int quantAgentes, TIPO_AGENTE *agentes,
                     const double *parametros, const int *indexParametros,
                     const int *quantLotes, int quantQuadras,
                     const int *indexQuadras, const int *indexPosicoes,
-                    const int *posicoes, int quantidade, int estado, int sexo,
-                    int idade, int *i) {
-  int q, l, posicoesLote, p, x, y;
+                    const int *posicoes, const int *indexRotas, const int *rotas, 
+                    const int *indexTrajetos, const int *trajetos,
+                    int quantidade, int estado, int sexo,
+                    int idade, int *i, int t) {
+  int posicoesLote, p, x, y;
+  int l = rotas[indexRotas[trajetos[indexTrajetos[t]]] + 0];
+  int q = rotas[indexRotas[trajetos[indexTrajetos[t]]] + 1];
   for (int j = 0; j < quantidade; ++j) {
-    q = (int)(randomizarPercentual() * quantQuadras);
-    l = (int)(randomizarPercentual() * quantLotes[q]);
-    if (q == 0 || quantLotes[q] < 3) {
-      j--;
-      continue;
-    }
     posicoesLote = (indexPosicoes[indexQuadras[2 * q] + l + 1] -
                     indexPosicoes[indexQuadras[2 * q] + l]) /
                    4;
     p = ENTRE_FAIXA(0, posicoesLote, randomizarPercentual());
     x = posicoes[indexPosicoes[indexQuadras[q * 2] + l] + p * 4 + 0];
     y = posicoes[indexPosicoes[indexQuadras[q * 2] + l] + p * 4 + 1];
-    inicializarAgente(agentes, *i, estado, x, y, l, q, sexo, idade);
+    inicializarAgente(agentes, *i, estado, x, y, l, q, sexo, idade, t);
     (*i)++;
   }
 }
@@ -47,162 +46,153 @@ TIPO_AGENTE *criarAgentes(int quantAgentes, const double *parametros,
                           const int *indexParametros, const int *quantLotes,
                           int quantQuadras, const int *indexQuadras,
                           const int *indexPosicoes, const int *posicoes, 
-                          const int *rotas) {
+                          const int *indexRotas, const int *rotas, 
+                          const int *indexTrajetos, const int *trajetos) {
   int i = 0;
   TIPO_AGENTE *agentes = new TIPO_AGENTE[quantAgentes * ATRIBUTOS_AGENTE];
 
-  int l = rotas[0];
-  int q = rotas[1];
-  int posicoesLote = (indexPosicoes[indexQuadras[2 * q] + l + 1] -
-                    indexPosicoes[indexQuadras[2 * q] + l]) / 4;
-  int p = ENTRE_FAIXA(0, posicoesLote, randomizarPercentual());
-  int x = posicoes[indexPosicoes[indexQuadras[q * 2] + l] + p * 4 + 0];
-  int y = posicoes[indexPosicoes[indexQuadras[q * 2] + l] + p * 4 + 1];
-  
-  inicializarAgente(agentes, i, SUSCETIVEL, x, y, l, q, MASCULINO, ADULTO);
-
-  /*inserirAgentes(quantAgentes, agentes, parametros, indexParametros,
-  quantLotes,
-                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+  int t = 0;
+  inserirAgentes(quantAgentes, agentes, parametros, indexParametros, quantLotes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes, indexRotas, rotas, indexTrajetos, trajetos, 
                  QUANTIDADE_AGENTES_SUSCETIVEIS_CRIANCA_MASCULINO, SUSCETIVEL,
-                 MASCULINO, CRIANCA, &i);
+                 MASCULINO, CRIANCA, &i, t);
   inserirAgentes(quantAgentes, agentes, parametros, indexParametros, quantLotes,
-                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes, indexRotas, rotas, indexTrajetos, trajetos, 
                  QUANTIDADE_AGENTES_EXPOSTOS_CRIANCA_MASCULINO, EXPOSTO,
-                 MASCULINO, CRIANCA, &i);
+                 MASCULINO, CRIANCA, &i, t);
   inserirAgentes(quantAgentes, agentes, parametros, indexParametros, quantLotes,
-                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes, indexRotas, rotas, indexTrajetos, trajetos, 
                  QUANTIDADE_AGENTES_INFECTADOS_CRIANCA_MASCULINO, INFECTADO,
-                 MASCULINO, CRIANCA, &i);
+                 MASCULINO, CRIANCA, &i, t);
   inserirAgentes(quantAgentes, agentes, parametros, indexParametros, quantLotes,
-                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes, indexRotas, rotas, indexTrajetos, trajetos, 
                  QUANTIDADE_AGENTES_RECUPERADOS_CRIANCA_MASCULINO, RECUPERADO,
-                 MASCULINO, CRIANCA, &i);
+                 MASCULINO, CRIANCA, &i, t);
   inserirAgentes(quantAgentes, agentes, parametros, indexParametros, quantLotes,
-                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes, indexRotas, rotas, indexTrajetos, trajetos, 
                  QUANTIDADE_AGENTES_SUSCETIVEIS_CRIANCA_FEMININO, SUSCETIVEL,
-                 FEMININO, CRIANCA, &i);
+                 FEMININO, CRIANCA, &i, t);
   inserirAgentes(quantAgentes, agentes, parametros, indexParametros, quantLotes,
-                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes, indexRotas, rotas, indexTrajetos, trajetos, 
                  QUANTIDADE_AGENTES_EXPOSTOS_CRIANCA_FEMININO, EXPOSTO,
-                 FEMININO, CRIANCA, &i);
+                 FEMININO, CRIANCA, &i, t);
   inserirAgentes(quantAgentes, agentes, parametros, indexParametros, quantLotes,
-                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes, indexRotas, rotas, indexTrajetos, trajetos, 
                  QUANTIDADE_AGENTES_INFECTADOS_CRIANCA_FEMININO, INFECTADO,
-                 FEMININO, CRIANCA, &i);
+                 FEMININO, CRIANCA, &i, t);
   inserirAgentes(quantAgentes, agentes, parametros, indexParametros, quantLotes,
-                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes, indexRotas, rotas, indexTrajetos, trajetos, 
                  QUANTIDADE_AGENTES_RECUPERADOS_CRIANCA_FEMININO, RECUPERADO,
-                 FEMININO, CRIANCA, &i);
-
+                 FEMININO, CRIANCA, &i, t);
+  
+  t = 1;
   inserirAgentes(quantAgentes, agentes, parametros, indexParametros, quantLotes,
-                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes, indexRotas, rotas, indexTrajetos, trajetos, 
                  QUANTIDADE_AGENTES_SUSCETIVEIS_JOVEM_MASCULINO, SUSCETIVEL,
-                 MASCULINO, JOVEM, &i);
+                 MASCULINO, JOVEM, &i, t);
   inserirAgentes(quantAgentes, agentes, parametros, indexParametros, quantLotes,
-                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes, indexRotas, rotas, indexTrajetos, trajetos, 
                  QUANTIDADE_AGENTES_EXPOSTOS_JOVEM_MASCULINO, EXPOSTO,
-                 MASCULINO, JOVEM, &i);
+                 MASCULINO, JOVEM, &i, t);
   inserirAgentes(quantAgentes, agentes, parametros, indexParametros, quantLotes,
-                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes, indexRotas, rotas, indexTrajetos, trajetos, 
                  QUANTIDADE_AGENTES_INFECTADOS_JOVEM_MASCULINO, INFECTADO,
-                 MASCULINO, JOVEM, &i);
+                 MASCULINO, JOVEM, &i, t);
   inserirAgentes(quantAgentes, agentes, parametros, indexParametros, quantLotes,
-                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes, indexRotas, rotas, indexTrajetos, trajetos, 
                  QUANTIDADE_AGENTES_RECUPERADOS_JOVEM_MASCULINO, RECUPERADO,
-                 MASCULINO, JOVEM, &i);
+                 MASCULINO, JOVEM, &i, t);
   inserirAgentes(quantAgentes, agentes, parametros, indexParametros, quantLotes,
-                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes, indexRotas, rotas, indexTrajetos, trajetos, 
                  QUANTIDADE_AGENTES_SUSCETIVEIS_JOVEM_FEMININO, SUSCETIVEL,
-                 FEMININO, JOVEM, &i);
+                 FEMININO, JOVEM, &i, t);
   inserirAgentes(quantAgentes, agentes, parametros, indexParametros, quantLotes,
-                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes, indexRotas, rotas, indexTrajetos, trajetos, 
                  QUANTIDADE_AGENTES_EXPOSTOS_JOVEM_FEMININO, EXPOSTO, FEMININO,
-                 JOVEM, &i);
+                 JOVEM, &i, t);
   inserirAgentes(quantAgentes, agentes, parametros, indexParametros, quantLotes,
-                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes, indexRotas, rotas, indexTrajetos, trajetos, 
                  QUANTIDADE_AGENTES_INFECTADOS_JOVEM_FEMININO, INFECTADO,
-                 FEMININO, JOVEM, &i);
+                 FEMININO, JOVEM, &i, t);
   inserirAgentes(quantAgentes, agentes, parametros, indexParametros, quantLotes,
-                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes, indexRotas, rotas, indexTrajetos, trajetos, 
                  QUANTIDADE_AGENTES_RECUPERADOS_JOVEM_FEMININO, RECUPERADO,
-                 FEMININO, JOVEM, &i);
+                 FEMININO, JOVEM, &i, t);
 
+  t = 2;
   inserirAgentes(quantAgentes, agentes, parametros, indexParametros, quantLotes,
-                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes, indexRotas, rotas, indexTrajetos, trajetos, 
                  QUANTIDADE_AGENTES_SUSCETIVEIS_ADULTO_MASCULINO, SUSCETIVEL,
-                 MASCULINO, ADULTO, &i);
+                 MASCULINO, ADULTO, &i, t);
   inserirAgentes(quantAgentes, agentes, parametros, indexParametros, quantLotes,
-                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes, indexRotas, rotas, indexTrajetos, trajetos, 
                  QUANTIDADE_AGENTES_EXPOSTOS_ADULTO_MASCULINO, EXPOSTO,
-                 MASCULINO, ADULTO, &i);
+                 MASCULINO, ADULTO, &i, t);
   inserirAgentes(quantAgentes, agentes, parametros, indexParametros, quantLotes,
-                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes, indexRotas, rotas, indexTrajetos, trajetos, 
                  QUANTIDADE_AGENTES_INFECTADOS_ADULTO_MASCULINO, INFECTADO,
-                 MASCULINO, ADULTO, &i);
+                 MASCULINO, ADULTO, &i, t);
   inserirAgentes(quantAgentes, agentes, parametros, indexParametros, quantLotes,
-                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes, indexRotas, rotas, indexTrajetos, trajetos, 
                  QUANTIDADE_AGENTES_RECUPERADOS_ADULTO_MASCULINO, RECUPERADO,
-                 MASCULINO, ADULTO, &i);
+                 MASCULINO, ADULTO, &i, t);
   inserirAgentes(quantAgentes, agentes, parametros, indexParametros, quantLotes,
-                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes, indexRotas, rotas, indexTrajetos, trajetos, 
                  QUANTIDADE_AGENTES_SUSCETIVEIS_ADULTO_FEMININO, SUSCETIVEL,
-                 FEMININO, ADULTO, &i);
+                 FEMININO, ADULTO, &i, t);
   inserirAgentes(quantAgentes, agentes, parametros, indexParametros, quantLotes,
-                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes, indexRotas, rotas, indexTrajetos, trajetos, 
                  QUANTIDADE_AGENTES_EXPOSTOS_ADULTO_FEMININO, EXPOSTO, FEMININO,
-                 ADULTO, &i);
+                 ADULTO, &i, t);
   inserirAgentes(quantAgentes, agentes, parametros, indexParametros, quantLotes,
-                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes, indexRotas, rotas, indexTrajetos, trajetos, 
                  QUANTIDADE_AGENTES_INFECTADOS_ADULTO_FEMININO, INFECTADO,
-                 FEMININO, ADULTO, &i);
+                 FEMININO, ADULTO, &i, t);
   inserirAgentes(quantAgentes, agentes, parametros, indexParametros, quantLotes,
-                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes, indexRotas, rotas, indexTrajetos, trajetos, 
                  QUANTIDADE_AGENTES_RECUPERADOS_ADULTO_FEMININO, RECUPERADO,
-                 FEMININO, ADULTO, &i);
+                 FEMININO, ADULTO, &i, t);
 
+  t = 3;
   inserirAgentes(quantAgentes, agentes, parametros, indexParametros, quantLotes,
-                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes, indexRotas, rotas, indexTrajetos, trajetos, 
                  QUANTIDADE_AGENTES_SUSCETIVEIS_IDOSO_MASCULINO, SUSCETIVEL,
-                 MASCULINO, IDOSO, &i);
+                 MASCULINO, IDOSO, &i, t);
   inserirAgentes(quantAgentes, agentes, parametros, indexParametros, quantLotes,
-                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes, indexRotas, rotas, indexTrajetos, trajetos, 
                  QUANTIDADE_AGENTES_EXPOSTOS_IDOSO_MASCULINO, EXPOSTO,
-                 MASCULINO, IDOSO, &i);
+                 MASCULINO, IDOSO, &i, t);
   inserirAgentes(quantAgentes, agentes, parametros, indexParametros, quantLotes,
-                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes, indexRotas, rotas, indexTrajetos, trajetos, 
                  QUANTIDADE_AGENTES_INFECTADOS_IDOSO_MASCULINO, INFECTADO,
-                 MASCULINO, IDOSO, &i);
+                 MASCULINO, IDOSO, &i, t);
   inserirAgentes(quantAgentes, agentes, parametros, indexParametros, quantLotes,
-                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes, indexRotas, rotas, indexTrajetos, trajetos, 
                  QUANTIDADE_AGENTES_RECUPERADOS_IDOSO_MASCULINO, RECUPERADO,
-                 MASCULINO, IDOSO, &i);
+                 MASCULINO, IDOSO, &i, t);
   inserirAgentes(quantAgentes, agentes, parametros, indexParametros, quantLotes,
-                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes, indexRotas, rotas, indexTrajetos, trajetos, 
                  QUANTIDADE_AGENTES_SUSCETIVEIS_IDOSO_FEMININO, SUSCETIVEL,
-                 FEMININO, IDOSO, &i);
+                 FEMININO, IDOSO, &i, t);
   inserirAgentes(quantAgentes, agentes, parametros, indexParametros, quantLotes,
-                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes, indexRotas, rotas, indexTrajetos, trajetos, 
                  QUANTIDADE_AGENTES_EXPOSTOS_IDOSO_FEMININO, EXPOSTO, FEMININO,
-                 IDOSO, &i);
+                 IDOSO, &i, t);
   inserirAgentes(quantAgentes, agentes, parametros, indexParametros, quantLotes,
-                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes, indexRotas, rotas, indexTrajetos, trajetos, 
                  QUANTIDADE_AGENTES_INFECTADOS_IDOSO_FEMININO, INFECTADO,
-                 FEMININO, IDOSO, &i);
+                 FEMININO, IDOSO, &i, t);
   inserirAgentes(quantAgentes, agentes, parametros, indexParametros, quantLotes,
-                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes, indexRotas, rotas, indexTrajetos, trajetos, 
                  QUANTIDADE_AGENTES_RECUPERADOS_IDOSO_FEMININO, RECUPERADO,
-                 FEMININO, IDOSO, &i);*/
+                 FEMININO, IDOSO, &i, t);
   return agentes;
 }
 
 int contarTotalAgentes(const int *quantLotes, int quantQuadras,
                        const double *parametros, const int *indexParametros) {
   int quantAgentes = 0;
-
-  quantAgentes = 1;
-
-  /*quantAgentes += QUANTIDADE_AGENTES_SUSCETIVEIS_CRIANCA_MASCULINO +
+  quantAgentes += QUANTIDADE_AGENTES_SUSCETIVEIS_CRIANCA_MASCULINO +
                   QUANTIDADE_AGENTES_EXPOSTOS_CRIANCA_MASCULINO +
                   QUANTIDADE_AGENTES_INFECTADOS_CRIANCA_MASCULINO +
                   QUANTIDADE_AGENTES_RECUPERADOS_CRIANCA_MASCULINO +
@@ -236,7 +226,7 @@ int contarTotalAgentes(const int *quantLotes, int quantQuadras,
                   QUANTIDADE_AGENTES_SUSCETIVEIS_IDOSO_FEMININO +
                   QUANTIDADE_AGENTES_EXPOSTOS_IDOSO_FEMININO +
                   QUANTIDADE_AGENTES_INFECTADOS_IDOSO_FEMININO +
-                  QUANTIDADE_AGENTES_RECUPERADOS_IDOSO_FEMININO;*/
+                  QUANTIDADE_AGENTES_RECUPERADOS_IDOSO_FEMININO;
   return quantAgentes;
 }
 }
@@ -1205,19 +1195,19 @@ void movimentacao(TIPO_AGENTE *agentes, int quantAgentes,
                   const int *esquinas, const int *indexCentrosEsquinas,
                   const int *centrosEsquinas, int quantRotas, 
                   const int *indexRotas, const int *rotas, 
-                  const int *indexPosicoes, const int *posicoes) {
-  TRAJETO;
-  N_TRAJETO;
-
+                  const int *indexPosicoes, const int *posicoes, 
+                  int quantTrajetos, const int *indexTrajetos, 
+                  const int *trajetos) {
 #pragma omp parallel for
   for (int id = 0; id < quantAgentes; ++id) {
-    cout << GET_X(id) << ";" << GET_Y(id) << ";100" << (GET_R(id) + 1) << endl;
+    //cout << GET_X(id) << ";" << GET_Y(id) << ";100" << (GET_R(id) + 1) << endl;
     int q = GET_Q(id);
     int l = GET_L(id);
     int x = GET_X(id);
     int y = GET_Y(id);
     int m = GET_M(id);
     int r = GET_R(id);
+    int t = GET_T(id);
     double taxa;
     switch (GET_I(id)) {
     case CRIANCA:
@@ -1257,10 +1247,10 @@ void movimentacao(TIPO_AGENTE *agentes, int quantAgentes,
             k++;
           }
         }
-        int l_origem = rotas[indexRotas[trajeto[r]] + 0];
-        int q_origem = rotas[indexRotas[trajeto[r]] + 1];
-        int l_destino = rotas[indexRotas[trajeto[r] + 1] - 2];
-        int q_destino = rotas[indexRotas[trajeto[r] + 1] - 1];
+        int l_origem = rotas[indexRotas[trajetos[indexTrajetos[t]] + r] + 0];
+        int q_origem = rotas[indexRotas[trajetos[indexTrajetos[t]] + r] + 1];
+        int l_destino = rotas[indexRotas[trajetos[indexTrajetos[t]] + r + 1] - 2];
+        int q_destino = rotas[indexRotas[trajetos[indexTrajetos[t]] + r + 1] - 1];
         int x_destino = posicoes[indexPosicoes[indexQuadras[q_destino * 2] + l_destino] + 0 * 4 + 0];
         int y_destino = posicoes[indexPosicoes[indexQuadras[q_destino * 2] + l_destino] + 0 * 4 + 1];
         // O AGENTE ESTÁ NA QUADRA E NO LOTE DE ORIGEM
@@ -1409,11 +1399,10 @@ void movimentacao(TIPO_AGENTE *agentes, int quantAgentes,
                 }
               }
             } else {
-              // Se o agente está na última rua da rota atual
-              if (m + 1 == ((indexRotas[trajeto[r] + 1] - indexRotas[trajeto[r]]) - 4)) {
+              // Se o agente está na última rua da rota atual             
+              if (m + 1 == ((indexRotas[trajetos[indexTrajetos[t]] + r + 1] - indexRotas[trajetos[indexTrajetos[t]] + r]) - 4)) {
                 // Encontra na vizinhança do agente o ponto mais próximo ao
-                // ponto de destino
-                // e que pertença ao seu lote atual
+                // ponto de destino e que pertença ao seu lote atual
                 int indMenorViz = 0;
                 double distMenorViz = INT_MAX;
                 for (int i = 0; i < quantidade; i++) {
@@ -1442,7 +1431,7 @@ void movimentacao(TIPO_AGENTE *agentes, int quantAgentes,
                 int pontoCentral;
                 for (int i = indexCentrosEsquinas[l];
                      i < indexCentrosEsquinas[l + 1]; i += 3) {
-                  if (centrosEsquinas[i + 2] == rotas[indexRotas[trajeto[r]] + 2 + m + 1]) {
+                  if (centrosEsquinas[i + 2] == rotas[indexRotas[trajetos[indexTrajetos[t]] + r] + 2 + m + 1]) {
                     pontoCentral = i;
                     break;
                   }
@@ -1453,7 +1442,7 @@ void movimentacao(TIPO_AGENTE *agentes, int quantAgentes,
                 int indMenorViz = 0;
                 double distMenorViz = INT_MAX;
                 for (int i = 0; i < quantidade; i++) {
-                  if (vizinhos[4 * i + 2] == rotas[indexRotas[trajeto[r]] + 2 + m + 1] &&
+                  if (vizinhos[4 * i + 2] == rotas[indexRotas[trajetos[indexTrajetos[t]] + r] + 2 + m + 1] &&
                       vizinhos[4 * i + 3] == RUA) {
                     double dist = DIST(vizinhos[4 * i + 0], vizinhos[4 * i + 1],
                                        centrosEsquinas[pontoCentral + 0],
@@ -1553,7 +1542,7 @@ void movimentacao(TIPO_AGENTE *agentes, int quantAgentes,
                 SET_M(id, 0);
                 SET_F(id, 0);
                 // Se o agente não está percorrendo a última rota do trajeto
-                if (r + 1 != n_trajeto) {
+                if (r + 1 != (indexTrajetos[t + 1] - indexTrajetos[t])) {
                   SET_R(id, r + 1);
                 } else {
                   // Se o agente está percorrendo a última rota do trajeto
@@ -1713,7 +1702,8 @@ void iniciarSimulacao(
     const int *fronteiras, const int *indexEsquinas, const int *esquinas,
     const int *indexCentrosEsquinas, const int *centrosEsquinas,
     const int *indexSaidaQuantidadeQuadras, int *saidaQuantidadeQuadras, 
-    int quantRotas, const int *indexRotas, const int *rotas) {
+    int quantRotas, const int *indexRotas, const int *rotas, 
+    int quantTrajetos, const int *indexTrajetos, const int *trajetos) {
   int ciclos = NUMERO_CICLOS_SIMULACAO + 1;
 
   int quantLinhasSaidaEspacial =
@@ -1724,7 +1714,8 @@ void iniciarSimulacao(
                                                  parametros, indexParametros);
   TIPO_AGENTE *agentes = Agentes::criarAgentes(
       quantAgentes, parametros, indexParametros, quantLotes, quantQuadras,
-      indexQuadras, indexPosicoes, posicoes, rotas);
+      indexQuadras, indexPosicoes, posicoes, indexRotas, rotas, 
+      indexTrajetos, trajetos);
 
   if (idSimulacao == 0) {
     int totMem = (quantAgentes * ATRIBUTOS_AGENTE * sizeof(TIPO_AGENTE));
@@ -1953,7 +1944,8 @@ void iniciarSimulacao(
                  vizinhancas, parametros, indexParametros, indexFronteiras,
                  fronteiras, indexEsquinas, esquinas, indexCentrosEsquinas,
                  centrosEsquinas, quantRotas, indexRotas, rotas, 
-                 indexPosicoes, posicoes);
+                 indexPosicoes, posicoes, quantTrajetos, indexTrajetos, 
+                 trajetos);
     contato(agentes, quantAgentes, quantLotes, quantQuadras, parametros,
             indexParametros, indexQuadras, indexPosicoes, posicoes);
     transicao(agentes, quantAgentes, parametros, indexParametros);

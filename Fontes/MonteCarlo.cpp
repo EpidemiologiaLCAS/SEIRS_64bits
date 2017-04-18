@@ -101,26 +101,18 @@ void iniciarSimulacao(int idMonteCarlo, string pastaEntrada,
   string pastaEntradaMonteCarlo = pastaEntrada,
          pastaSaidaMonteCarlo = pastaSaida;
 
-  int quantQuadras;
-  int *quantLotes;
-  int *indexQuadras;
-  int *indexVizinhancas;
-  int *vizinhancas;
-  int *indexPosicoes;
-  int *posicoes;
-  int *indexFronteiras;
-  int *fronteiras;
-  int *indexEsquinas;
-  int *esquinas;
-  int *indexCentrosEsquinas;
-  int *centrosEsquinas;
-  int quantRotas;
-  int *indexRotas;
-  int *rotas;
+  int quantQuadras, *quantLotes, *indexQuadras;
+  int *indexVizinhancas, *vizinhancas;
+  int *indexPosicoes, *posicoes;
+  int *indexFronteiras, *fronteiras;
+  int *indexEsquinas, *esquinas;
+  int *indexCentrosEsquinas, *centrosEsquinas;
+  int quantRotas, *indexRotas, *rotas;
+  int quantTrajetos, *indexTrajetos, *trajetos;
   tie(quantQuadras, quantLotes, indexQuadras, indexVizinhancas, vizinhancas,
       indexPosicoes, posicoes, indexFronteiras, fronteiras, indexEsquinas,
       esquinas, indexCentrosEsquinas, centrosEsquinas, quantRotas, 
-      indexRotas, rotas) =
+      indexRotas, rotas, quantTrajetos, indexTrajetos, trajetos) =
       Parametros::lerVetores();
   int sizeParametros;
   double *parametros;
@@ -148,7 +140,8 @@ void iniciarSimulacao(int idMonteCarlo, string pastaEntrada,
         indexQuadras, indexVizinhancas, vizinhancas, indexPosicoes, posicoes,
         indexFronteiras, fronteiras, indexEsquinas, esquinas,
         indexCentrosEsquinas, centrosEsquinas, indexSaidaQuantidadeQuadras,
-        saidaQuantidadeQuadras, quantRotas, indexRotas, rotas);
+        saidaQuantidadeQuadras, quantRotas, indexRotas, rotas, quantTrajetos, 
+        indexTrajetos, trajetos);
   }
 
   SaidasMonteCarlo::gerarSaidaQuantidadeQuadras(
@@ -169,6 +162,8 @@ void iniciarSimulacao(int idMonteCarlo, string pastaEntrada,
   delete[](esquinas);
   delete[](indexRotas);
   delete[](rotas);
+  delete[](indexTrajetos);
+  delete[](trajetos);
   delete[](indexCentrosEsquinas);
   delete[](centrosEsquinas);
   delete[](indexSaidaQuantidadeQuadras);

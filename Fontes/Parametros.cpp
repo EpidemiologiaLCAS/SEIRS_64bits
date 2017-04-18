@@ -102,24 +102,16 @@ double randomizarPercentual() { return dis(gen); }
 namespace Parametros {
 
 tuple<int, int *, int *, int *, int *, int *, int *, int *, int *, int *, int *,
-      int *, int *, int, int *, int *>
+      int *, int *, int, int *, int *, int, int *, int *>
 lerVetores() {
-  int quantQuadras;
-  int *quantLotes;
-  int *indexQuadras;
-  int *indexVizinhancas;
-  int *vizinhancas;
-  int *indexPosicoes;
-  int *posicoes;
-  int *indexFronteiras;
-  int *fronteiras;
-  int *indexEsquinas;
-  int *esquinas;
-  int *indexCentrosEsquinas;
-  int *centrosEsquinas;
-  int quantRotas;
-  int *indexRotas;
-  int *rotas;
+  int quantQuadras, *quantLotes, *indexQuadras;
+  int *indexVizinhancas, *vizinhancas;
+  int *indexPosicoes, *posicoes;
+  int *indexFronteiras, *fronteiras;
+  int *indexEsquinas, *esquinas;
+  int *indexCentrosEsquinas, *centrosEsquinas;
+  int quantRotas, *indexRotas, *rotas;
+  int quantTrajetos, *indexTrajetos, *trajetos;
   string nomeArquivoEntrada =
       string("Entradas") + SEPARADOR + string("Vetores.csv");
   ifstream arquivoEntrada(nomeArquivoEntrada);
@@ -201,6 +193,19 @@ lerVetores() {
       arquivoEntrada >> rotas[i];
       arquivoEntrada.get();
     }
+    
+    arquivoEntrada >> quantTrajetos;
+    arquivoEntrada.get();
+    indexTrajetos = new int[quantTrajetos + 1];
+    for (int i = 0; i < quantTrajetos + 1; ++i) {
+      arquivoEntrada >> indexTrajetos[i];
+      arquivoEntrada.get();
+    }
+    trajetos = new int[indexTrajetos[quantTrajetos]];
+    for (int i = 0; i < indexTrajetos[quantTrajetos]; ++i) {
+      arquivoEntrada >> trajetos[i];
+      arquivoEntrada.get();
+    }
     arquivoEntrada.close();
   } else {
     cerr << "Arquivo: " << nomeArquivoEntrada << " nao foi aberto!" << endl;
@@ -209,7 +214,8 @@ lerVetores() {
   return make_tuple(quantQuadras, quantLotes, indexQuadras, indexVizinhancas,
                     vizinhancas, indexPosicoes, posicoes, indexFronteiras,
                     fronteiras, indexEsquinas, esquinas, indexCentrosEsquinas,
-                    centrosEsquinas, quantRotas, indexRotas, rotas);
+                    centrosEsquinas, quantRotas, indexRotas, rotas, 
+                    quantTrajetos, indexTrajetos, trajetos);
 }
 
 tuple<int, double *> lerParametros(string pastaEntrada, const int *quantLotes,

@@ -29,8 +29,6 @@
 
 #define RUA 0
 
-#define TRAJETO int trajeto[] = {0, 1, 2, 3}
-#define N_TRAJETO int n_trajeto = 4
 #define TEMPO 10
 
 #define ABS(x) (x < 0 ? (-1 * x) : x)
@@ -40,7 +38,7 @@
 
 #define TIPO_AGENTE int
 
-#define ATRIBUTOS_AGENTE 11
+#define ATRIBUTOS_AGENTE 12
 
 // Gets
 #define GET_Q(i) (int)(agentes[(i)*ATRIBUTOS_AGENTE + 0])
@@ -54,6 +52,7 @@
 #define GET_M(i) (int)(agentes[(i)*ATRIBUTOS_AGENTE + 8])
 #define GET_F(i) (int)(agentes[(i)*ATRIBUTOS_AGENTE + 9])
 #define GET_R(i) (int)(agentes[(i)*ATRIBUTOS_AGENTE + 10])
+#define GET_T(i) (int)(agentes[(i)*ATRIBUTOS_AGENTE + 11])
 
 // Sets
 #define SET_Q(i, novo) (agentes[(i)*ATRIBUTOS_AGENTE + 0] = (novo))
@@ -67,6 +66,7 @@
 #define SET_M(i, novo) (agentes[(i)*ATRIBUTOS_AGENTE + 8] = (novo))
 #define SET_F(i, novo) (agentes[(i)*ATRIBUTOS_AGENTE + 9] = (novo))
 #define SET_R(i, novo) (agentes[(i)*ATRIBUTOS_AGENTE + 10] = (novo))
+#define SET_T(i, novo) (agentes[(i)*ATRIBUTOS_AGENTE + 11] = (novo))
 
 #endif
 
