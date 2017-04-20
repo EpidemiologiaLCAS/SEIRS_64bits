@@ -1,5 +1,5 @@
-#ifndef SIMULACAO_H
-#define SIMULACAO_H
+#ifndef __SIMULACAO__
+#define __SIMULACAO__
 
 namespace Agentes {
 
@@ -23,9 +23,9 @@ void inserirAgentes(int quantAgentes, TIPO_AGENTE *agentes,
                     const double *parametros, const int *indexParametros,
                     const int *quantLotes, int quantQuadras,
                     const int *indexQuadras, const int *indexPosicoes,
-                    const int *posicoes, const int *indexRotas, const int *rotas, 
-                    const int *indexTrajetos, const int *trajetos,
-                    int quantidade, int estado, int sexo,
+                    const int *posicoes, const int *indexRotas,
+                    const int *rotas, const int *indexTrajetos,
+                    const int *trajetos, int quantidade, int estado, int sexo,
                     int idade, int *i, int t) {
   int posicoesLote, p, x, y;
   int l = rotas[indexRotas[trajetos[indexTrajetos[t]]] + 0];
@@ -45,145 +45,177 @@ void inserirAgentes(int quantAgentes, TIPO_AGENTE *agentes,
 TIPO_AGENTE *criarAgentes(int quantAgentes, const double *parametros,
                           const int *indexParametros, const int *quantLotes,
                           int quantQuadras, const int *indexQuadras,
-                          const int *indexPosicoes, const int *posicoes, 
-                          const int *indexRotas, const int *rotas, 
+                          const int *indexPosicoes, const int *posicoes,
+                          const int *indexRotas, const int *rotas,
                           const int *indexTrajetos, const int *trajetos) {
   int i = 0;
   TIPO_AGENTE *agentes = new TIPO_AGENTE[quantAgentes * ATRIBUTOS_AGENTE];
 
   int t = 0;
   inserirAgentes(quantAgentes, agentes, parametros, indexParametros, quantLotes,
-                 quantQuadras, indexQuadras, indexPosicoes, posicoes, indexRotas, rotas, indexTrajetos, trajetos, 
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 indexRotas, rotas, indexTrajetos, trajetos,
                  QUANTIDADE_AGENTES_SUSCETIVEIS_CRIANCA_MASCULINO, SUSCETIVEL,
                  MASCULINO, CRIANCA, &i, t);
   inserirAgentes(quantAgentes, agentes, parametros, indexParametros, quantLotes,
-                 quantQuadras, indexQuadras, indexPosicoes, posicoes, indexRotas, rotas, indexTrajetos, trajetos, 
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 indexRotas, rotas, indexTrajetos, trajetos,
                  QUANTIDADE_AGENTES_EXPOSTOS_CRIANCA_MASCULINO, EXPOSTO,
                  MASCULINO, CRIANCA, &i, t);
   inserirAgentes(quantAgentes, agentes, parametros, indexParametros, quantLotes,
-                 quantQuadras, indexQuadras, indexPosicoes, posicoes, indexRotas, rotas, indexTrajetos, trajetos, 
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 indexRotas, rotas, indexTrajetos, trajetos,
                  QUANTIDADE_AGENTES_INFECTADOS_CRIANCA_MASCULINO, INFECTADO,
                  MASCULINO, CRIANCA, &i, t);
   inserirAgentes(quantAgentes, agentes, parametros, indexParametros, quantLotes,
-                 quantQuadras, indexQuadras, indexPosicoes, posicoes, indexRotas, rotas, indexTrajetos, trajetos, 
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 indexRotas, rotas, indexTrajetos, trajetos,
                  QUANTIDADE_AGENTES_RECUPERADOS_CRIANCA_MASCULINO, RECUPERADO,
                  MASCULINO, CRIANCA, &i, t);
   inserirAgentes(quantAgentes, agentes, parametros, indexParametros, quantLotes,
-                 quantQuadras, indexQuadras, indexPosicoes, posicoes, indexRotas, rotas, indexTrajetos, trajetos, 
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 indexRotas, rotas, indexTrajetos, trajetos,
                  QUANTIDADE_AGENTES_SUSCETIVEIS_CRIANCA_FEMININO, SUSCETIVEL,
                  FEMININO, CRIANCA, &i, t);
   inserirAgentes(quantAgentes, agentes, parametros, indexParametros, quantLotes,
-                 quantQuadras, indexQuadras, indexPosicoes, posicoes, indexRotas, rotas, indexTrajetos, trajetos, 
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 indexRotas, rotas, indexTrajetos, trajetos,
                  QUANTIDADE_AGENTES_EXPOSTOS_CRIANCA_FEMININO, EXPOSTO,
                  FEMININO, CRIANCA, &i, t);
   inserirAgentes(quantAgentes, agentes, parametros, indexParametros, quantLotes,
-                 quantQuadras, indexQuadras, indexPosicoes, posicoes, indexRotas, rotas, indexTrajetos, trajetos, 
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 indexRotas, rotas, indexTrajetos, trajetos,
                  QUANTIDADE_AGENTES_INFECTADOS_CRIANCA_FEMININO, INFECTADO,
                  FEMININO, CRIANCA, &i, t);
   inserirAgentes(quantAgentes, agentes, parametros, indexParametros, quantLotes,
-                 quantQuadras, indexQuadras, indexPosicoes, posicoes, indexRotas, rotas, indexTrajetos, trajetos, 
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 indexRotas, rotas, indexTrajetos, trajetos,
                  QUANTIDADE_AGENTES_RECUPERADOS_CRIANCA_FEMININO, RECUPERADO,
                  FEMININO, CRIANCA, &i, t);
-  
+
   t = 1;
   inserirAgentes(quantAgentes, agentes, parametros, indexParametros, quantLotes,
-                 quantQuadras, indexQuadras, indexPosicoes, posicoes, indexRotas, rotas, indexTrajetos, trajetos, 
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 indexRotas, rotas, indexTrajetos, trajetos,
                  QUANTIDADE_AGENTES_SUSCETIVEIS_JOVEM_MASCULINO, SUSCETIVEL,
                  MASCULINO, JOVEM, &i, t);
   inserirAgentes(quantAgentes, agentes, parametros, indexParametros, quantLotes,
-                 quantQuadras, indexQuadras, indexPosicoes, posicoes, indexRotas, rotas, indexTrajetos, trajetos, 
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 indexRotas, rotas, indexTrajetos, trajetos,
                  QUANTIDADE_AGENTES_EXPOSTOS_JOVEM_MASCULINO, EXPOSTO,
                  MASCULINO, JOVEM, &i, t);
   inserirAgentes(quantAgentes, agentes, parametros, indexParametros, quantLotes,
-                 quantQuadras, indexQuadras, indexPosicoes, posicoes, indexRotas, rotas, indexTrajetos, trajetos, 
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 indexRotas, rotas, indexTrajetos, trajetos,
                  QUANTIDADE_AGENTES_INFECTADOS_JOVEM_MASCULINO, INFECTADO,
                  MASCULINO, JOVEM, &i, t);
   inserirAgentes(quantAgentes, agentes, parametros, indexParametros, quantLotes,
-                 quantQuadras, indexQuadras, indexPosicoes, posicoes, indexRotas, rotas, indexTrajetos, trajetos, 
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 indexRotas, rotas, indexTrajetos, trajetos,
                  QUANTIDADE_AGENTES_RECUPERADOS_JOVEM_MASCULINO, RECUPERADO,
                  MASCULINO, JOVEM, &i, t);
   inserirAgentes(quantAgentes, agentes, parametros, indexParametros, quantLotes,
-                 quantQuadras, indexQuadras, indexPosicoes, posicoes, indexRotas, rotas, indexTrajetos, trajetos, 
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 indexRotas, rotas, indexTrajetos, trajetos,
                  QUANTIDADE_AGENTES_SUSCETIVEIS_JOVEM_FEMININO, SUSCETIVEL,
                  FEMININO, JOVEM, &i, t);
   inserirAgentes(quantAgentes, agentes, parametros, indexParametros, quantLotes,
-                 quantQuadras, indexQuadras, indexPosicoes, posicoes, indexRotas, rotas, indexTrajetos, trajetos, 
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 indexRotas, rotas, indexTrajetos, trajetos,
                  QUANTIDADE_AGENTES_EXPOSTOS_JOVEM_FEMININO, EXPOSTO, FEMININO,
                  JOVEM, &i, t);
   inserirAgentes(quantAgentes, agentes, parametros, indexParametros, quantLotes,
-                 quantQuadras, indexQuadras, indexPosicoes, posicoes, indexRotas, rotas, indexTrajetos, trajetos, 
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 indexRotas, rotas, indexTrajetos, trajetos,
                  QUANTIDADE_AGENTES_INFECTADOS_JOVEM_FEMININO, INFECTADO,
                  FEMININO, JOVEM, &i, t);
   inserirAgentes(quantAgentes, agentes, parametros, indexParametros, quantLotes,
-                 quantQuadras, indexQuadras, indexPosicoes, posicoes, indexRotas, rotas, indexTrajetos, trajetos, 
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 indexRotas, rotas, indexTrajetos, trajetos,
                  QUANTIDADE_AGENTES_RECUPERADOS_JOVEM_FEMININO, RECUPERADO,
                  FEMININO, JOVEM, &i, t);
 
   t = 2;
   inserirAgentes(quantAgentes, agentes, parametros, indexParametros, quantLotes,
-                 quantQuadras, indexQuadras, indexPosicoes, posicoes, indexRotas, rotas, indexTrajetos, trajetos, 
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 indexRotas, rotas, indexTrajetos, trajetos,
                  QUANTIDADE_AGENTES_SUSCETIVEIS_ADULTO_MASCULINO, SUSCETIVEL,
                  MASCULINO, ADULTO, &i, t);
   inserirAgentes(quantAgentes, agentes, parametros, indexParametros, quantLotes,
-                 quantQuadras, indexQuadras, indexPosicoes, posicoes, indexRotas, rotas, indexTrajetos, trajetos, 
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 indexRotas, rotas, indexTrajetos, trajetos,
                  QUANTIDADE_AGENTES_EXPOSTOS_ADULTO_MASCULINO, EXPOSTO,
                  MASCULINO, ADULTO, &i, t);
   inserirAgentes(quantAgentes, agentes, parametros, indexParametros, quantLotes,
-                 quantQuadras, indexQuadras, indexPosicoes, posicoes, indexRotas, rotas, indexTrajetos, trajetos, 
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 indexRotas, rotas, indexTrajetos, trajetos,
                  QUANTIDADE_AGENTES_INFECTADOS_ADULTO_MASCULINO, INFECTADO,
                  MASCULINO, ADULTO, &i, t);
   inserirAgentes(quantAgentes, agentes, parametros, indexParametros, quantLotes,
-                 quantQuadras, indexQuadras, indexPosicoes, posicoes, indexRotas, rotas, indexTrajetos, trajetos, 
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 indexRotas, rotas, indexTrajetos, trajetos,
                  QUANTIDADE_AGENTES_RECUPERADOS_ADULTO_MASCULINO, RECUPERADO,
                  MASCULINO, ADULTO, &i, t);
   inserirAgentes(quantAgentes, agentes, parametros, indexParametros, quantLotes,
-                 quantQuadras, indexQuadras, indexPosicoes, posicoes, indexRotas, rotas, indexTrajetos, trajetos, 
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 indexRotas, rotas, indexTrajetos, trajetos,
                  QUANTIDADE_AGENTES_SUSCETIVEIS_ADULTO_FEMININO, SUSCETIVEL,
                  FEMININO, ADULTO, &i, t);
   inserirAgentes(quantAgentes, agentes, parametros, indexParametros, quantLotes,
-                 quantQuadras, indexQuadras, indexPosicoes, posicoes, indexRotas, rotas, indexTrajetos, trajetos, 
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 indexRotas, rotas, indexTrajetos, trajetos,
                  QUANTIDADE_AGENTES_EXPOSTOS_ADULTO_FEMININO, EXPOSTO, FEMININO,
                  ADULTO, &i, t);
   inserirAgentes(quantAgentes, agentes, parametros, indexParametros, quantLotes,
-                 quantQuadras, indexQuadras, indexPosicoes, posicoes, indexRotas, rotas, indexTrajetos, trajetos, 
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 indexRotas, rotas, indexTrajetos, trajetos,
                  QUANTIDADE_AGENTES_INFECTADOS_ADULTO_FEMININO, INFECTADO,
                  FEMININO, ADULTO, &i, t);
   inserirAgentes(quantAgentes, agentes, parametros, indexParametros, quantLotes,
-                 quantQuadras, indexQuadras, indexPosicoes, posicoes, indexRotas, rotas, indexTrajetos, trajetos, 
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 indexRotas, rotas, indexTrajetos, trajetos,
                  QUANTIDADE_AGENTES_RECUPERADOS_ADULTO_FEMININO, RECUPERADO,
                  FEMININO, ADULTO, &i, t);
 
   t = 3;
   inserirAgentes(quantAgentes, agentes, parametros, indexParametros, quantLotes,
-                 quantQuadras, indexQuadras, indexPosicoes, posicoes, indexRotas, rotas, indexTrajetos, trajetos, 
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 indexRotas, rotas, indexTrajetos, trajetos,
                  QUANTIDADE_AGENTES_SUSCETIVEIS_IDOSO_MASCULINO, SUSCETIVEL,
                  MASCULINO, IDOSO, &i, t);
   inserirAgentes(quantAgentes, agentes, parametros, indexParametros, quantLotes,
-                 quantQuadras, indexQuadras, indexPosicoes, posicoes, indexRotas, rotas, indexTrajetos, trajetos, 
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 indexRotas, rotas, indexTrajetos, trajetos,
                  QUANTIDADE_AGENTES_EXPOSTOS_IDOSO_MASCULINO, EXPOSTO,
                  MASCULINO, IDOSO, &i, t);
   inserirAgentes(quantAgentes, agentes, parametros, indexParametros, quantLotes,
-                 quantQuadras, indexQuadras, indexPosicoes, posicoes, indexRotas, rotas, indexTrajetos, trajetos, 
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 indexRotas, rotas, indexTrajetos, trajetos,
                  QUANTIDADE_AGENTES_INFECTADOS_IDOSO_MASCULINO, INFECTADO,
                  MASCULINO, IDOSO, &i, t);
   inserirAgentes(quantAgentes, agentes, parametros, indexParametros, quantLotes,
-                 quantQuadras, indexQuadras, indexPosicoes, posicoes, indexRotas, rotas, indexTrajetos, trajetos, 
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 indexRotas, rotas, indexTrajetos, trajetos,
                  QUANTIDADE_AGENTES_RECUPERADOS_IDOSO_MASCULINO, RECUPERADO,
                  MASCULINO, IDOSO, &i, t);
   inserirAgentes(quantAgentes, agentes, parametros, indexParametros, quantLotes,
-                 quantQuadras, indexQuadras, indexPosicoes, posicoes, indexRotas, rotas, indexTrajetos, trajetos, 
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 indexRotas, rotas, indexTrajetos, trajetos,
                  QUANTIDADE_AGENTES_SUSCETIVEIS_IDOSO_FEMININO, SUSCETIVEL,
                  FEMININO, IDOSO, &i, t);
   inserirAgentes(quantAgentes, agentes, parametros, indexParametros, quantLotes,
-                 quantQuadras, indexQuadras, indexPosicoes, posicoes, indexRotas, rotas, indexTrajetos, trajetos, 
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 indexRotas, rotas, indexTrajetos, trajetos,
                  QUANTIDADE_AGENTES_EXPOSTOS_IDOSO_FEMININO, EXPOSTO, FEMININO,
                  IDOSO, &i, t);
   inserirAgentes(quantAgentes, agentes, parametros, indexParametros, quantLotes,
-                 quantQuadras, indexQuadras, indexPosicoes, posicoes, indexRotas, rotas, indexTrajetos, trajetos, 
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 indexRotas, rotas, indexTrajetos, trajetos,
                  QUANTIDADE_AGENTES_INFECTADOS_IDOSO_FEMININO, INFECTADO,
                  FEMININO, IDOSO, &i, t);
   inserirAgentes(quantAgentes, agentes, parametros, indexParametros, quantLotes,
-                 quantQuadras, indexQuadras, indexPosicoes, posicoes, indexRotas, rotas, indexTrajetos, trajetos, 
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 indexRotas, rotas, indexTrajetos, trajetos,
                  QUANTIDADE_AGENTES_RECUPERADOS_IDOSO_FEMININO, RECUPERADO,
                  FEMININO, IDOSO, &i, t);
   return agentes;
@@ -233,22 +265,23 @@ int contarTotalAgentes(const int *quantLotes, int quantQuadras,
 
 namespace SaidasSimulacao {
 
-void salvarSaidaEspacial(string pastaSaida, const int *saidaEspacial,
+void salvarSaidaEspacial(std::string pastaSaida, const int *saidaEspacial,
                          int quantLinhasSaidaEspacial,
                          int quantColunasSaidaEspacial) {
-  string nomeArquivoSaida = pastaSaida + string("Espacial_Geo.csv");
-  ofstream arquivoSaida(nomeArquivoSaida);
+  std::string nomeArquivoSaida = pastaSaida + std::string("Espacial_Geo.csv");
+  std::ofstream arquivoSaida(nomeArquivoSaida);
   if (arquivoSaida.is_open()) {
     for (int i = 0; i < quantLinhasSaidaEspacial; ++i) {
       for (int j = 0; j < quantColunasSaidaEspacial; ++j) {
         arquivoSaida << saidaEspacial[VEC(i, j, quantColunasSaidaEspacial)]
                      << ";";
       }
-      arquivoSaida << endl;
+      arquivoSaida << std::endl;
     }
     arquivoSaida.close();
   } else {
-    cerr << "Arquivo: " << nomeArquivoSaida << " nao foi aberto!" << endl;
+    std::cerr << "Arquivo: " << nomeArquivoSaida << " nao foi aberto!"
+              << std::endl;
     exit(1);
   }
 }
@@ -264,22 +297,22 @@ __global__ void gerarSaidaQuantidadeTotal(const TIPO_AGENTE *agentes,
     if (GET_S(i) == MASCULINO) {
       switch (GET_I(i)) {
       case CRIANCA:
-        atomicAdd(&saidaQuantidadeTotal[VEC(ciclo, 1 + GET_E(i),
+        atomicAdd(&saidaQuantidadeTotal[VEC(ciclo, 0 + GET_E(i),
                                             COLUNAS_SAIDAS_QUANTIDADES)],
                   1);
         break;
       case JOVEM:
-        atomicAdd(&saidaQuantidadeTotal[VEC(ciclo, 5 + GET_E(i),
+        atomicAdd(&saidaQuantidadeTotal[VEC(ciclo, 4 + GET_E(i),
                                             COLUNAS_SAIDAS_QUANTIDADES)],
                   1);
         break;
       case ADULTO:
-        atomicAdd(&saidaQuantidadeTotal[VEC(ciclo, 9 + GET_E(i),
+        atomicAdd(&saidaQuantidadeTotal[VEC(ciclo, 8 + GET_E(i),
                                             COLUNAS_SAIDAS_QUANTIDADES)],
                   1);
         break;
       case IDOSO:
-        atomicAdd(&saidaQuantidadeTotal[VEC(ciclo, 13 + GET_E(i),
+        atomicAdd(&saidaQuantidadeTotal[VEC(ciclo, 12 + GET_E(i),
                                             COLUNAS_SAIDAS_QUANTIDADES)],
                   1);
         break;
@@ -287,28 +320,28 @@ __global__ void gerarSaidaQuantidadeTotal(const TIPO_AGENTE *agentes,
     } else {
       switch (GET_I(i)) {
       case CRIANCA:
-        atomicAdd(&saidaQuantidadeTotal[VEC(ciclo, 17 + GET_E(i),
+        atomicAdd(&saidaQuantidadeTotal[VEC(ciclo, 16 + GET_E(i),
                                             COLUNAS_SAIDAS_QUANTIDADES)],
                   1);
         break;
       case JOVEM:
-        atomicAdd(&saidaQuantidadeTotal[VEC(ciclo, 21 + GET_E(i),
+        atomicAdd(&saidaQuantidadeTotal[VEC(ciclo, 20 + GET_E(i),
                                             COLUNAS_SAIDAS_QUANTIDADES)],
                   1);
         break;
       case ADULTO:
-        atomicAdd(&saidaQuantidadeTotal[VEC(ciclo, 25 + GET_E(i),
+        atomicAdd(&saidaQuantidadeTotal[VEC(ciclo, 24 + GET_E(i),
                                             COLUNAS_SAIDAS_QUANTIDADES)],
                   1);
         break;
       case IDOSO:
-        atomicAdd(&saidaQuantidadeTotal[VEC(ciclo, 29 + GET_E(i),
+        atomicAdd(&saidaQuantidadeTotal[VEC(ciclo, 28 + GET_E(i),
                                             COLUNAS_SAIDAS_QUANTIDADES)],
                   1);
         break;
       }
     }
-    atomicAdd(&saidaQuantidadeTotal[VEC(ciclo, 33, COLUNAS_SAIDAS_QUANTIDADES)],
+    atomicAdd(&saidaQuantidadeTotal[VEC(ciclo, 32, COLUNAS_SAIDAS_QUANTIDADES)],
               1);
   }
 }
@@ -324,28 +357,28 @@ gerarSaidaQuantidadeQuadras(const TIPO_AGENTE *agentes, int quantAgentes,
       case CRIANCA:
         atomicAdd(
             &saidaQuantidadeQuadras[indexSaidaQuantidadeQuadras[GET_Q(i)] +
-                                    VEC(ciclo, 1 + GET_E(i),
+                                    VEC(ciclo, 0 + GET_E(i),
                                         COLUNAS_SAIDAS_QUANTIDADES)],
             1);
         break;
       case JOVEM:
         atomicAdd(
             &saidaQuantidadeQuadras[indexSaidaQuantidadeQuadras[GET_Q(i)] +
-                                    VEC(ciclo, 5 + GET_E(i),
+                                    VEC(ciclo, 4 + GET_E(i),
                                         COLUNAS_SAIDAS_QUANTIDADES)],
             1);
         break;
       case ADULTO:
         atomicAdd(
             &saidaQuantidadeQuadras[indexSaidaQuantidadeQuadras[GET_Q(i)] +
-                                    VEC(ciclo, 9 + GET_E(i),
+                                    VEC(ciclo, 8 + GET_E(i),
                                         COLUNAS_SAIDAS_QUANTIDADES)],
             1);
         break;
       case IDOSO:
         atomicAdd(
             &saidaQuantidadeQuadras[indexSaidaQuantidadeQuadras[GET_Q(i)] +
-                                    VEC(ciclo, 13 + GET_E(i),
+                                    VEC(ciclo, 12 + GET_E(i),
                                         COLUNAS_SAIDAS_QUANTIDADES)],
             1);
         break;
@@ -355,28 +388,28 @@ gerarSaidaQuantidadeQuadras(const TIPO_AGENTE *agentes, int quantAgentes,
       case CRIANCA:
         atomicAdd(
             &saidaQuantidadeQuadras[indexSaidaQuantidadeQuadras[GET_Q(i)] +
-                                    VEC(ciclo, 17 + GET_E(i),
+                                    VEC(ciclo, 16 + GET_E(i),
                                         COLUNAS_SAIDAS_QUANTIDADES)],
             1);
         break;
       case JOVEM:
         atomicAdd(
             &saidaQuantidadeQuadras[indexSaidaQuantidadeQuadras[GET_Q(i)] +
-                                    VEC(ciclo, 21 + GET_E(i),
+                                    VEC(ciclo, 20 + GET_E(i),
                                         COLUNAS_SAIDAS_QUANTIDADES)],
             1);
         break;
       case ADULTO:
         atomicAdd(
             &saidaQuantidadeQuadras[indexSaidaQuantidadeQuadras[GET_Q(i)] +
-                                    VEC(ciclo, 25 + GET_E(i),
+                                    VEC(ciclo, 24 + GET_E(i),
                                         COLUNAS_SAIDAS_QUANTIDADES)],
             1);
         break;
       case IDOSO:
         atomicAdd(
             &saidaQuantidadeQuadras[indexSaidaQuantidadeQuadras[GET_Q(i)] +
-                                    VEC(ciclo, 29 + GET_E(i),
+                                    VEC(ciclo, 28 + GET_E(i),
                                         COLUNAS_SAIDAS_QUANTIDADES)],
             1);
         break;
@@ -384,7 +417,7 @@ gerarSaidaQuantidadeQuadras(const TIPO_AGENTE *agentes, int quantAgentes,
     }
     atomicAdd(
         &saidaQuantidadeQuadras[indexSaidaQuantidadeQuadras[GET_Q(i)] +
-                                VEC(ciclo, 33, COLUNAS_SAIDAS_QUANTIDADES)],
+                                VEC(ciclo, 32, COLUNAS_SAIDAS_QUANTIDADES)],
         1);
   }
 }
@@ -427,22 +460,22 @@ void gerarSaidaQuantidadeTotal(const TIPO_AGENTE *agentes, int quantAgentes,
       switch (GET_I(i)) {
       case CRIANCA: {
 #pragma omp atomic
-        saidaQuantidadeTotal[VEC(ciclo, 1 + GET_E(i),
+        saidaQuantidadeTotal[VEC(ciclo, 0 + GET_E(i),
                                  COLUNAS_SAIDAS_QUANTIDADES)]++;
       } break;
       case JOVEM: {
 #pragma omp atomic
-        saidaQuantidadeTotal[VEC(ciclo, 5 + GET_E(i),
+        saidaQuantidadeTotal[VEC(ciclo, 4 + GET_E(i),
                                  COLUNAS_SAIDAS_QUANTIDADES)]++;
       } break;
       case ADULTO: {
 #pragma omp atomic
-        saidaQuantidadeTotal[VEC(ciclo, 9 + GET_E(i),
+        saidaQuantidadeTotal[VEC(ciclo, 8 + GET_E(i),
                                  COLUNAS_SAIDAS_QUANTIDADES)]++;
       } break;
       case IDOSO: {
 #pragma omp atomic
-        saidaQuantidadeTotal[VEC(ciclo, 13 + GET_E(i),
+        saidaQuantidadeTotal[VEC(ciclo, 12 + GET_E(i),
                                  COLUNAS_SAIDAS_QUANTIDADES)]++;
       } break;
       }
@@ -450,28 +483,28 @@ void gerarSaidaQuantidadeTotal(const TIPO_AGENTE *agentes, int quantAgentes,
       switch (GET_I(i)) {
       case CRIANCA: {
 #pragma omp atomic
-        saidaQuantidadeTotal[VEC(ciclo, 17 + GET_E(i),
+        saidaQuantidadeTotal[VEC(ciclo, 16 + GET_E(i),
                                  COLUNAS_SAIDAS_QUANTIDADES)]++;
       } break;
       case JOVEM: {
 #pragma omp atomic
-        saidaQuantidadeTotal[VEC(ciclo, 21 + GET_E(i),
+        saidaQuantidadeTotal[VEC(ciclo, 20 + GET_E(i),
                                  COLUNAS_SAIDAS_QUANTIDADES)]++;
       } break;
       case ADULTO: {
 #pragma omp atomic
-        saidaQuantidadeTotal[VEC(ciclo, 25 + GET_E(i),
+        saidaQuantidadeTotal[VEC(ciclo, 24 + GET_E(i),
                                  COLUNAS_SAIDAS_QUANTIDADES)]++;
       } break;
       case IDOSO: {
 #pragma omp atomic
-        saidaQuantidadeTotal[VEC(ciclo, 29 + GET_E(i),
+        saidaQuantidadeTotal[VEC(ciclo, 28 + GET_E(i),
                                  COLUNAS_SAIDAS_QUANTIDADES)]++;
       } break;
       }
     }
 #pragma omp atomic
-    saidaQuantidadeTotal[VEC(ciclo, 33, COLUNAS_SAIDAS_QUANTIDADES)]++;
+    saidaQuantidadeTotal[VEC(ciclo, 32, COLUNAS_SAIDAS_QUANTIDADES)]++;
   }
 }
 
@@ -485,25 +518,25 @@ void gerarSaidaQuantidadeQuadras(const TIPO_AGENTE *agentes, int quantAgentes,
       case CRIANCA: {
 #pragma omp atomic
         saidaQuantidadeQuadras[indexSaidaQuantidadeQuadras[GET_Q(i)] +
-                               VEC(ciclo, 1 + GET_E(i),
+                               VEC(ciclo, 0 + GET_E(i),
                                    COLUNAS_SAIDAS_QUANTIDADES)]++;
       } break;
       case JOVEM: {
 #pragma omp atomic
         saidaQuantidadeQuadras[indexSaidaQuantidadeQuadras[GET_Q(i)] +
-                               VEC(ciclo, 5 + GET_E(i),
+                               VEC(ciclo, 4 + GET_E(i),
                                    COLUNAS_SAIDAS_QUANTIDADES)]++;
       } break;
       case ADULTO: {
 #pragma omp atomic
         saidaQuantidadeQuadras[indexSaidaQuantidadeQuadras[GET_Q(i)] +
-                               VEC(ciclo, 9 + GET_E(i),
+                               VEC(ciclo, 8 + GET_E(i),
                                    COLUNAS_SAIDAS_QUANTIDADES)]++;
       } break;
       case IDOSO: {
 #pragma omp atomic
         saidaQuantidadeQuadras[indexSaidaQuantidadeQuadras[GET_Q(i)] +
-                               VEC(ciclo, 13 + GET_E(i),
+                               VEC(ciclo, 12 + GET_E(i),
                                    COLUNAS_SAIDAS_QUANTIDADES)]++;
       } break;
       }
@@ -512,32 +545,32 @@ void gerarSaidaQuantidadeQuadras(const TIPO_AGENTE *agentes, int quantAgentes,
       case CRIANCA: {
 #pragma omp atomic
         saidaQuantidadeQuadras[indexSaidaQuantidadeQuadras[GET_Q(i)] +
-                               VEC(ciclo, 17 + GET_E(i),
+                               VEC(ciclo, 16 + GET_E(i),
                                    COLUNAS_SAIDAS_QUANTIDADES)]++;
       } break;
       case JOVEM: {
 #pragma omp atomic
         saidaQuantidadeQuadras[indexSaidaQuantidadeQuadras[GET_Q(i)] +
-                               VEC(ciclo, 21 + GET_E(i),
+                               VEC(ciclo, 20 + GET_E(i),
                                    COLUNAS_SAIDAS_QUANTIDADES)]++;
       } break;
       case ADULTO: {
 #pragma omp atomic
         saidaQuantidadeQuadras[indexSaidaQuantidadeQuadras[GET_Q(i)] +
-                               VEC(ciclo, 25 + GET_E(i),
+                               VEC(ciclo, 24 + GET_E(i),
                                    COLUNAS_SAIDAS_QUANTIDADES)]++;
       } break;
       case IDOSO: {
 #pragma omp atomic
         saidaQuantidadeQuadras[indexSaidaQuantidadeQuadras[GET_Q(i)] +
-                               VEC(ciclo, 29 + GET_E(i),
+                               VEC(ciclo, 28 + GET_E(i),
                                    COLUNAS_SAIDAS_QUANTIDADES)]++;
       } break;
       }
     }
 #pragma omp atomic
     saidaQuantidadeQuadras[indexSaidaQuantidadeQuadras[GET_Q(i)] +
-                           VEC(ciclo, 33, COLUNAS_SAIDAS_QUANTIDADES)]++;
+                           VEC(ciclo, 32, COLUNAS_SAIDAS_QUANTIDADES)]++;
   }
 }
 
@@ -793,7 +826,7 @@ void movimentacao(TIPO_AGENTE *agentes, int quantAgentes,
                   const int *centrosEsquinas) {
 #pragma omp parallel for
   for (int id = 0; id < quantAgentes; ++id) {
-    // cout << GET_X(id) << ";" << GET_Y(id) << ";1001" << endl;
+    // std::cout << GET_X(id) << ";" << GET_Y(id) << ";1001" << std::endl;
     int q = GET_Q(id);
     int l = GET_L(id);
     int x = GET_X(id);
@@ -1173,8 +1206,7 @@ void movimentacao(TIPO_AGENTE *agentes, int quantAgentes,
                     SET_Q(id, q);
                   }
                 }
-              } else
-                cout << "CHEGOU!" << endl;
+              }
             }
           }
         }
@@ -1185,7 +1217,7 @@ void movimentacao(TIPO_AGENTE *agentes, int quantAgentes,
 
 #endif
 
-#ifdef __ROTA__
+#ifdef __TRAJETO__
 
 void movimentacao(TIPO_AGENTE *agentes, int quantAgentes,
                   const int *indexQuadras, const int *indexVizinhancas,
@@ -1193,14 +1225,15 @@ void movimentacao(TIPO_AGENTE *agentes, int quantAgentes,
                   const int *indexParametros, const int *indexFronteiras,
                   const int *fronteiras, const int *indexEsquinas,
                   const int *esquinas, const int *indexCentrosEsquinas,
-                  const int *centrosEsquinas, int quantRotas, 
-                  const int *indexRotas, const int *rotas, 
-                  const int *indexPosicoes, const int *posicoes, 
-                  int quantTrajetos, const int *indexTrajetos, 
-                  const int *trajetos) {
+                  const int *centrosEsquinas, int quantRotas,
+                  const int *indexRotas, const int *rotas,
+                  const int *indexPosicoes, const int *posicoes,
+                  int quantTrajetos, const int *indexTrajetos,
+                  const int *trajetos, const int *indexPeriodos,
+                  const int *periodos) {
 #pragma omp parallel for
   for (int id = 0; id < quantAgentes; ++id) {
-    //cout << GET_X(id) << ";" << GET_Y(id) << ";100" << (GET_R(id) + 1) << endl;
+    // std::cout << GET_X(id) << ";" << GET_Y(id) << ";100" << (GET_R(id) + 1) << std::endl;
     int q = GET_Q(id);
     int l = GET_L(id);
     int x = GET_X(id);
@@ -1249,14 +1282,20 @@ void movimentacao(TIPO_AGENTE *agentes, int quantAgentes,
         }
         int l_origem = rotas[indexRotas[trajetos[indexTrajetos[t]] + r] + 0];
         int q_origem = rotas[indexRotas[trajetos[indexTrajetos[t]] + r] + 1];
-        int l_destino = rotas[indexRotas[trajetos[indexTrajetos[t]] + r + 1] - 2];
-        int q_destino = rotas[indexRotas[trajetos[indexTrajetos[t]] + r + 1] - 1];
-        int x_destino = posicoes[indexPosicoes[indexQuadras[q_destino * 2] + l_destino] + 0 * 4 + 0];
-        int y_destino = posicoes[indexPosicoes[indexQuadras[q_destino * 2] + l_destino] + 0 * 4 + 1];
+        int l_destino =
+            rotas[indexRotas[trajetos[indexTrajetos[t]] + r + 1] - 2];
+        int q_destino =
+            rotas[indexRotas[trajetos[indexTrajetos[t]] + r + 1] - 1];
+        int x_destino =
+            posicoes[indexPosicoes[indexQuadras[q_destino * 2] + l_destino] +
+                     0 * 4 + 0];
+        int y_destino =
+            posicoes[indexPosicoes[indexQuadras[q_destino * 2] + l_destino] +
+                     0 * 4 + 1];
         // O AGENTE ESTÁ NA QUADRA E NO LOTE DE ORIGEM
         if (q == q_origem && l == l_origem) {
           if (GET_F(id) == 1) {
-            SET_M(id, TEMPO);
+            SET_M(id, periodos[indexPeriodos[t] + r]);
             SET_F(id, 0);
           }
           m = GET_M(id);
@@ -1265,7 +1304,8 @@ void movimentacao(TIPO_AGENTE *agentes, int quantAgentes,
             int quantidade = 0;
             for (int i = indexVizinhancas[indexQuadras[2 * q] + l];
                  i < indexVizinhancas[indexQuadras[2 * q] + l + 1]; i += 6) {
-              if (vizinhancas[i + 0] == x && vizinhancas[i + 1] == y && vizinhancas[i + 4] == l && vizinhancas[i + 5] == q) {
+              if (vizinhancas[i + 0] == x && vizinhancas[i + 1] == y &&
+                  vizinhancas[i + 4] == l && vizinhancas[i + 5] == q) {
                 quantidade++;
               }
             }
@@ -1273,7 +1313,8 @@ void movimentacao(TIPO_AGENTE *agentes, int quantAgentes,
             int k = 0;
             for (int i = indexVizinhancas[indexQuadras[2 * q] + l];
                  i < indexVizinhancas[indexQuadras[2 * q] + l + 1]; i += 6) {
-              if (vizinhancas[i + 0] == x && vizinhancas[i + 1] == y && vizinhancas[i + 4] == l && vizinhancas[i + 5] == q) {
+              if (vizinhancas[i + 0] == x && vizinhancas[i + 1] == y &&
+                  vizinhancas[i + 4] == l && vizinhancas[i + 5] == q) {
                 posicoes[4 * k + 0] = vizinhancas[i + 2];
                 posicoes[4 * k + 1] = vizinhancas[i + 3];
                 posicoes[4 * k + 2] = vizinhancas[i + 4];
@@ -1399,12 +1440,15 @@ void movimentacao(TIPO_AGENTE *agentes, int quantAgentes,
                 }
               }
             } else {
-              // Se o agente está na última rua da rota atual             
-              if (m + 1 == ((indexRotas[trajetos[indexTrajetos[t]] + r + 1] - indexRotas[trajetos[indexTrajetos[t]] + r]) - 4)) {
-                // Encontra na vizinhança do agente o ponto mais próximo ao
+              // Se o agente está na última rua da rota atual
+              if (m + 1 == ((indexRotas[trajetos[indexTrajetos[t]] + r + 1] -
+                             indexRotas[trajetos[indexTrajetos[t]] + r]) -
+                            4)) {
+                // Encontra na vizinhança do agente um ponto que diminua sua
+                // distância ao
                 // ponto de destino e que pertença ao seu lote atual
-                int indMenorViz = 0;
-                double distMenorViz = INT_MAX;
+                int indMenorViz = -1;
+                double distMenorViz = DIST(x, y, x_destino, y_destino);
                 for (int i = 0; i < quantidade; i++) {
                   if (vizinhos[4 * i + 2] == l && vizinhos[4 * i + 3] == RUA) {
                     double dist = DIST(vizinhos[4 * i + 0], vizinhos[4 * i + 1],
@@ -1415,34 +1459,119 @@ void movimentacao(TIPO_AGENTE *agentes, int quantAgentes,
                     }
                   }
                 }
-                // Move o agente
-                x = vizinhos[4 * indMenorViz + 0];
-                y = vizinhos[4 * indMenorViz + 1];
-                l = vizinhos[4 * indMenorViz + 2];
-                q = vizinhos[4 * indMenorViz + 3];
-                delete[](vizinhos);
-                SET_X(id, x);
-                SET_Y(id, y);
-                SET_L(id, l);
-                SET_Q(id, q);
+                if (indMenorViz != -1) {
+                  // Move o agente
+                  x = vizinhos[4 * indMenorViz + 0];
+                  y = vizinhos[4 * indMenorViz + 1];
+                  l = vizinhos[4 * indMenorViz + 2];
+                  q = vizinhos[4 * indMenorViz + 3];
+                  delete[](vizinhos);
+                  SET_X(id, x);
+                  SET_Y(id, y);
+                  SET_L(id, l);
+                  SET_Q(id, q);
+                } else {
+                  // O agente está na posição de mínimo local
+                  
+                  // Armazena a posição de mínimo local
+                  int x_min = x;
+                  int y_min = y;
+                  
+                  // Procura na vizinhança do agente o ponto com menor distância ao ponto destino
+                  int indMenorViz = 0;
+                  double distMenorViz = INT_MAX;
+                  for (int i = 0; i < quantidade; i++) {
+                    if (vizinhos[4 * i + 2] == l && vizinhos[4 * i + 3] == RUA) {
+                      double dist = DIST(vizinhos[4 * i + 0], vizinhos[4 * i + 1],
+                                         x_destino, y_destino);
+                      if (dist < distMenorViz) {
+                        distMenorViz = dist;
+                        indMenorViz = i;
+                      }
+                    }
+                  }
+                  // Move o agente
+                  x = vizinhos[4 * indMenorViz + 0];
+                  y = vizinhos[4 * indMenorViz + 1];
+                  l = vizinhos[4 * indMenorViz + 2];
+                  q = vizinhos[4 * indMenorViz + 3];
+                  delete[](vizinhos);
+                  SET_X(id, x);
+                  SET_Y(id, y);
+                  SET_L(id, l);
+                  SET_Q(id, q);
+                  
+                  // Conta quantas posições de vizinhança o agente possui
+                  int quantidade = 0;
+                  for (int i = indexVizinhancas[indexQuadras[2 * q] + l];
+                       i < indexVizinhancas[indexQuadras[2 * q] + l + 1]; i += 6) {
+                    if (vizinhancas[i + 0] == x && vizinhancas[i + 1] == y) {
+                      quantidade++;
+                    }
+                  }
+                  
+                  // Coleta as posições da vizinhança do agente
+                  int *vizinhos = new int[quantidade * 4];
+                  int k = 0;
+                  for (int i = indexVizinhancas[indexQuadras[2 * q] + l];
+                       i < indexVizinhancas[indexQuadras[2 * q] + l + 1]; i += 6) {
+                    if (vizinhancas[i + 0] == x && vizinhancas[i + 1] == y) {
+                      vizinhos[4 * k + 0] = vizinhancas[i + 2];
+                      vizinhos[4 * k + 1] = vizinhancas[i + 3];
+                      vizinhos[4 * k + 2] = vizinhancas[i + 4];
+                      vizinhos[4 * k + 3] = vizinhancas[i + 5];
+                      k++;
+                    }
+                  }
+                  
+                  // Procura na vizinhança do agente o ponto com menor distância ao ponto destino 
+                  // removendo o ponto de mínimo local
+                  indMenorViz = 0;
+                  distMenorViz = INT_MAX;
+                  for (int i = 0; i < quantidade; i++) {
+                    if (vizinhos[4 * i + 2] == l && vizinhos[4 * i + 3] == RUA && 
+                    vizinhos[4 * i + 0] != x_min && vizinhos[4 * i + 1] != y_min) {
+                      double dist = DIST(vizinhos[4 * i + 0], vizinhos[4 * i + 1],
+                                         x_destino, y_destino);
+                      if (dist < distMenorViz) {
+                        distMenorViz = dist;
+                        indMenorViz = i;
+                      }
+                    }
+                  }
+                  // Move o agente
+                  x = vizinhos[4 * indMenorViz + 0];
+                  y = vizinhos[4 * indMenorViz + 1];
+                  l = vizinhos[4 * indMenorViz + 2];
+                  q = vizinhos[4 * indMenorViz + 3];
+                  delete[](vizinhos);
+                  SET_X(id, x);
+                  SET_Y(id, y);
+                  SET_L(id, l);
+                  SET_Q(id, q);
+                  
+                }
               } else {
                 // Procura um ponto central de esquina que pertença a próxima
                 // rua da rota atual
                 int pontoCentral;
                 for (int i = indexCentrosEsquinas[l];
                      i < indexCentrosEsquinas[l + 1]; i += 3) {
-                  if (centrosEsquinas[i + 2] == rotas[indexRotas[trajetos[indexTrajetos[t]] + r] + 2 + m + 1]) {
+                  if (centrosEsquinas[i + 2] ==
+                      rotas[indexRotas[trajetos[indexTrajetos[t]] + r] + 2 + m +
+                            1]) {
                     pontoCentral = i;
                     break;
                   }
                 }
                 // Encontra na vizinhança do agente o ponto mais próximo ao
-                // ponto
-                // central da esquina que pertença a próxima rua da trajeto
+                // ponto central da esquina que pertença a próxima rua da trajeto
                 int indMenorViz = 0;
                 double distMenorViz = INT_MAX;
                 for (int i = 0; i < quantidade; i++) {
-                  if (vizinhos[4 * i + 2] == rotas[indexRotas[trajetos[indexTrajetos[t]] + r] + 2 + m + 1] &&
+                  if (vizinhos[4 * i + 2] ==
+                          rotas[indexRotas[trajetos[indexTrajetos[t]] + r] + 2 +
+                                m + 1] &&
                       vizinhos[4 * i + 3] == RUA) {
                     double dist = DIST(vizinhos[4 * i + 0], vizinhos[4 * i + 1],
                                        centrosEsquinas[pontoCentral + 0],
@@ -1502,7 +1631,7 @@ void movimentacao(TIPO_AGENTE *agentes, int quantAgentes,
             // O AGENTE ESTÁ NA QUADRA E NO LOTE DE DESTINO
             if (q == q_destino && l == l_destino) {
               if (GET_F(id) == 0) {
-                SET_M(id, TEMPO);
+                SET_M(id, periodos[indexPeriodos[t] + r + 1]);
                 SET_F(id, 1);
               }
               m = GET_M(id);
@@ -1510,16 +1639,20 @@ void movimentacao(TIPO_AGENTE *agentes, int quantAgentes,
                 delete[](vizinhos);
                 int quantidade = 0;
                 for (int i = indexVizinhancas[indexQuadras[2 * q] + l];
-                     i < indexVizinhancas[indexQuadras[2 * q] + l + 1]; i += 6) {
-                  if (vizinhancas[i + 0] == x && vizinhancas[i + 1] == y && vizinhancas[i + 4] == l && vizinhancas[i + 5] == q) {
+                     i < indexVizinhancas[indexQuadras[2 * q] + l + 1];
+                     i += 6) {
+                  if (vizinhancas[i + 0] == x && vizinhancas[i + 1] == y &&
+                      vizinhancas[i + 4] == l && vizinhancas[i + 5] == q) {
                     quantidade++;
                   }
                 }
                 int *posicoes = new int[quantidade * 4];
                 int k = 0;
                 for (int i = indexVizinhancas[indexQuadras[2 * q] + l];
-                     i < indexVizinhancas[indexQuadras[2 * q] + l + 1]; i += 6) {
-                  if (vizinhancas[i + 0] == x && vizinhancas[i + 1] == y && vizinhancas[i + 4] == l && vizinhancas[i + 5] == q) {
+                     i < indexVizinhancas[indexQuadras[2 * q] + l + 1];
+                     i += 6) {
+                  if (vizinhancas[i + 0] == x && vizinhancas[i + 1] == y &&
+                      vizinhancas[i + 4] == l && vizinhancas[i + 5] == q) {
                     posicoes[4 * k + 0] = vizinhancas[i + 2];
                     posicoes[4 * k + 1] = vizinhancas[i + 3];
                     posicoes[4 * k + 2] = vizinhancas[i + 4];
@@ -1695,15 +1828,16 @@ void transicao(TIPO_AGENTE *agentes, int quantAgentes, const double *parametros,
 
 void iniciarSimulacao(
     int idSimulacao, const double *parametros, int sizeParametros,
-    const int *indexParametros, string pastaSaida, int *saidaQuantidadeTotal,
-    const int *quantLotes, int quantQuadras, const int *indexQuadras,
-    const int *indexVizinhancas, const int *vizinhancas,
-    const int *indexPosicoes, const int *posicoes, const int *indexFronteiras,
-    const int *fronteiras, const int *indexEsquinas, const int *esquinas,
-    const int *indexCentrosEsquinas, const int *centrosEsquinas,
-    const int *indexSaidaQuantidadeQuadras, int *saidaQuantidadeQuadras, 
-    int quantRotas, const int *indexRotas, const int *rotas, 
-    int quantTrajetos, const int *indexTrajetos, const int *trajetos) {
+    const int *indexParametros, std::string pastaSaida,
+    int *saidaQuantidadeTotal, const int *quantLotes, int quantQuadras,
+    const int *indexQuadras, const int *indexVizinhancas,
+    const int *vizinhancas, const int *indexPosicoes, const int *posicoes,
+    const int *indexFronteiras, const int *fronteiras, const int *indexEsquinas,
+    const int *esquinas, const int *indexCentrosEsquinas,
+    const int *centrosEsquinas, const int *indexSaidaQuantidadeQuadras,
+    int *saidaQuantidadeQuadras, int quantRotas, const int *indexRotas,
+    const int *rotas, int quantTrajetos, const int *indexTrajetos,
+    const int *trajetos, const int *indexPeriodos, const int *periodos) {
   int ciclos = NUMERO_CICLOS_SIMULACAO + 1;
 
   int quantLinhasSaidaEspacial =
@@ -1714,21 +1848,25 @@ void iniciarSimulacao(
                                                  parametros, indexParametros);
   TIPO_AGENTE *agentes = Agentes::criarAgentes(
       quantAgentes, parametros, indexParametros, quantLotes, quantQuadras,
-      indexQuadras, indexPosicoes, posicoes, indexRotas, rotas, 
-      indexTrajetos, trajetos);
+      indexQuadras, indexPosicoes, posicoes, indexRotas, rotas, indexTrajetos,
+      trajetos);
 
   if (idSimulacao == 0) {
     int totMem = (quantAgentes * ATRIBUTOS_AGENTE * sizeof(TIPO_AGENTE));
     totMem += (ciclos * COLUNAS_SAIDAS_QUANTIDADES * sizeof(int));
     totMem += (sizeParametros * sizeof(double));
-    totMem +=
-        (indexVizinhancas[indexQuadras[quantQuadras * 2 - 1]] * sizeof(int));
+    totMem += (indexVizinhancas[indexQuadras[quantQuadras * 2 - 1]] * sizeof(int));
     totMem += indexPosicoes[indexQuadras[quantQuadras * 2 - 1]] * sizeof(int);
     totMem += indexFronteiras[indexQuadras[quantQuadras * 2 - 1]] * sizeof(int);
-    cout << totMem << endl;
+    totMem += indexEsquinas[quantLotes[0]];
+    totMem += indexCentrosEsquinas[quantLotes[0]];
+    totMem += indexRotas[quantRotas];
+    totMem += indexTrajetos[quantTrajetos];
+    totMem += indexPeriodos[quantTrajetos];
+    std::cout << totMem << std::endl;
   }
 
-#if defined(__GPU__)
+#ifdef __GPU__
 
   TIPO_AGENTE *agentesDev;
   int *saidaQuantidadeTotalDev;
@@ -1943,9 +2081,9 @@ void iniciarSimulacao(
     movimentacao(agentes, quantAgentes, indexQuadras, indexVizinhancas,
                  vizinhancas, parametros, indexParametros, indexFronteiras,
                  fronteiras, indexEsquinas, esquinas, indexCentrosEsquinas,
-                 centrosEsquinas, quantRotas, indexRotas, rotas, 
-                 indexPosicoes, posicoes, quantTrajetos, indexTrajetos, 
-                 trajetos);
+                 centrosEsquinas, quantRotas, indexRotas, rotas, indexPosicoes,
+                 posicoes, quantTrajetos, indexTrajetos, trajetos,
+                 indexPeriodos, periodos);
     contato(agentes, quantAgentes, quantLotes, quantQuadras, parametros,
             indexParametros, indexQuadras, indexPosicoes, posicoes);
     transicao(agentes, quantAgentes, parametros, indexParametros);
@@ -1962,7 +2100,7 @@ void iniciarSimulacao(
 
 #endif
 
-#if defined(__GPU__)
+#ifdef __GPU__
 
   cudaMemcpy(saidaQuantidadeTotal, saidaQuantidadeTotalDev,
              ciclos * COLUNAS_SAIDAS_QUANTIDADES * sizeof(int),

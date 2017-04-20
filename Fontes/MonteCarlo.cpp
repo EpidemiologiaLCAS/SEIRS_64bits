@@ -1,5 +1,5 @@
-#ifndef MONTE_CARLO_H
-#define MONTE_CARLO_H
+#ifndef __MONTE_CARLO__
+#define __MONTE_CARLO__
 
 #include "Parametros.cpp"
 #include "Simulacao.cpp"
@@ -8,33 +8,22 @@ namespace SaidasMonteCarlo {
 
 void gerarSaidaQuantidadeTotal(int idMonteCarlo, int ciclos, int simulacoes,
                                int *saidaQuantidadeTotal) {
-  for (int i = 0; i < ciclos; ++i) {
-    for (int j = 0; j < COLUNAS_SAIDAS_QUANTIDADES; ++j) {
-      saidaQuantidadeTotal[VEC(i, j, COLUNAS_SAIDAS_QUANTIDADES)] /=
-          (double)simulacoes;
-    }
-  }
-  for (int i = 0; i < ciclos; ++i) {
-    saidaQuantidadeTotal[VEC(i, 0, COLUNAS_SAIDAS_QUANTIDADES)] = i;
-  }
-  string nomeArquivoSaida = string("Saidas") + SEPARADOR + "MonteCarlo_" +
-                            to_string(idMonteCarlo) + SEPARADOR +
-                            string("Quantidades_Total.csv");
-  ofstream arquivoSaida(nomeArquivoSaida);
+  std::string nomeArquivoSaida = std::string("Saidas") + SEPARADOR +
+                                 "MonteCarlo_" + std::to_string(idMonteCarlo) +
+                                 SEPARADOR + std::string("Quantidades_Total.csv");
+  std::ofstream arquivoSaida(nomeArquivoSaida);
   if (arquivoSaida.is_open()) {
     for (int i = 0; i < ciclos; ++i) {
-      arquivoSaida
-          << saidaQuantidadeTotal[VEC(i, 0, COLUNAS_SAIDAS_QUANTIDADES)];
+      arquivoSaida << i;
       for (int j = 1; j < COLUNAS_SAIDAS_QUANTIDADES; ++j) {
-        arquivoSaida
-            << ";"
-            << saidaQuantidadeTotal[VEC(i, j, COLUNAS_SAIDAS_QUANTIDADES)];
+        arquivoSaida << ";"  << saidaQuantidadeTotal[VEC(i, j, COLUNAS_SAIDAS_QUANTIDADES)] / simulacoes;
       }
-      arquivoSaida << endl;
+      arquivoSaida << std::endl;
     }
     arquivoSaida.close();
   } else {
-    cerr << "Arquivo: " << nomeArquivoSaida << " nao foi aberto!" << endl;
+    std::cerr << "Arquivo: " << nomeArquivoSaida << " nao foi aberto!"
+              << std::endl;
     exit(1);
   }
 }
@@ -44,38 +33,25 @@ void gerarSaidaQuantidadeQuadras(int idMonteCarlo, int quantQuadras, int ciclos,
                                  const int *indexSaidaQuantidadeQuadras,
                                  int *saidaQuantidadeQuadras) {
   for (int idQuadra = 0; idQuadra < quantQuadras; ++idQuadra) {
-    for (int i = 0; i < ciclos; ++i) {
-      for (int j = 0; j < COLUNAS_SAIDAS_QUANTIDADES; ++j) {
-        saidaQuantidadeQuadras[indexSaidaQuantidadeQuadras[idQuadra] +
-                               VEC(i, j, COLUNAS_SAIDAS_QUANTIDADES)] /=
-            (double)simulacoes;
-      }
-    }
-    for (int i = 0; i < ciclos; ++i) {
-      saidaQuantidadeQuadras[indexSaidaQuantidadeQuadras[idQuadra] +
-                             VEC(i, 0, COLUNAS_SAIDAS_QUANTIDADES)] = i;
-    }
-    string nomeArquivoSaida = string("Saidas") + SEPARADOR +
-                              string("MonteCarlo_") + to_string(idMonteCarlo) +
-                              SEPARADOR + string("Quantidades_Quadra-") +
-                              to_string(idQuadra) + string(".csv");
-    ofstream arquivoSaida(nomeArquivoSaida);
+    std::string nomeArquivoSaida =
+        std::string("Saidas") + SEPARADOR + std::string("MonteCarlo_") +
+        std::to_string(idMonteCarlo) + SEPARADOR +
+        std::string("Quantidades_Quadra-") + std::to_string(idQuadra) +
+        std::string(".csv");
+    std::ofstream arquivoSaida(nomeArquivoSaida);
     if (arquivoSaida.is_open()) {
       for (int i = 0; i < ciclos; ++i) {
-        arquivoSaida
-            << saidaQuantidadeQuadras[indexSaidaQuantidadeQuadras[idQuadra] +
-                                      VEC(i, 0, COLUNAS_SAIDAS_QUANTIDADES)];
+        arquivoSaida << i;
         for (int j = 1; j < COLUNAS_SAIDAS_QUANTIDADES; ++j) {
-          arquivoSaida
-              << ";"
-              << saidaQuantidadeQuadras[indexSaidaQuantidadeQuadras[idQuadra] +
-                                        VEC(i, j, COLUNAS_SAIDAS_QUANTIDADES)];
+          arquivoSaida << ";" << saidaQuantidadeQuadras[indexSaidaQuantidadeQuadras[idQuadra] +
+                                        VEC(i, j, COLUNAS_SAIDAS_QUANTIDADES)] / simulacoes;
         }
-        arquivoSaida << endl;
+        arquivoSaida << std::endl;
       }
       arquivoSaida.close();
     } else {
-      cerr << "Arquivo: " << nomeArquivoSaida << " nao foi aberto!" << endl;
+      std::cerr << "Arquivo: " << nomeArquivoSaida << " nao foi aberto!"
+                << std::endl;
       exit(1);
     }
   }
@@ -85,8 +61,7 @@ int *calcularIndexSaidaQuantidadeQuadras(int quantQuadras, int ciclos) {
   int i = 0, size = 0;
   int *deslocamentos = new int[quantQuadras + 1];
   for (int k = 0; k < quantQuadras; ++k) {
-    deslocamentos[i] = size;
-    i++;
+    deslocamentos[i++] = size;
     size += ciclos * COLUNAS_SAIDAS_QUANTIDADES;
   }
   deslocamentos[quantQuadras] = size;
@@ -96,10 +71,10 @@ int *calcularIndexSaidaQuantidadeQuadras(int quantQuadras, int ciclos) {
 
 namespace MonteCarlo {
 
-void iniciarSimulacao(int idMonteCarlo, string pastaEntrada,
-                      string pastaSaida) {
-  string pastaEntradaMonteCarlo = pastaEntrada,
-         pastaSaidaMonteCarlo = pastaSaida;
+void iniciarSimulacao(int idMonteCarlo, std::string pastaEntrada,
+                      std::string pastaSaida) {
+  std::string pastaEntradaMonteCarlo = pastaEntrada,
+              pastaSaidaMonteCarlo = pastaSaida;
 
   int quantQuadras, *quantLotes, *indexQuadras;
   int *indexVizinhancas, *vizinhancas;
@@ -109,14 +84,15 @@ void iniciarSimulacao(int idMonteCarlo, string pastaEntrada,
   int *indexCentrosEsquinas, *centrosEsquinas;
   int quantRotas, *indexRotas, *rotas;
   int quantTrajetos, *indexTrajetos, *trajetos;
-  tie(quantQuadras, quantLotes, indexQuadras, indexVizinhancas, vizinhancas,
-      indexPosicoes, posicoes, indexFronteiras, fronteiras, indexEsquinas,
-      esquinas, indexCentrosEsquinas, centrosEsquinas, quantRotas, 
-      indexRotas, rotas, quantTrajetos, indexTrajetos, trajetos) =
-      Parametros::lerVetores();
+  int *indexPeriodos, *periodos;
+  std::tie(quantQuadras, quantLotes, indexQuadras, indexVizinhancas,
+           vizinhancas, indexPosicoes, posicoes, indexFronteiras, fronteiras,
+           indexEsquinas, esquinas, indexCentrosEsquinas, centrosEsquinas,
+           quantRotas, indexRotas, rotas, quantTrajetos, indexTrajetos,
+           trajetos, indexPeriodos, periodos) = Parametros::lerVetores();
   int sizeParametros;
   double *parametros;
-  tie(sizeParametros, parametros) = Parametros::lerParametros(
+  std::tie(sizeParametros, parametros) = Parametros::lerParametros(
       pastaEntradaMonteCarlo, quantLotes, quantQuadras);
   int *indexParametros =
       Parametros::calcularIndexParametros(quantLotes, quantQuadras);
@@ -132,16 +108,17 @@ void iniciarSimulacao(int idMonteCarlo, string pastaEntrada,
       new int[indexSaidaQuantidadeQuadras[quantQuadras]]();
 
   for (int idSimulacao = 0; idSimulacao < simulacoes; ++idSimulacao) {
-    string pastaSaidaSimulacao = pastaSaidaMonteCarlo + string("Simulacao_") +
-                                 to_string(idSimulacao) + SEPARADOR;
+    std::string pastaSaidaSimulacao = pastaSaidaMonteCarlo +
+                                      std::string("Simulacao_") +
+                                      std::to_string(idSimulacao) + SEPARADOR;
     Simulacao::iniciarSimulacao(
         idSimulacao, parametros, sizeParametros, indexParametros,
         pastaSaidaSimulacao, saidaQuantidadeTotal, quantLotes, quantQuadras,
         indexQuadras, indexVizinhancas, vizinhancas, indexPosicoes, posicoes,
         indexFronteiras, fronteiras, indexEsquinas, esquinas,
         indexCentrosEsquinas, centrosEsquinas, indexSaidaQuantidadeQuadras,
-        saidaQuantidadeQuadras, quantRotas, indexRotas, rotas, quantTrajetos, 
-        indexTrajetos, trajetos);
+        saidaQuantidadeQuadras, quantRotas, indexRotas, rotas, quantTrajetos,
+        indexTrajetos, trajetos, indexPeriodos, periodos);
   }
 
   SaidasMonteCarlo::gerarSaidaQuantidadeQuadras(
@@ -164,6 +141,8 @@ void iniciarSimulacao(int idMonteCarlo, string pastaEntrada,
   delete[](rotas);
   delete[](indexTrajetos);
   delete[](trajetos);
+  delete[](indexPeriodos);
+  delete[](periodos);
   delete[](indexCentrosEsquinas);
   delete[](centrosEsquinas);
   delete[](indexSaidaQuantidadeQuadras);

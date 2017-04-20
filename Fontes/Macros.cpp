@@ -1,14 +1,18 @@
-#ifndef MACROS_H
-#define MACROS_H
+#ifndef __MACROS__
+#define __MACROS__
 
 #ifdef __linux__
-#define COMANDO_CRIAR_PASTA string("mkdir -p ")
-#define COMANDO_EXCLUIR_PASTA string("rm -rf ")
-#define SEPARADOR string("/")
+
+#define COMANDO_CRIAR_PASTA std::string("mkdir -p ")
+#define COMANDO_EXCLUIR_PASTA std::string("rm -rf ")
+#define SEPARADOR std::string("/")
+
 #else
-#define COMANDO_CRIAR_PASTA string("md ")
-#define COMANDO_EXCLUIR_PASTA string("rd /s /q ")
-#define SEPARADOR string("\\")
+
+#define COMANDO_CRIAR_PASTA std::string("md ")
+#define COMANDO_EXCLUIR_PASTA std::string("rd /s /q ")
+#define SEPARADOR std::string("\\")
+
 #endif
 
 #define SUSCETIVEL 0
@@ -24,15 +28,13 @@
 #define ADULTO 1
 #define IDOSO 0
 
-#define COLUNAS_SAIDAS_QUANTIDADES 34
+#define COLUNAS_SAIDAS_QUANTIDADES 33
 #define VEC(i, j, num_colunas) (((i) * (num_colunas)) + (j))
 
 #define RUA 0
 
-#define TEMPO 10
-
-#define ABS(x) (x < 0 ? (-1 * x) : x)
-#define DIST(x1, y1, x2, y2) (double)(sqrt(pow(x1 - x2, 2.0) + pow(y1 - y2, 2.0)))
+#define DIST(x1, y1, x2, y2)                                                   \
+  (double)(sqrt(pow((x1) - (x2), 2.0) + pow((y1) - (y2), 2.0)))
 
 #ifdef __CONVENCIONAL__
 
@@ -119,32 +121,32 @@
 #define NM_E (TIPO_AGENTE)18446744073709551612U
 
 // Gets
-#define GET_Q(i) (int)((agentes[i] & MA_Q) >> A_Q)
-#define GET_S(i) (int)((agentes[i] & MA_S) >> A_S)
-#define GET_I(i) (int)((agentes[i] & MA_I) >> A_I)
-#define GET_L(i) (int)((agentes[i] & MA_L) >> A_L)
-#define GET_X(i) (int)((agentes[i] & MA_X) >> A_X)
-#define GET_Y(i) (int)((agentes[i] & MA_Y) >> A_Y)
-#define GET_C(i) (int)((agentes[i] & MA_C) >> A_C)
-#define GET_E(i) (int)((agentes[i] & MA_E) >> A_E)
+#define GET_Q(i) (int)((agentes[(i)] & MA_Q) >> A_Q)
+#define GET_S(i) (int)((agentes[(i)] & MA_S) >> A_S)
+#define GET_I(i) (int)((agentes[(i)] & MA_I) >> A_I)
+#define GET_L(i) (int)((agentes[(i)] & MA_L) >> A_L)
+#define GET_X(i) (int)((agentes[(i)] & MA_X) >> A_X)
+#define GET_Y(i) (int)((agentes[(i)] & MA_Y) >> A_Y)
+#define GET_C(i) (int)((agentes[(i)] & MA_C) >> A_C)
+#define GET_E(i) (int)((agentes[(i)] & MA_E) >> A_E)
 
 // Sets
 #define SET_Q(i, novo)                                                         \
-  (agentes[i] = ((agentes[i] & NM_Q) | (((TIPO_AGENTE)novo) << A_Q)))
+  (agentes[(i)] = ((agentes[(i)] & NM_Q) | (((TIPO_AGENTE)(novo)) << A_Q)))
 #define SET_S(i, novo)                                                         \
-  (agentes[i] = ((agentes[i] & NM_S) | (((TIPO_AGENTE)novo) << A_S)))
+  (agentes[(i)] = ((agentes[(i)] & NM_S) | (((TIPO_AGENTE)(novo)) << A_S)))
 #define SET_I(i, novo)                                                         \
-  (agentes[i] = ((agentes[i] & NM_I) | (((TIPO_AGENTE)novo) << A_I)))
+  (agentes[(i)] = ((agentes[(i)] & NM_I) | (((TIPO_AGENTE)(novo)) << A_I)))
 #define SET_L(i, novo)                                                         \
-  (agentes[i] = ((agentes[i] & NM_L) | (((TIPO_AGENTE)novo) << A_L)))
+  (agentes[(i)] = ((agentes[(i)] & NM_L) | (((TIPO_AGENTE)(novo)) << A_L)))
 #define SET_X(i, novo)                                                         \
-  (agentes[i] = ((agentes[i] & NM_X) | (((TIPO_AGENTE)novo) << A_X)))
+  (agentes[(i)] = ((agentes[(i)] & NM_X) | (((TIPO_AGENTE)(novo)) << A_X)))
 #define SET_Y(i, novo)                                                         \
-  (agentes[i] = ((agentes[i] & NM_Y) | (((TIPO_AGENTE)novo) << A_Y)))
+  (agentes[(i)] = ((agentes[(i)] & NM_Y) | (((TIPO_AGENTE)(novo)) << A_Y)))
 #define SET_C(i, novo)                                                         \
-  (agentes[i] = ((agentes[i] & NM_C) | (((TIPO_AGENTE)novo) << A_C)))
+  (agentes[(i)] = ((agentes[(i)] & NM_C) | (((TIPO_AGENTE)(novo)) << A_C)))
 #define SET_E(i, novo)                                                         \
-  (agentes[i] = ((agentes[i] & NM_E) | (((TIPO_AGENTE)novo) << A_E)))
+  (agentes[(i)] = ((agentes[(i)] & NM_E) | (((TIPO_AGENTE)(novo)) << A_E)))
 
 #endif
 

@@ -1,7 +1,7 @@
 GPU_CC=nvcc
 CPU_CC=g++
-GPU_FLAGS=-std=c++11 -D_MWAITXINTRIN_H_INCLUDED -x cu
-CPU_FLAGS=-std=c++17 -fopenmp -Wall -D__ROTA__
+GPU_FLAGS=-std=c++11 -D_MWAITXINTRIN_H_INCLUDED -x cu -D__TRAJETO__
+CPU_FLAGS=-std=c++17 -fopenmp -Wall -D__TRAJETO__
 FILE=Fontes/Main.cpp
 EXE=SEIRS
 

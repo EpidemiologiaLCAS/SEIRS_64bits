@@ -1,5 +1,5 @@
-#ifndef PARAMETROS_H
-#define PARAMETROS_H
+#ifndef __PARAMETROS__
+#define __PARAMETROS__
 
 #define QUANTIDADE_PARAMETROS_GERAIS 54
 #define ENTRE_FAIXA(min, max, percentual)                                      \
@@ -49,60 +49,61 @@
 #define QUANTIDADE_AGENTES_RECUPERADOS_IDOSO_FEMININO (int)(parametros[66])
 
 #define TAXA_INFECCAO_CRIANCA(percentual)                                      \
-  (double)(ENTRE_FAIXA(parametros[68], parametros[69], percentual))
+  (double)(ENTRE_FAIXA(parametros[68], parametros[69], (percentual)))
 #define PERIODO_EXPOSTO_CRIANCA(percentual)                                    \
-  (int)(ENTRE_FAIXA(parametros[70], parametros[71], percentual))
+  (int)(ENTRE_FAIXA(parametros[70], parametros[71], (percentual)))
 #define PERIODO_INFECTADO_CRIANCA(percentual)                                  \
-  (int)(ENTRE_FAIXA(parametros[72], parametros[73], percentual))
+  (int)(ENTRE_FAIXA(parametros[72], parametros[73], (percentual)))
 #define PERIODO_RECUPERADO_CRIANCA(percentual)                                 \
-  (int)(ENTRE_FAIXA(parametros[74], parametros[75], percentual))
+  (int)(ENTRE_FAIXA(parametros[74], parametros[75], (percentual)))
 
 #define TAXA_INFECCAO_JOVEM(percentual)                                        \
-  (double)(ENTRE_FAIXA(parametros[76], parametros[77], percentual))
+  (double)(ENTRE_FAIXA(parametros[76], parametros[77], (percentual)))
 #define PERIODO_EXPOSTO_JOVEM(percentual)                                      \
-  (int)(ENTRE_FAIXA(parametros[78], parametros[79], percentual))
+  (int)(ENTRE_FAIXA(parametros[78], parametros[79], (percentual)))
 #define PERIODO_INFECTADO_JOVEM(percentual)                                    \
-  (int)(ENTRE_FAIXA(parametros[80], parametros[81], percentual))
+  (int)(ENTRE_FAIXA(parametros[80], parametros[81], (percentual)))
 #define PERIODO_RECUPERADO_JOVEM(percentual)                                   \
-  (int)(ENTRE_FAIXA(parametros[82], parametros[83], percentual))
+  (int)(ENTRE_FAIXA(parametros[82], parametros[83], (percentual)))
 
 #define TAXA_INFECCAO_ADULTO(percentual)                                       \
-  (double)(ENTRE_FAIXA(parametros[84], parametros[85], percentual))
+  (double)(ENTRE_FAIXA(parametros[84], parametros[85], (percentual)))
 #define PERIODO_EXPOSTO_ADULTO(percentual)                                     \
-  (int)(ENTRE_FAIXA(parametros[86], parametros[87], percentual))
+  (int)(ENTRE_FAIXA(parametros[86], parametros[87], (percentual)))
 #define PERIODO_INFECTADO_ADULTO(percentual)                                   \
-  (int)(ENTRE_FAIXA(parametros[88], parametros[89], percentual))
+  (int)(ENTRE_FAIXA(parametros[88], parametros[89], (percentual)))
 #define PERIODO_RECUPERADO_ADULTO(percentual)                                  \
-  (int)(ENTRE_FAIXA(parametros[90], parametros[91], percentual))
+  (int)(ENTRE_FAIXA(parametros[90], parametros[91], (percentual)))
 
 #define TAXA_INFECCAO_IDOSO(percentual)                                        \
-  (double)(ENTRE_FAIXA(parametros[92], parametros[93], percentual))
+  (double)(ENTRE_FAIXA(parametros[92], parametros[93], (percentual)))
 #define PERIODO_EXPOSTO_IDOSO(percentual)                                      \
-  (int)(ENTRE_FAIXA(parametros[94], parametros[95], percentual))
+  (int)(ENTRE_FAIXA(parametros[94], parametros[95], (percentual)))
 #define PERIODO_INFECTADO_IDOSO(percentual)                                    \
-  (int)(ENTRE_FAIXA(parametros[96], parametros[97], percentual))
+  (int)(ENTRE_FAIXA(parametros[96], parametros[97], (percentual)))
 #define PERIODO_RECUPERADO_IDOSO(percentual)                                   \
-  (int)(ENTRE_FAIXA(parametros[98], parametros[99], percentual))
+  (int)(ENTRE_FAIXA(parametros[98], parametros[99], (percentual)))
 
 #define TAXA_MOBILIDADE_CRIANCA(percentual)                                    \
-  (double)(ENTRE_FAIXA(parametros[100], parametros[101], percentual))
+  (double)(ENTRE_FAIXA(parametros[100], parametros[101], (percentual)))
 #define TAXA_MOBILIDADE_JOVEM(percentual)                                      \
-  (double)(ENTRE_FAIXA(parametros[102], parametros[103], percentual))
+  (double)(ENTRE_FAIXA(parametros[102], parametros[103], (percentual)))
 #define TAXA_MOBILIDADE_ADULTO(percentual)                                     \
-  (double)(ENTRE_FAIXA(parametros[104], parametros[105], percentual))
+  (double)(ENTRE_FAIXA(parametros[104], parametros[105], (percentual)))
 #define TAXA_MOBILIDADE_IDOSO(percentual)                                      \
-  (double)(ENTRE_FAIXA(parametros[106], parametros[107], percentual))
+  (double)(ENTRE_FAIXA(parametros[106], parametros[107], (percentual)))
 
-default_random_engine
-    gen(chrono::system_clock::now().time_since_epoch().count());
-uniform_real_distribution<double> dis(0.0, 1.0);
+std::default_random_engine
+    gen(std::chrono::system_clock::now().time_since_epoch().count());
+std::uniform_real_distribution<double> dis(0.0, 1.0);
 
 double randomizarPercentual() { return dis(gen); }
 
 namespace Parametros {
 
-tuple<int, int *, int *, int *, int *, int *, int *, int *, int *, int *, int *,
-      int *, int *, int, int *, int *, int, int *, int *>
+std::tuple<int, int *, int *, int *, int *, int *, int *, int *, int *, int *,
+           int *, int *, int *, int, int *, int *, int, int *, int *, int *,
+           int *>
 lerVetores() {
   int quantQuadras, *quantLotes, *indexQuadras;
   int *indexVizinhancas, *vizinhancas;
@@ -112,9 +113,10 @@ lerVetores() {
   int *indexCentrosEsquinas, *centrosEsquinas;
   int quantRotas, *indexRotas, *rotas;
   int quantTrajetos, *indexTrajetos, *trajetos;
-  string nomeArquivoEntrada =
-      string("Entradas") + SEPARADOR + string("Vetores.csv");
-  ifstream arquivoEntrada(nomeArquivoEntrada);
+  int *indexPeriodos, *periodos;
+  std::string nomeArquivoEntrada =
+      std::string("Entradas") + SEPARADOR + std::string("Vetores.csv");
+  std::ifstream arquivoEntrada(nomeArquivoEntrada);
   if (arquivoEntrada.is_open()) {
     arquivoEntrada >> quantQuadras;
     arquivoEntrada.get();
@@ -193,7 +195,6 @@ lerVetores() {
       arquivoEntrada >> rotas[i];
       arquivoEntrada.get();
     }
-    
     arquivoEntrada >> quantTrajetos;
     arquivoEntrada.get();
     indexTrajetos = new int[quantTrajetos + 1];
@@ -206,42 +207,54 @@ lerVetores() {
       arquivoEntrada >> trajetos[i];
       arquivoEntrada.get();
     }
+    indexPeriodos = new int[quantTrajetos + 1];
+    for (int i = 0; i < quantTrajetos + 1; ++i) {
+      arquivoEntrada >> indexPeriodos[i];
+      arquivoEntrada.get();
+    }
+    periodos = new int[indexPeriodos[quantTrajetos]];
+    for (int i = 0; i < indexPeriodos[quantTrajetos]; ++i) {
+      arquivoEntrada >> periodos[i];
+      arquivoEntrada.get();
+    }
     arquivoEntrada.close();
   } else {
-    cerr << "Arquivo: " << nomeArquivoEntrada << " nao foi aberto!" << endl;
+    std::cerr << "Arquivo: " << nomeArquivoEntrada << " nao foi aberto!"
+              << std::endl;
     exit(1);
   }
-  return make_tuple(quantQuadras, quantLotes, indexQuadras, indexVizinhancas,
-                    vizinhancas, indexPosicoes, posicoes, indexFronteiras,
-                    fronteiras, indexEsquinas, esquinas, indexCentrosEsquinas,
-                    centrosEsquinas, quantRotas, indexRotas, rotas, 
-                    quantTrajetos, indexTrajetos, trajetos);
+  return std::make_tuple(
+      quantQuadras, quantLotes, indexQuadras, indexVizinhancas, vizinhancas,
+      indexPosicoes, posicoes, indexFronteiras, fronteiras, indexEsquinas,
+      esquinas, indexCentrosEsquinas, centrosEsquinas, quantRotas, indexRotas,
+      rotas, quantTrajetos, indexTrajetos, trajetos, indexPeriodos, periodos);
 }
 
-tuple<int, double *> lerParametros(string pastaEntrada, const int *quantLotes,
-                                   int quantQuadras) {
+std::tuple<int, double *> lerParametros(std::string pastaEntrada,
+                                        const int *quantLotes,
+                                        int quantQuadras) {
   int quantParametros = QUANTIDADE_PARAMETROS_GERAIS;
   double *retorno = new double[quantParametros * 2];
-  string pastaEntradaAux = pastaEntrada;
-  string nomeArquivoEntrada = pastaEntradaAux + string("Geral.csv");
-  ifstream arquivoEntrada(nomeArquivoEntrada);
+  std::string pastaEntradaAux = pastaEntrada;
+  std::string nomeArquivoEntrada = pastaEntradaAux + std::string("Geral.csv");
+  std::ifstream arquivoEntrada(nomeArquivoEntrada);
   int i = 0;
   if (arquivoEntrada.is_open()) {
     arquivoEntrada.ignore(1024, '\n');
-    for (; i < QUANTIDADE_PARAMETROS_GERAIS * 2; i++) {
-      arquivoEntrada >> retorno[i];
+    for (; i < QUANTIDADE_PARAMETROS_GERAIS * 2;) {
+      arquivoEntrada >> retorno[i++];
       arquivoEntrada.get();
-      i++;
-      arquivoEntrada >> retorno[i];
+      arquivoEntrada >> retorno[i++];
       arquivoEntrada.get();
       arquivoEntrada.ignore(1024, '\n');
     }
     arquivoEntrada.close();
   } else {
-    cerr << "Arquivo: " << nomeArquivoEntrada << " nao foi aberto!" << endl;
+    std::cerr << "Arquivo: " << nomeArquivoEntrada << " nao foi aberto!"
+              << std::endl;
     exit(1);
   }
-  return make_tuple(quantParametros * 2, retorno);
+  return std::make_tuple(quantParametros * 2, retorno);
 }
 
 int *calcularIndexParametros(const int *quantLotes, int quantQuadras) {
