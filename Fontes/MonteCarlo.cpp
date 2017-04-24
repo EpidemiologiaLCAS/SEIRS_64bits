@@ -16,7 +16,7 @@ void gerarSaidaQuantidadeTotal(int idMonteCarlo, int ciclos, int simulacoes,
   if (arquivoSaida.is_open()) {
     for (int i = 0; i < ciclos; ++i) {
       arquivoSaida << i;
-      for (int j = 1; j < COLUNAS_SAIDAS_QUANTIDADES; ++j) {
+      for (int j = 0; j < COLUNAS_SAIDAS_QUANTIDADES; ++j) {
         arquivoSaida
             << ";"
             << saidaQuantidadeTotal[VEC(i, j, COLUNAS_SAIDAS_QUANTIDADES)] /
@@ -46,7 +46,7 @@ void gerarSaidaQuantidadeQuadras(int idMonteCarlo, int quantQuadras, int ciclos,
     if (arquivoSaida.is_open()) {
       for (int i = 0; i < ciclos; ++i) {
         arquivoSaida << i;
-        for (int j = 1; j < COLUNAS_SAIDAS_QUANTIDADES; ++j) {
+        for (int j = 0; j < COLUNAS_SAIDAS_QUANTIDADES; ++j) {
           arquivoSaida
               << ";"
               << saidaQuantidadeQuadras[indexSaidaQuantidadeQuadras[idQuadra] +

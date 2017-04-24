@@ -6,17 +6,23 @@ namespace Agentes {
 void inicializarAgente(TIPO_AGENTE *agentes, int id, int e, int x, int y, int l,
                        int q, int s, int i, int t) {
   SET_Q(id, q);
-  SET_S(id, s);
-  SET_I(id, i);
   SET_L(id, l);
-  SET_X(id, x);
-  SET_Y(id, y);
-  SET_C(id, 0);
-  SET_E(id, e);
-  SET_M(id, 0);
-  SET_F(id, 1);
   SET_R(id, 0);
   SET_T(id, t);
+  SET_F(id, 1);
+  // SET_A
+  
+  SET_S(id, s);
+  SET_I(id, i);
+  SET_E(id, e);
+  // SET_U
+  // SET_H
+  SET_C(id, 0);
+  SET_M(id, 0);
+  
+  SET_X(id, x);
+  
+  SET_Y(id, y);  
 }
 
 void inserirAgentes(int quantAgentes, TIPO_AGENTE *agentes,
@@ -290,7 +296,8 @@ void salvarSaidaEspacial(std::string pastaSaida, const int *saidaEspacial,
 
 __global__ void gerarSaidaQuantidadeTotal(const TIPO_AGENTE *agentes,
                                           int quantAgentes,
-                                          int *saidaQuantidadeTotal, int ciclo) {
+                                          int *saidaQuantidadeTotal,
+                                          int ciclo) {
   int i = threadIdx.x + blockIdx.x * blockDim.x;
   if (i < quantAgentes) {
     if (GET_S(i) == MASCULINO) {
@@ -2832,22 +2839,20 @@ void iniciarSimulacao(
         rotasDev, indexPosicoesDev, posicoesDev, quantTrajetos,
         indexTrajetosDev, trajetosDev, indexPeriodosDev, periodosDev);
 
-    contato<<<f2, numThreads>>>(
-        seedsDev, agentesDev, quantAgentes, quantLotesDev, quantQuadras,
-        parametrosDev, indexParametrosDev, indexQuadrasDev, indexPosicoesDev,
-        posicoesDev);
+    contato<<<f2, numThreads>>>(seedsDev, agentesDev, quantAgentes,
+                                quantLotesDev, quantQuadras, parametrosDev,
+                                indexParametrosDev, indexQuadrasDev,
+                                indexPosicoesDev, posicoesDev);
 
-    transicao<<<f1, numThreads>>>(seedsDev, agentesDev,
-                                              quantAgentes, parametrosDev,
-                                              indexParametrosDev);
+    transicao<<<f1, numThreads>>>(seedsDev, agentesDev, quantAgentes,
+                                  parametrosDev, indexParametrosDev);
 
     SaidasSimulacao::gerarSaidaQuantidadeTotal<<<f1, numThreads>>>(
         agentesDev, quantAgentes, saidaQuantidadeTotalDev, ciclo);
 
-    SaidasSimulacao::
-        gerarSaidaQuantidadeQuadras<<<f1, numThreads>>>(
-            agentesDev, quantAgentes, indexSaidaQuantidadeQuadrasDev,
-            saidaQuantidadeQuadrasDev, ciclo);
+    SaidasSimulacao::gerarSaidaQuantidadeQuadras<<<f1, numThreads>>>(
+        agentesDev, quantAgentes, indexSaidaQuantidadeQuadrasDev,
+        saidaQuantidadeQuadrasDev, ciclo);
 
     SaidasSimulacao::gerarSaidaEspacial<<<f2, numThreads>>>(
         agentesDev, quantAgentes, saidaEspacialDev, ciclo, quantQuadras, ciclos,
