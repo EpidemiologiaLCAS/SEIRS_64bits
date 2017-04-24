@@ -3,7 +3,7 @@
 #include <fstream>  // std::ifstream, std::ofstream
 #include <iostream> // std::cout, std::cerr
 #include <random> // std::default_random_engine, std::uniform_real_distribution
-#include <tuple> // std::tuple, std::make_tuple, std::tie
+#include <tuple>  // std::tuple, std::make_tuple, std::tie
 
 #ifdef __GPU__
 
@@ -30,7 +30,7 @@ int main(int argc, char **argv) {
   } else {
     omp_set_num_threads(omp_get_max_threads());
   }
-  
+
 #endif
 
 #ifdef __GPU__
@@ -38,7 +38,7 @@ int main(int argc, char **argv) {
   if (argc == 2) {
     cudaSetDevice(atoi(argv[1]));
   }
-  
+
 #endif
 
   std::string pastaEntrada, pastaSaida;

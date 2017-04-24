@@ -10,13 +10,17 @@ void gerarSaidaQuantidadeTotal(int idMonteCarlo, int ciclos, int simulacoes,
                                int *saidaQuantidadeTotal) {
   std::string nomeArquivoSaida = std::string("Saidas") + SEPARADOR +
                                  "MonteCarlo_" + std::to_string(idMonteCarlo) +
-                                 SEPARADOR + std::string("Quantidades_Total.csv");
+                                 SEPARADOR +
+                                 std::string("Quantidades_Total.csv");
   std::ofstream arquivoSaida(nomeArquivoSaida);
   if (arquivoSaida.is_open()) {
     for (int i = 0; i < ciclos; ++i) {
       arquivoSaida << i;
       for (int j = 1; j < COLUNAS_SAIDAS_QUANTIDADES; ++j) {
-        arquivoSaida << ";"  << saidaQuantidadeTotal[VEC(i, j, COLUNAS_SAIDAS_QUANTIDADES)] / simulacoes;
+        arquivoSaida
+            << ";"
+            << saidaQuantidadeTotal[VEC(i, j, COLUNAS_SAIDAS_QUANTIDADES)] /
+                   simulacoes;
       }
       arquivoSaida << std::endl;
     }
@@ -43,8 +47,11 @@ void gerarSaidaQuantidadeQuadras(int idMonteCarlo, int quantQuadras, int ciclos,
       for (int i = 0; i < ciclos; ++i) {
         arquivoSaida << i;
         for (int j = 1; j < COLUNAS_SAIDAS_QUANTIDADES; ++j) {
-          arquivoSaida << ";" << saidaQuantidadeQuadras[indexSaidaQuantidadeQuadras[idQuadra] +
-                                        VEC(i, j, COLUNAS_SAIDAS_QUANTIDADES)] / simulacoes;
+          arquivoSaida
+              << ";"
+              << saidaQuantidadeQuadras[indexSaidaQuantidadeQuadras[idQuadra] +
+                                        VEC(i, j, COLUNAS_SAIDAS_QUANTIDADES)] /
+                     simulacoes;
         }
         arquivoSaida << std::endl;
       }
