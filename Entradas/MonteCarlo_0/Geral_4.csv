@@ -1,35 +1,35 @@
 Min;Max;Descricao
 1;1;Quantidade de Simulacoes
-2000;2000;Numero de Ciclos por Simulacao
-12;12;Quantidade de Agentes Suscetiveis Crianca Masculino
+1000;1000;Numero de Ciclos por Simulacao
+1;1;Quantidade de Agentes Suscetiveis Crianca Masculino
 0;0;Quantidade de Agentes Expostos Crianca Masculino
 0;0;Quantidade de Agentes Infectados Crianca Masculino
 0;0;Quantidade de Agentes Recuperados Crianca Masculino
-12;12;Quantidade de Agentes Suscetiveis Crianca Feminino
+0;0;Quantidade de Agentes Suscetiveis Crianca Feminino
 0;0;Quantidade de Agentes Expostos Crianca Feminino 
 0;0;Quantidade de Agentes Infectados Crianca Feminino
 0;0;Quantidade de Agentes Recuperados Crianca Feminino
-6;6;Quantidade de Agentes Suscetiveis Jovem Masculino
+1;1;Quantidade de Agentes Suscetiveis Jovem Masculino
 0;0;Quantidade de Agentes Expostos Jovem Masculino
 0;0;Quantidade de Agentes Infectados Jovem Masculino
 0;0;Quantidade de Agentes Recuperados Jovem Masculino
-6;6;Quantidade de Agentes Suscetiveis Jovem Feminino
+0;0;Quantidade de Agentes Suscetiveis Jovem Feminino
 0;0;Quantidade de Agentes Expostos Jovem Feminino
 0;0;Quantidade de Agentes Infectados Jovem Feminino
 0;0;Quantidade de Agentes Recuperados Jovem Feminino
-9;9;Quantidade de Agentes Suscetiveis Adulto Masculino
+1;1;Quantidade de Agentes Suscetiveis Adulto Masculino
 0;0;Quantidade de Agentes Expostos Adulto Masculino
 0;0;Quantidade de Agentes Infectados Adulto Masculino
 0;0;Quantidade de Agentes Recuperados Adulto Masculino
-9;9;Quantidade de Agentes Suscetiveis Adulto Feminino
+0;0;Quantidade de Agentes Suscetiveis Adulto Feminino
 0;0;Quantidade de Agentes Expostos Adulto Feminino
 0;0;Quantidade de Agentes Infectados Adulto Feminino
 0;0;Quantidade de Agentes Recuperados Adulto Feminino
-3;3;Quantidade de Agentes Suscetiveis Idoso Masculino
+1;1;Quantidade de Agentes Suscetiveis Idoso Masculino
 0;0;Quantidade de Agentes Expostos Idoso Masculino
 0;0;Quantidade de Agentes Infectados Idoso Masculino
 0;0;Quantidade de Agentes Recuperados Idoso Masculino
-3;3;Quantidade de Agentes Suscetiveis Idoso Feminino
+0;0;Quantidade de Agentes Suscetiveis Idoso Feminino
 0;0;Quantidade de Agentes Expostos Idoso Feminino
 0;0;Quantidade de Agentes Infectados Idoso Feminino
 0;0;Quantidade de Agentes Recuperados Idoso Feminino

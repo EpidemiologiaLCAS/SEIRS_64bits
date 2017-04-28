@@ -103,7 +103,7 @@ namespace Parametros {
 
 std::tuple<int, int *, int *, int *, int *, int *, int *, int *, int *, int *,
            int *, int *, int *, int, int *, int *, int, int *, int *, int *,
-           int *>
+           int *, int *>
 lerVetores() {
   int quantQuadras, *quantLotes, *indexQuadras;
   int *indexVizinhancas, *vizinhancas;
@@ -114,10 +114,13 @@ lerVetores() {
   int quantRotas, *indexRotas, *rotas;
   int quantTrajetos, *indexTrajetos, *trajetos;
   int *indexPeriodos, *periodos;
+  int *indexTrajetosFaixaEtaria;
+
   std::string nomeArquivoEntrada =
       std::string("Entradas") + SEPARADOR + std::string("Vetores.csv");
   std::ifstream arquivoEntrada(nomeArquivoEntrada);
   if (arquivoEntrada.is_open()) {
+    arquivoEntrada.ignore(1024, '\n');
     arquivoEntrada >> quantQuadras;
     arquivoEntrada.get();
     quantLotes = new int[quantQuadras];
@@ -130,6 +133,9 @@ lerVetores() {
       arquivoEntrada >> indexQuadras[i];
       arquivoEntrada.get();
     }
+    
+    arquivoEntrada.ignore(1024, '\n');
+    arquivoEntrada.ignore(1024, '\n');
     indexVizinhancas = new int[indexQuadras[quantQuadras * 2 - 1] + 1];
     for (int i = 0; i < indexQuadras[quantQuadras * 2 - 1] + 1; ++i) {
       arquivoEntrada >> indexVizinhancas[i];
@@ -141,6 +147,9 @@ lerVetores() {
       arquivoEntrada >> vizinhancas[i];
       arquivoEntrada.get();
     }
+    
+    arquivoEntrada.ignore(1024, '\n');
+    arquivoEntrada.ignore(1024, '\n');
     indexPosicoes = new int[indexQuadras[quantQuadras * 2 - 1] + 1];
     for (int i = 0; i < indexQuadras[quantQuadras * 2 - 1] + 1; ++i) {
       arquivoEntrada >> indexPosicoes[i];
@@ -152,6 +161,9 @@ lerVetores() {
       arquivoEntrada >> posicoes[i];
       arquivoEntrada.get();
     }
+    
+    arquivoEntrada.ignore(1024, '\n');
+    arquivoEntrada.ignore(1024, '\n');
     indexFronteiras = new int[indexQuadras[quantQuadras * 2 - 1] + 1];
     for (int i = 0; i < indexQuadras[quantQuadras * 2 - 1] + 1; ++i) {
       arquivoEntrada >> indexFronteiras[i];
@@ -163,6 +175,9 @@ lerVetores() {
       arquivoEntrada >> fronteiras[i];
       arquivoEntrada.get();
     }
+    
+    arquivoEntrada.ignore(1024, '\n');
+    arquivoEntrada.ignore(1024, '\n');
     indexEsquinas = new int[quantLotes[0] + 1];
     for (int i = 0; i < quantLotes[0] + 1; ++i) {
       arquivoEntrada >> indexEsquinas[i];
@@ -173,6 +188,9 @@ lerVetores() {
       arquivoEntrada >> esquinas[i];
       arquivoEntrada.get();
     }
+    
+    arquivoEntrada.ignore(1024, '\n');
+    arquivoEntrada.ignore(1024, '\n');
     indexCentrosEsquinas = new int[quantLotes[0] + 1];
     for (int i = 0; i < quantLotes[0] + 1; ++i) {
       arquivoEntrada >> indexCentrosEsquinas[i];
@@ -183,6 +201,9 @@ lerVetores() {
       arquivoEntrada >> centrosEsquinas[i];
       arquivoEntrada.get();
     }
+    
+    arquivoEntrada.ignore(1024, '\n');
+    arquivoEntrada.ignore(1024, '\n');
     arquivoEntrada >> quantRotas;
     arquivoEntrada.get();
     indexRotas = new int[quantRotas + 1];
@@ -193,8 +214,11 @@ lerVetores() {
     rotas = new int[indexRotas[quantRotas]];
     for (int i = 0; i < indexRotas[quantRotas]; ++i) {
       arquivoEntrada >> rotas[i];
-      arquivoEntrada.get();
+      arquivoEntrada.get();  
     }
+
+    arquivoEntrada.ignore(1024, '\n');
+    arquivoEntrada.ignore(1024, '\n');
     arquivoEntrada >> quantTrajetos;
     arquivoEntrada.get();
     indexTrajetos = new int[quantTrajetos + 1];
@@ -207,16 +231,28 @@ lerVetores() {
       arquivoEntrada >> trajetos[i];
       arquivoEntrada.get();
     }
+    
+    arquivoEntrada.ignore(1024, '\n');
+    arquivoEntrada.ignore(1024, '\n');
     indexPeriodos = new int[quantTrajetos + 1];
     for (int i = 0; i < quantTrajetos + 1; ++i) {
       arquivoEntrada >> indexPeriodos[i];
       arquivoEntrada.get();
-    }
+    }   
     periodos = new int[indexPeriodos[quantTrajetos]];
     for (int i = 0; i < indexPeriodos[quantTrajetos]; ++i) {
       arquivoEntrada >> periodos[i];
       arquivoEntrada.get();
     }
+    
+    arquivoEntrada.ignore(1024, '\n');
+    arquivoEntrada.ignore(1024, '\n');
+    indexTrajetosFaixaEtaria = new int[QUANT_IDADES + 1];
+    for (int i = 0; i < QUANT_IDADES + 1; ++i) {
+      arquivoEntrada >> indexTrajetosFaixaEtaria[i];
+      arquivoEntrada.get();
+    }
+    
     arquivoEntrada.close();
   } else {
     std::cerr << "Arquivo: " << nomeArquivoEntrada << " nao foi aberto!"
@@ -227,7 +263,8 @@ lerVetores() {
       quantQuadras, quantLotes, indexQuadras, indexVizinhancas, vizinhancas,
       indexPosicoes, posicoes, indexFronteiras, fronteiras, indexEsquinas,
       esquinas, indexCentrosEsquinas, centrosEsquinas, quantRotas, indexRotas,
-      rotas, quantTrajetos, indexTrajetos, trajetos, indexPeriodos, periodos);
+      rotas, quantTrajetos, indexTrajetos, trajetos, indexPeriodos, periodos, 
+      indexTrajetosFaixaEtaria);
 }
 
 std::tuple<int, double *> lerParametros(std::string pastaEntrada,

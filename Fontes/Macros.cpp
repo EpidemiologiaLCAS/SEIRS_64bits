@@ -23,6 +23,8 @@
 #define FEMININO 0
 #define MASCULINO 1
 
+#define QUANT_IDADES 4
+
 #define CRIANCA 3
 #define JOVEM 2
 #define ADULTO 1

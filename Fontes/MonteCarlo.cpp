@@ -92,17 +92,16 @@ void iniciarSimulacao(int idMonteCarlo, std::string pastaEntrada,
   int quantRotas, *indexRotas, *rotas;
   int quantTrajetos, *indexTrajetos, *trajetos;
   int *indexPeriodos, *periodos;
+  int *indexTrajetosFaixaEtaria;
   std::tie(quantQuadras, quantLotes, indexQuadras, indexVizinhancas,
            vizinhancas, indexPosicoes, posicoes, indexFronteiras, fronteiras,
            indexEsquinas, esquinas, indexCentrosEsquinas, centrosEsquinas,
            quantRotas, indexRotas, rotas, quantTrajetos, indexTrajetos,
-           trajetos, indexPeriodos, periodos) = Parametros::lerVetores();
+           trajetos, indexPeriodos, periodos, indexTrajetosFaixaEtaria) = Parametros::lerVetores();
   int sizeParametros;
   double *parametros;
   std::tie(sizeParametros, parametros) = Parametros::lerParametros(
       pastaEntradaMonteCarlo, quantLotes, quantQuadras);
-  int *indexParametros =
-      Parametros::calcularIndexParametros(quantLotes, quantQuadras);
 
   int ciclos = NUMERO_CICLOS_SIMULACAO + 1;
   int simulacoes = QUANTIDADE_SIMULACOES;
@@ -119,13 +118,13 @@ void iniciarSimulacao(int idMonteCarlo, std::string pastaEntrada,
                                       std::string("Simulacao_") +
                                       std::to_string(idSimulacao) + SEPARADOR;
     Simulacao::iniciarSimulacao(
-        idSimulacao, parametros, sizeParametros, indexParametros,
+        idSimulacao, parametros, sizeParametros,
         pastaSaidaSimulacao, saidaQuantidadeTotal, quantLotes, quantQuadras,
         indexQuadras, indexVizinhancas, vizinhancas, indexPosicoes, posicoes,
         indexFronteiras, fronteiras, indexEsquinas, esquinas,
         indexCentrosEsquinas, centrosEsquinas, indexSaidaQuantidadeQuadras,
         saidaQuantidadeQuadras, quantRotas, indexRotas, rotas, quantTrajetos,
-        indexTrajetos, trajetos, indexPeriodos, periodos);
+        indexTrajetos, trajetos, indexPeriodos, periodos, indexTrajetosFaixaEtaria);
   }
 
   SaidasMonteCarlo::gerarSaidaQuantidadeQuadras(
@@ -152,10 +151,10 @@ void iniciarSimulacao(int idMonteCarlo, std::string pastaEntrada,
   delete[](periodos);
   delete[](indexCentrosEsquinas);
   delete[](centrosEsquinas);
+  delete[](indexTrajetosFaixaEtaria);
   delete[](indexSaidaQuantidadeQuadras);
   delete[](saidaQuantidadeQuadras);
   delete[](parametros);
-  delete[](indexParametros);
   delete[](quantLotes);
 }
 }
