@@ -616,6 +616,154 @@ namespace Simulacao {
 
 #ifdef __GPU__
 
+#ifdef __LOCAL__
+
+__global__ void
+movimentacao(curandState *seeds, TIPO_AGENTE *agentes, int quantAgentes,
+             const int *indexQuadras, const int *indexVizinhancas,
+             const int *vizinhancas, const double *parametros,
+             const int *indexFronteiras,
+             const int *fronteiras, const int *indexEsquinas,
+             const int *esquinas, const int *indexCentrosEsquinas,
+             const int *centrosEsquinas, int quantRotas, const int *indexRotas,
+             const int *rotas, const int *indexPosicoes, const int *posicoes,
+             int quantTrajetos, const int *indexTrajetos, const int *trajetos,
+             const int *indexPeriodos, const int *periodos) {
+  int id = threadIdx.x + blockIdx.x * blockDim.x;
+  if (id < quantAgentes) {
+    int q = GET_Q(id);
+    int l = GET_L(id);
+    int x = GET_X(id);
+    int y = GET_Y(id);
+    double taxa;
+    switch (GET_I(id)) {
+    case CRIANCA:
+      taxa = TAXA_MOBILIDADE_CRIANCA(curand_uniform_double(&seeds[id]));
+      break;
+    case JOVEM:
+      taxa = TAXA_MOBILIDADE_JOVEM(curand_uniform_double(&seeds[id]));
+      break;
+    case ADULTO:
+      taxa = TAXA_MOBILIDADE_ADULTO(curand_uniform_double(&seeds[id]));
+      break;
+    case IDOSO:
+      taxa = TAXA_MOBILIDADE_IDOSO(curand_uniform_double(&seeds[id]));
+      break;
+    }
+    if (curand_uniform_double(&seeds[id]) <= taxa) {
+      // Conta quantas posições de vizinhança o agente possui
+      int quantidade = 0;
+      for (int i = indexVizinhancas[indexQuadras[2 * q] + l];
+           i < indexVizinhancas[indexQuadras[2 * q] + l + 1]; i += 6) {
+        if (vizinhancas[i + 0] == x && vizinhancas[i + 1] == y && 
+            vizinhancas[i + 4] == l && vizinhancas[i + 5] == q) {
+          quantidade++;
+        }
+      }
+      // Se o agente possuir posições de vizinhanças
+      if (quantidade > 0) {
+        int indice =
+            (int)(curand_uniform_double(&seeds[id]) * quantidade);
+        int k = 0;
+        for (int i = indexVizinhancas[indexQuadras[2 * q] + l];
+             i < indexVizinhancas[indexQuadras[2 * q] + l + 1];
+             i += 6) {
+          if (vizinhancas[i + 0] == x && vizinhancas[i + 1] == y && 
+              vizinhancas[i + 4] == l && vizinhancas[i + 5] == q) {
+            if (k == indice) {
+              x = vizinhancas[i + 2];
+              y = vizinhancas[i + 3];
+              l = vizinhancas[i + 4];
+              q = vizinhancas[i + 5];
+              SET_X(id, x);
+              SET_Y(id, y);
+              SET_L(id, l);
+              SET_Q(id, q);
+              break;
+            }
+            k++;
+          }
+        }
+      }
+    }
+  }
+}
+
+#endif
+
+#ifdef __ALEATORIO__
+
+__global__ void
+movimentacao(curandState *seeds, TIPO_AGENTE *agentes, int quantAgentes,
+             const int *indexQuadras, const int *indexVizinhancas,
+             const int *vizinhancas, const double *parametros,
+             const int *indexFronteiras,
+             const int *fronteiras, const int *indexEsquinas,
+             const int *esquinas, const int *indexCentrosEsquinas,
+             const int *centrosEsquinas, int quantRotas, const int *indexRotas,
+             const int *rotas, const int *indexPosicoes, const int *posicoes,
+             int quantTrajetos, const int *indexTrajetos, const int *trajetos,
+             const int *indexPeriodos, const int *periodos) {
+  int id = threadIdx.x + blockIdx.x * blockDim.x;
+  if (id < quantAgentes) {
+    int q = GET_Q(id);
+    int l = GET_L(id);
+    int x = GET_X(id);
+    int y = GET_Y(id);
+    double taxa;
+    switch (GET_I(id)) {
+    case CRIANCA:
+      taxa = TAXA_MOBILIDADE_CRIANCA(curand_uniform_double(&seeds[id]));
+      break;
+    case JOVEM:
+      taxa = TAXA_MOBILIDADE_JOVEM(curand_uniform_double(&seeds[id]));
+      break;
+    case ADULTO:
+      taxa = TAXA_MOBILIDADE_ADULTO(curand_uniform_double(&seeds[id]));
+      break;
+    case IDOSO:
+      taxa = TAXA_MOBILIDADE_IDOSO(curand_uniform_double(&seeds[id]));
+      break;
+    }
+    if (curand_uniform_double(&seeds[id]) <= taxa) {
+      // Conta quantas posições de vizinhança o agente possui
+      int quantidade = 0;
+      for (int i = indexVizinhancas[indexQuadras[2 * q] + l];
+           i < indexVizinhancas[indexQuadras[2 * q] + l + 1]; i += 6) {
+        if (vizinhancas[i + 0] == x && vizinhancas[i + 1] == y) {
+          quantidade++;
+        }
+      }
+      // Se o agente possuir posições de vizinhanças
+      if (quantidade > 0) {
+        int indice =
+            (int)(curand_uniform_double(&seeds[id]) * quantidade);
+        int k = 0;
+        for (int i = indexVizinhancas[indexQuadras[2 * q] + l];
+             i < indexVizinhancas[indexQuadras[2 * q] + l + 1];
+             i += 6) {
+          if (vizinhancas[i + 0] == x && vizinhancas[i + 1] == y) {
+            if (k == indice) {
+              x = vizinhancas[i + 2];
+              y = vizinhancas[i + 3];
+              l = vizinhancas[i + 4];
+              q = vizinhancas[i + 5];
+              SET_X(id, x);
+              SET_Y(id, y);
+              SET_L(id, l);
+              SET_Q(id, q);
+              break;
+            }
+            k++;
+          }
+        }
+      }
+    }
+  }
+}
+
+#endif
+
 #ifdef __LIVRE__
 
 __global__ void movimentacao(curandState *seeds, TIPO_AGENTE *agentes,
@@ -1479,79 +1627,6 @@ movimentacao(curandState *seeds, TIPO_AGENTE *agentes, int quantAgentes,
 
 #endif
 
-#ifdef __ALEATORIO__
-
-__global__ void
-movimentacao(curandState *seeds, TIPO_AGENTE *agentes, int quantAgentes,
-             const int *indexQuadras, const int *indexVizinhancas,
-             const int *vizinhancas, const double *parametros,
-             const int *indexFronteiras,
-             const int *fronteiras, const int *indexEsquinas,
-             const int *esquinas, const int *indexCentrosEsquinas,
-             const int *centrosEsquinas, int quantRotas, const int *indexRotas,
-             const int *rotas, const int *indexPosicoes, const int *posicoes,
-             int quantTrajetos, const int *indexTrajetos, const int *trajetos,
-             const int *indexPeriodos, const int *periodos) {
-  int id = threadIdx.x + blockIdx.x * blockDim.x;
-  if (id < quantAgentes) {
-    int q = GET_Q(id);
-    int l = GET_L(id);
-    int x = GET_X(id);
-    int y = GET_Y(id);
-    double taxa;
-    switch (GET_I(id)) {
-    case CRIANCA:
-      taxa = TAXA_MOBILIDADE_CRIANCA(curand_uniform_double(&seeds[id]));
-      break;
-    case JOVEM:
-      taxa = TAXA_MOBILIDADE_JOVEM(curand_uniform_double(&seeds[id]));
-      break;
-    case ADULTO:
-      taxa = TAXA_MOBILIDADE_ADULTO(curand_uniform_double(&seeds[id]));
-      break;
-    case IDOSO:
-      taxa = TAXA_MOBILIDADE_IDOSO(curand_uniform_double(&seeds[id]));
-      break;
-    }
-    if (curand_uniform_double(&seeds[id]) <= taxa) {
-      // Conta quantas posições de vizinhança o agente possui
-      int quantidade = 0;
-      for (int i = indexVizinhancas[indexQuadras[2 * q] + l];
-           i < indexVizinhancas[indexQuadras[2 * q] + l + 1]; i += 6) {
-        if (vizinhancas[i + 0] == x && vizinhancas[i + 1] == y) {
-          quantidade++;
-        }
-      }
-      // Se o agente possuir posições de vizinhanças
-      if (quantidade > 0) {
-        int indice =
-            (int)(curand_uniform_double(&seeds[id]) * quantidade);
-        int k = 0;
-        for (int i = indexVizinhancas[indexQuadras[2 * q] + l];
-             i < indexVizinhancas[indexQuadras[2 * q] + l + 1];
-             i += 6) {
-          if (vizinhancas[i + 0] == x && vizinhancas[i + 1] == y) {
-            if (k == indice) {
-              x = vizinhancas[i + 2];
-              y = vizinhancas[i + 3];
-              l = vizinhancas[i + 4];
-              q = vizinhancas[i + 5];
-              SET_X(id, x);
-              SET_Y(id, y);
-              SET_L(id, l);
-              SET_Q(id, q);
-              break;
-            }
-            k++;
-          }
-        }
-      }
-    }
-  }
-}
-
-#endif
-
 __global__ void contato(curandState *seeds, TIPO_AGENTE *agentes,
                         int quantAgentes, const int *quantLotes,
                         int quantQuadras, const double *parametros,
@@ -1695,6 +1770,154 @@ __global__ void initCurand(curandState *seeds, const int *rands,
 #endif
 
 #ifdef __CPU__
+
+#ifdef __LOCAL__
+
+void movimentacao(TIPO_AGENTE *agentes, int quantAgentes,
+                  const int *indexQuadras, const int *indexVizinhancas,
+                  const int *vizinhancas, const double *parametros,
+                  const int *indexFronteiras,
+                  const int *fronteiras, const int *indexEsquinas,
+                  const int *esquinas, const int *indexCentrosEsquinas,
+                  const int *centrosEsquinas, int quantRotas,
+                  const int *indexRotas, const int *rotas,
+                  const int *indexPosicoes, const int *posicoes,
+                  int quantTrajetos, const int *indexTrajetos,
+                  const int *trajetos, const int *indexPeriodos,
+                  const int *periodos) {
+#pragma omp parallel for
+  for (int id = 0; id < quantAgentes; ++id) {
+    int q = GET_Q(id);
+    int l = GET_L(id);
+    int x = GET_X(id);
+    int y = GET_Y(id);
+    double taxa;
+    switch (GET_I(id)) {
+    case CRIANCA:
+      taxa = TAXA_MOBILIDADE_CRIANCA(randomizarPercentual());
+      break;
+    case JOVEM:
+      taxa = TAXA_MOBILIDADE_JOVEM(randomizarPercentual());
+      break;
+    case ADULTO:
+      taxa = TAXA_MOBILIDADE_ADULTO(randomizarPercentual());
+      break;
+    case IDOSO:
+      taxa = TAXA_MOBILIDADE_IDOSO(randomizarPercentual());
+      break;
+    }
+    if (randomizarPercentual() <= taxa) {
+      // Conta quantas posições de vizinhança o agente possui
+      int quantidade = 0;
+      for (int i = indexVizinhancas[indexQuadras[2 * q] + l];
+           i < indexVizinhancas[indexQuadras[2 * q] + l + 1]; i += 6) {
+        if (vizinhancas[i + 0] == x && vizinhancas[i + 1] == y && 
+            vizinhancas[i + 4] == l && vizinhancas[i + 5] == q) {
+          quantidade++;
+        }
+      }
+      // Se o agente possuir posições de vizinhanças
+      if (quantidade > 0) {
+        int indice = (int)(randomizarPercentual() * quantidade);
+        int k = 0;
+        for (int i = indexVizinhancas[indexQuadras[2 * q] + l];
+             i < indexVizinhancas[indexQuadras[2 * q] + l + 1];
+             i += 6) {
+          if (vizinhancas[i + 0] == x && vizinhancas[i + 1] == y &&
+              vizinhancas[i + 4] == l && vizinhancas[i + 5] == q) {
+            if (k == indice) {
+              x = vizinhancas[i + 2];
+              y = vizinhancas[i + 3];
+              l = vizinhancas[i + 4];
+              q = vizinhancas[i + 5];
+              SET_X(id, x);
+              SET_Y(id, y);
+              SET_L(id, l);
+              SET_Q(id, q);
+              break;
+            }
+            k++;
+          }
+        }
+      }
+    }
+  }
+}
+
+#endif
+
+#ifdef __ALEATORIO__
+
+void movimentacao(TIPO_AGENTE *agentes, int quantAgentes,
+                  const int *indexQuadras, const int *indexVizinhancas,
+                  const int *vizinhancas, const double *parametros,
+                  const int *indexFronteiras,
+                  const int *fronteiras, const int *indexEsquinas,
+                  const int *esquinas, const int *indexCentrosEsquinas,
+                  const int *centrosEsquinas, int quantRotas,
+                  const int *indexRotas, const int *rotas,
+                  const int *indexPosicoes, const int *posicoes,
+                  int quantTrajetos, const int *indexTrajetos,
+                  const int *trajetos, const int *indexPeriodos,
+                  const int *periodos) {
+#pragma omp parallel for
+  for (int id = 0; id < quantAgentes; ++id) {
+    int q = GET_Q(id);
+    int l = GET_L(id);
+    int x = GET_X(id);
+    int y = GET_Y(id);
+    double taxa;
+    switch (GET_I(id)) {
+    case CRIANCA:
+      taxa = TAXA_MOBILIDADE_CRIANCA(randomizarPercentual());
+      break;
+    case JOVEM:
+      taxa = TAXA_MOBILIDADE_JOVEM(randomizarPercentual());
+      break;
+    case ADULTO:
+      taxa = TAXA_MOBILIDADE_ADULTO(randomizarPercentual());
+      break;
+    case IDOSO:
+      taxa = TAXA_MOBILIDADE_IDOSO(randomizarPercentual());
+      break;
+    }
+    if (randomizarPercentual() <= taxa) {
+      // Conta quantas posições de vizinhança o agente possui
+      int quantidade = 0;
+      for (int i = indexVizinhancas[indexQuadras[2 * q] + l];
+           i < indexVizinhancas[indexQuadras[2 * q] + l + 1]; i += 6) {
+        if (vizinhancas[i + 0] == x && vizinhancas[i + 1] == y) {
+          quantidade++;
+        }
+      }
+      // Se o agente possuir posições de vizinhanças
+      if (quantidade > 0) {
+        int indice = (int)(randomizarPercentual() * quantidade);
+        int k = 0;
+        for (int i = indexVizinhancas[indexQuadras[2 * q] + l];
+             i < indexVizinhancas[indexQuadras[2 * q] + l + 1];
+             i += 6) {
+          if (vizinhancas[i + 0] == x && vizinhancas[i + 1] == y) {
+            if (k == indice) {
+              x = vizinhancas[i + 2];
+              y = vizinhancas[i + 3];
+              l = vizinhancas[i + 4];
+              q = vizinhancas[i + 5];
+              SET_X(id, x);
+              SET_Y(id, y);
+              SET_L(id, l);
+              SET_Q(id, q);
+              break;
+            }
+            k++;
+          }
+        }
+      }
+    }
+  }
+}
+
+#endif
 
 #ifdef __LIVRE__
 
@@ -2630,79 +2853,6 @@ void movimentacao(TIPO_AGENTE *agentes, int quantAgentes,
                 }
               }
             }
-          }
-        }
-      }
-    }
-  }
-}
-
-#endif
-
-#ifdef __ALEATORIO__
-
-void movimentacao(TIPO_AGENTE *agentes, int quantAgentes,
-                  const int *indexQuadras, const int *indexVizinhancas,
-                  const int *vizinhancas, const double *parametros,
-                  const int *indexFronteiras,
-                  const int *fronteiras, const int *indexEsquinas,
-                  const int *esquinas, const int *indexCentrosEsquinas,
-                  const int *centrosEsquinas, int quantRotas,
-                  const int *indexRotas, const int *rotas,
-                  const int *indexPosicoes, const int *posicoes,
-                  int quantTrajetos, const int *indexTrajetos,
-                  const int *trajetos, const int *indexPeriodos,
-                  const int *periodos) {
-#pragma omp parallel for
-  for (int id = 0; id < quantAgentes; ++id) {
-    int q = GET_Q(id);
-    int l = GET_L(id);
-    int x = GET_X(id);
-    int y = GET_Y(id);
-    double taxa;
-    switch (GET_I(id)) {
-    case CRIANCA:
-      taxa = TAXA_MOBILIDADE_CRIANCA(randomizarPercentual());
-      break;
-    case JOVEM:
-      taxa = TAXA_MOBILIDADE_JOVEM(randomizarPercentual());
-      break;
-    case ADULTO:
-      taxa = TAXA_MOBILIDADE_ADULTO(randomizarPercentual());
-      break;
-    case IDOSO:
-      taxa = TAXA_MOBILIDADE_IDOSO(randomizarPercentual());
-      break;
-    }
-    if (randomizarPercentual() <= taxa) {
-      // Conta quantas posições de vizinhança o agente possui
-      int quantidade = 0;
-      for (int i = indexVizinhancas[indexQuadras[2 * q] + l];
-           i < indexVizinhancas[indexQuadras[2 * q] + l + 1]; i += 6) {
-        if (vizinhancas[i + 0] == x && vizinhancas[i + 1] == y) {
-          quantidade++;
-        }
-      }
-      // Se o agente possuir posições de vizinhanças
-      if (quantidade > 0) {
-        int indice = (int)(randomizarPercentual() * quantidade);
-        int k = 0;
-        for (int i = indexVizinhancas[indexQuadras[2 * q] + l];
-             i < indexVizinhancas[indexQuadras[2 * q] + l + 1];
-             i += 6) {
-          if (vizinhancas[i + 0] == x && vizinhancas[i + 1] == y) {
-            if (k == indice) {
-              x = vizinhancas[i + 2];
-              y = vizinhancas[i + 3];
-              l = vizinhancas[i + 4];
-              q = vizinhancas[i + 5];
-              SET_X(id, x);
-              SET_Y(id, y);
-              SET_L(id, l);
-              SET_Q(id, q);
-              break;
-            }
-            k++;
           }
         }
       }
