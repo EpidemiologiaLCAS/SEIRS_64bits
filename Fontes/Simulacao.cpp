@@ -38,7 +38,7 @@ void inserirAgentes(int quantAgentes, TIPO_AGENTE *agentes,
   
   for (int j = 0; j < quantidade; ++j) {      
     t = ENTRE_FAIXA(indexTrajetosFaixaEtaria[3 - idade], indexTrajetosFaixaEtaria[(3 - idade) + 1], randomizarPercentual());
-
+    
     l = rotas[indexRotas[trajetos[indexTrajetos[t]]] + 0];
     q = rotas[indexRotas[trajetos[indexTrajetos[t]]] + 1];
     posicoesLote = (indexPosicoes[indexQuadras[2 * q] + l + 1] -
@@ -2126,12 +2126,12 @@ void movimentacao(TIPO_AGENTE *agentes, int quantAgentes,
     int y = GET_Y(id);
     int m = GET_M(id);
     
-    
+    /*
     // PARAR O AGENTE APÓS UMA VOLTA
     if (m == -1) {
       continue;
     }
-    
+    */
     
     int r = GET_R(id);
     int t = GET_T(id);
@@ -2167,12 +2167,17 @@ void movimentacao(TIPO_AGENTE *agentes, int quantAgentes,
             rotas[indexRotas[trajetos[indexTrajetos[t]] + r + 1] - 2];
         int q_destino =
             rotas[indexRotas[trajetos[indexTrajetos[t]] + r + 1] - 1];
-        int x_destino =
-            posicoes[indexPosicoes[indexQuadras[q_destino * 2] + l_destino] +
-                     0 * 4 + 0];
-        int y_destino =
-            posicoes[indexPosicoes[indexQuadras[q_destino * 2] + l_destino] +
-                     0 * 4 + 1];
+        int x_destino;
+        int y_destino;
+        for (int i = indexFronteiras[indexQuadras[2 * q_destino] + l_destino];
+             i < indexFronteiras[indexQuadras[2 * q_destino] + l_destino + 1]; 
+             i += 3) {
+           if (fronteiras[i + 2] == l) {
+              x_destino = fronteiras[i + 0];
+              y_destino = fronteiras[i + 1];
+              break;
+          }
+        }
         int prox_rua = rotas[indexRotas[trajetos[indexTrajetos[t]] + r] + 2];
         
         // O AGENTE ESTÁ NA QUADRA E NO LOTE DE ORIGEM
@@ -2353,6 +2358,7 @@ void movimentacao(TIPO_AGENTE *agentes, int quantAgentes,
                   SET_L(id, l);
                   SET_Q(id, q);
                 } else {
+                  
                   // O agente está na posição de mínimo local
                   // Armazena a posição de mínimo local
                   int x_min = x;
@@ -2383,15 +2389,6 @@ void movimentacao(TIPO_AGENTE *agentes, int quantAgentes,
                   SET_Y(id, y);
                   SET_L(id, l);
                   SET_Q(id, q);
-                  // Conta quantas posições de vizinhança o agente possui
-                  int quantidade = 0;
-                  for (int i = indexVizinhancas[indexQuadras[2 * q] + l];
-                       i < indexVizinhancas[indexQuadras[2 * q] + l + 1];
-                       i += 6) {
-                    if (vizinhancas[i + 0] == x && vizinhancas[i + 1] == y) {
-                      quantidade++;
-                    }
-                  }
                   // Procura na vizinhança do agente o ponto com menor distância
                   // ao ponto destino
                   // removendo o ponto de mínimo local
@@ -2420,7 +2417,7 @@ void movimentacao(TIPO_AGENTE *agentes, int quantAgentes,
                   SET_X(id, x);
                   SET_Y(id, y);
                   SET_L(id, l);
-                  SET_Q(id, q);
+                  SET_Q(id, q);                  
                 }
               } else {
                 // Procura um ponto central de esquina que pertença a próxima
@@ -2473,42 +2470,6 @@ void movimentacao(TIPO_AGENTE *agentes, int quantAgentes,
                   // incrementa o contador de movimentação
                   SET_M(id, m + 1);
                 } else {
-                  /*
-                  // Encontra na vizinhança do agente o ponto mais próximo ao
-                  // ponto central da esquina que pertença a mesma rua do agente
-                  int indMenorViz = 0;
-                  double distMenorViz = INT_MAX;
-                  for (int i = indexVizinhancas[indexQuadras[2 * q] + l];
-                       i < indexVizinhancas[indexQuadras[2 * q] + l + 1];
-                       i += 6) {
-                    if (vizinhancas[i + 0] == x && vizinhancas[i + 1] == y &&
-                        vizinhancas[i + 4] == l && vizinhancas[i + 5] == RUA) {
-                      double dist = DIST(vizinhancas[i + 2], vizinhancas[i + 3],
-                                         centrosEsquinas[pontoCentral + 0],
-                                         centrosEsquinas[pontoCentral + 1]);
-                      if (dist < distMenorViz) {
-                        distMenorViz = dist;
-                        indMenorViz = i;
-                      }
-                    }
-                  }
-                  // Move o agente
-                  x = vizinhancas[indMenorViz + 2];
-                  y = vizinhancas[indMenorViz + 3];
-                  l = vizinhancas[indMenorViz + 4];
-                  q = vizinhancas[indMenorViz + 5];
-                  SET_X(id, x);
-                  SET_Y(id, y);
-                  SET_L(id, l);
-                  SET_Q(id, q);
-                  */
-                  
-                  
-                  
-                  
-                  
-                  
-                  
                   // Encontra na vizinhança do agente o ponto mais próximo ao
                   // ponto central da esquina que pertença a mesma rua do agente
                   int indMenorViz = -1;
@@ -2605,16 +2566,7 @@ void movimentacao(TIPO_AGENTE *agentes, int quantAgentes,
                     SET_Y(id, y);
                     SET_L(id, l);
                     SET_Q(id, q);
-                  }
-                  
-                  
-                  
-                  
-                  
-                  
-                  
-                  
-                  
+                  }                  
                 }
               }
             }
@@ -2669,10 +2621,10 @@ void movimentacao(TIPO_AGENTE *agentes, int quantAgentes,
                   SET_R(id, 0);
                   SET_F(id, 1);
                   
-                  
+                  /*
                   // PARAR O AGENTE APÓS UMA VOLTA
                   SET_M(id, -1);
-                  
+                  */
                   
                 }
               }

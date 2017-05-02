@@ -42,7 +42,7 @@
 
 #define TIPO_AGENTE int
 
-#define ATRIBUTOS_AGENTE 15
+#define ATRIBUTOS_AGENTE 16
 
 // Gets
 #define GET_Q(i) (int)(agentes[(i)*ATRIBUTOS_AGENTE + 0])
@@ -87,10 +87,10 @@
 #define ATRIBUTOS_AGENTE 4
 
 /*
- Q = Quadra                                       (10 bits, 1024 valores)
- L = Lote                                         (8 bits, 256 valores)
+ Q = Quadra                                       (8 bits, 256 valores)
+ L = Lote                                         (7 bits, 128 valores)
  R = Rota                                         (3 bits, 8 valores)
- T = Trajeto                                      (9 bits, 512 valores)
+ T = Trajeto                                      (12 bits, 4096 valores)
  F = Flag de movimentação                         (1 bit, 2 valores)
  A = Fração Assintomático                         (1 bit, 2 valores)
 
@@ -99,8 +99,9 @@
  E = Estado                                       (3 bits, 8 valores)
  U = Sorotipo Atual                               (3 bits, 8 valores)
  H = Sorotipos contraídos                         (5 bits, Fixo)
- C = Contador de transições de estados (Ciclo)    (9 bits, 512 valores)
- M = Contador de movimentação                     (8 bits, 256 valores)
+ C = Contador de transições de estados (Ciclo)    (8 bits, 256 valores)
+ M = Contador de movimentação                     (7 bits, 128 valores)
+ K = Tipo de movimentação                         (2 bits, 4 valores)
 
  X = Latitude                                     (32 bits)
  
