@@ -1,6 +1,6 @@
 Min;Max;Descricao
 1;1;Quantidade de Simulacoes
-2000;2000;Numero de Ciclos por Simulacao
+200;200;Numero de Ciclos por Simulacao
 120;120;Quantidade de Agentes Suscetiveis Crianca Masculino
 0;0;Quantidade de Agentes Expostos Crianca Masculino
 0;0;Quantidade de Agentes Infectados Crianca Masculino

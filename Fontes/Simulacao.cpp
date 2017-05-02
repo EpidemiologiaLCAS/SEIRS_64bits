@@ -19,6 +19,7 @@ void inicializarAgente(TIPO_AGENTE *agentes, int id, int e, int x, int y, int l,
   // SET_H
   SET_C(id, 0);
   SET_M(id, 0);
+  // SET_K
   
   SET_X(id, x);
   
@@ -3090,9 +3091,7 @@ void iniciarSimulacao(
                                       quantQuadras, ciclos, indexQuadras,
                                       indexPosicoes, posicoes);
 
-  for (int ciclo = 1; ciclo < ciclos; ++ciclo) {
-    std::cout << ciclo << std::endl;
-    
+  for (int ciclo = 1; ciclo < ciclos; ++ciclo) {   
     movimentacao(agentes, quantAgentes, indexQuadras, indexVizinhancas,
                  vizinhancas, parametros, indexFronteiras,
                  fronteiras, indexEsquinas, esquinas, indexCentrosEsquinas,
