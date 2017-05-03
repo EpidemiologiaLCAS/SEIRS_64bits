@@ -1,6 +1,6 @@
 GPU_CC=nvcc
 CPU_CC=g++
-MOV=-D__LOCAL__
+MOV=-D__TRAJETO__
 GPU_FLAGS=-std=c++11 -D_MWAITXINTRIN_H_INCLUDED -x cu
 CPU_FLAGS=-std=c++11 -fopenmp -Wall
 FILE=Fontes/Main.cpp

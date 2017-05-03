@@ -93,11 +93,22 @@
 #define TAXA_MOBILIDADE_IDOSO(percentual)                                      \
   (double)(ENTRE_FAIXA(parametros[106], parametros[107], (percentual)))
 
+#ifdef __CPU__
+
 std::default_random_engine
     gen(std::chrono::system_clock::now().time_since_epoch().count());
 std::uniform_real_distribution<double> dis(0.0, 1.0);
 
 double randomizarPercentual() { return dis(gen); }
+
+#endif
+
+#ifdef __GPU__
+
+#define randomizarPercentual(i) curand_uniform_double(&seeds[i])
+
+#endif
+
 
 namespace Parametros {
 
