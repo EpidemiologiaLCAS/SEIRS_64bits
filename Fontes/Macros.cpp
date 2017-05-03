@@ -30,6 +30,11 @@
 #define ADULTO 1
 #define IDOSO 0
 
+#define LOCAL 0
+#define ALEATORIO 1
+#define LIVRE 2
+#define TRAJETO 3
+
 #define COLUNAS_SAIDAS_QUANTIDADES 33
 #define VEC(i, j, num_colunas) (((i) * (num_colunas)) + (j))
 
@@ -38,7 +43,7 @@
 #define DIST(x1, y1, x2, y2)                                                   \
   (double)(sqrt(pow((x1) - (x2), 2.0) + pow((y1) - (y2), 2.0)))
 
-#ifdef __CONVENCIONAL__
+#ifdef __CONV__
 
 #define TIPO_AGENTE int
 
@@ -88,7 +93,7 @@
 
 #endif
 
-#ifdef __BITSTRING__
+#ifdef __BITS__
 
 #define TIPO_AGENTE unsigned
 

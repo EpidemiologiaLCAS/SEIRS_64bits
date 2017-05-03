@@ -105,7 +105,7 @@ double randomizarPercentual() { return dis(gen); }
 
 #ifdef __GPU__
 
-#define randomizarPercentual(i) curand_uniform_double(&seeds[i])
+#define randomizarPercentual() curand_uniform_double(((curandState *) seeds) + id)
 
 #endif
 
@@ -303,12 +303,6 @@ std::tuple<int, double *> lerParametros(std::string pastaEntrada,
     exit(1);
   }
   return std::make_tuple(quantParametros * 2, retorno);
-}
-
-int *calcularIndexParametros(const int *quantLotes, int quantQuadras) {
-  int *retorno = new int[quantQuadras];
-  retorno[0] = QUANTIDADE_PARAMETROS_GERAIS * 2;
-  return retorno;
 }
 }
 
