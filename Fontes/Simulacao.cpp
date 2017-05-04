@@ -23,9 +23,9 @@ __global__ void initCurand(curandState *seeds, const int *rands,
 #define CABECALHO_SAIDAS_QUANTIDADES int id = blockIdx.x * blockDim.x + threadIdx.x; \
                                      if (id < quantAgentes)
                                      
-#define ATOMIC_ADD_TOTAL(ciclo, d) atomicAdd(&saidaQuantidadeTotal[VEC(ciclo, d + GET_E(id), COLUNAS_SAIDAS_QUANTIDADES)], 1);
+#define ATOMIC_ADD_TOTAL(ciclo, d, e) atomicAdd(&saidaQuantidadeTotal[VEC(ciclo, d + e, COLUNAS_SAIDAS_QUANTIDADES)], 1)
                    
-#define ATOMIC_ADD_QUADRAS(ciclo, d) atomicAdd(&saidaQuantidadeQuadras[indexSaidaQuantidadeQuadras[GET_Q(id)] + VEC(ciclo, d + GET_E(id), COLUNAS_SAIDAS_QUANTIDADES)], 1);
+#define ATOMIC_ADD_QUADRAS(ciclo, d, e) atomicAdd(&saidaQuantidadeQuadras[indexSaidaQuantidadeQuadras[GET_Q(id)] + VEC(ciclo, d + e, COLUNAS_SAIDAS_QUANTIDADES)], 1)
                       
 #define MARCADOR_GLOBAL __global__
 #define MARCADOR_DEVICE __device__
@@ -46,11 +46,11 @@ __global__ void initCurand(curandState *seeds, const int *rands,
 #define CABECALHO_SAIDAS_QUANTIDADES _Pragma("omp parallel for") \
                                      for (int id = 0; id < quantAgentes; id++)
                                      
-#define ATOMIC_ADD_TOTAL(ciclo, d) _Pragma("omp atomic") \
-                                   saidaQuantidadeTotal[VEC(ciclo, d + GET_E(id), COLUNAS_SAIDAS_QUANTIDADES)]++
+#define ATOMIC_ADD_TOTAL(ciclo, d, e) _Pragma("omp atomic") \
+                                   saidaQuantidadeTotal[VEC(ciclo, d + e, COLUNAS_SAIDAS_QUANTIDADES)]++
                    
-#define ATOMIC_ADD_QUADRAS(ciclo, d) _Pragma("omp atomic") \
-                                     saidaQuantidadeQuadras[indexSaidaQuantidadeQuadras[GET_Q(id)] + VEC(ciclo, d + GET_E(id), COLUNAS_SAIDAS_QUANTIDADES)]++;
+#define ATOMIC_ADD_QUADRAS(ciclo, d, e) _Pragma("omp atomic") \
+                                     saidaQuantidadeQuadras[indexSaidaQuantidadeQuadras[GET_Q(id)] + VEC(ciclo, d + e, COLUNAS_SAIDAS_QUANTIDADES)]++
 
 #define MARCADOR_GLOBAL
 #define MARCADOR_DEVICE
@@ -90,8 +90,8 @@ void inserirAgentes(int quantAgentes, TIPO_AGENTE *agentes,
                     const int *rotas, const int *indexTrajetos,
                     const int *trajetos, const int *indexTrajetosFaixaEtaria, 
                     int quantidade, int estado, int sexo,
-                    int idade, int *i) {
-  int posicoesLote, p, x, y, l, q, t, k;
+                    int idade, int *i, int k) {
+  int posicoesLote, p, x, y, l, q, t;
   
   std::default_random_engine
   gen(std::chrono::system_clock::now().time_since_epoch().count());
@@ -99,8 +99,6 @@ void inserirAgentes(int quantAgentes, TIPO_AGENTE *agentes,
   
   for (int j = 0; j < quantidade; ++j) {      
     t = ENTRE_FAIXA(indexTrajetosFaixaEtaria[3 - idade], indexTrajetosFaixaEtaria[(3 - idade) + 1], dis(gen));
-    
-    k = j % 4;
     
     l = rotas[indexRotas[trajetos[indexTrajetos[t]]] + 0];
     q = rotas[indexRotas[trajetos[indexTrajetos[t]]] + 1];
@@ -127,207 +125,865 @@ TIPO_AGENTE *criarAgentes(int quantAgentes, const double *parametros,
   inserirAgentes(quantAgentes, agentes, parametros, quantLotes,
                  quantQuadras, indexQuadras, indexPosicoes, posicoes,
                  indexRotas, rotas, indexTrajetos, trajetos, indexTrajetosFaixaEtaria, 
-                 QUANTIDADE_AGENTES_SUSCETIVEIS_CRIANCA_MASCULINO, SUSCETIVEL,
-                 MASCULINO, CRIANCA, &i);
+                 QUANTIDADE_AGENTES_SUSCETIVEIS_CRIANCA_MASCULINO_LOCAL, SUSCETIVEL,
+                 MASCULINO, CRIANCA, &i, LOCAL);
   inserirAgentes(quantAgentes, agentes, parametros, quantLotes,
                  quantQuadras, indexQuadras, indexPosicoes, posicoes,
                  indexRotas, rotas, indexTrajetos, trajetos, indexTrajetosFaixaEtaria, 
-                 QUANTIDADE_AGENTES_EXPOSTOS_CRIANCA_MASCULINO, EXPOSTO,
-                 MASCULINO, CRIANCA, &i);
+                 QUANTIDADE_AGENTES_EXPOSTOS_CRIANCA_MASCULINO_LOCAL, EXPOSTO,
+                 MASCULINO, CRIANCA, &i, LOCAL);
   inserirAgentes(quantAgentes, agentes, parametros, quantLotes,
                  quantQuadras, indexQuadras, indexPosicoes, posicoes,
                  indexRotas, rotas, indexTrajetos, trajetos, indexTrajetosFaixaEtaria, 
-                 QUANTIDADE_AGENTES_INFECTADOS_CRIANCA_MASCULINO, INFECTADO,
-                 MASCULINO, CRIANCA, &i);
+                 QUANTIDADE_AGENTES_INFECTADOS_CRIANCA_MASCULINO_LOCAL, INFECTADO,
+                 MASCULINO, CRIANCA, &i, LOCAL);
   inserirAgentes(quantAgentes, agentes, parametros, quantLotes,
                  quantQuadras, indexQuadras, indexPosicoes, posicoes,
                  indexRotas, rotas, indexTrajetos, trajetos, indexTrajetosFaixaEtaria, 
-                 QUANTIDADE_AGENTES_RECUPERADOS_CRIANCA_MASCULINO, RECUPERADO,
-                 MASCULINO, CRIANCA, &i);
-  inserirAgentes(quantAgentes, agentes, parametros, quantLotes,
-                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
-                 indexRotas, rotas, indexTrajetos, trajetos, indexTrajetosFaixaEtaria, 
-                 QUANTIDADE_AGENTES_SUSCETIVEIS_CRIANCA_FEMININO, SUSCETIVEL,
-                 FEMININO, CRIANCA, &i);
-  inserirAgentes(quantAgentes, agentes, parametros, quantLotes,
-                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
-                 indexRotas, rotas, indexTrajetos, trajetos, indexTrajetosFaixaEtaria, 
-                 QUANTIDADE_AGENTES_EXPOSTOS_CRIANCA_FEMININO, EXPOSTO,
-                 FEMININO, CRIANCA, &i);
-  inserirAgentes(quantAgentes, agentes, parametros, quantLotes,
-                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
-                 indexRotas, rotas, indexTrajetos, trajetos, indexTrajetosFaixaEtaria, 
-                 QUANTIDADE_AGENTES_INFECTADOS_CRIANCA_FEMININO, INFECTADO,
-                 FEMININO, CRIANCA, &i);
-  inserirAgentes(quantAgentes, agentes, parametros, quantLotes,
-                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
-                 indexRotas, rotas, indexTrajetos, trajetos, indexTrajetosFaixaEtaria, 
-                 QUANTIDADE_AGENTES_RECUPERADOS_CRIANCA_FEMININO, RECUPERADO,
-                 FEMININO, CRIANCA, &i);
-
-  inserirAgentes(quantAgentes, agentes, parametros, quantLotes,
-                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
-                 indexRotas, rotas, indexTrajetos, trajetos, indexTrajetosFaixaEtaria, 
-                 QUANTIDADE_AGENTES_SUSCETIVEIS_JOVEM_MASCULINO, SUSCETIVEL,
-                 MASCULINO, JOVEM, &i);
-  inserirAgentes(quantAgentes, agentes, parametros, quantLotes,
-                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
-                 indexRotas, rotas, indexTrajetos, trajetos, indexTrajetosFaixaEtaria, 
-                 QUANTIDADE_AGENTES_EXPOSTOS_JOVEM_MASCULINO, EXPOSTO,
-                 MASCULINO, JOVEM, &i);
-  inserirAgentes(quantAgentes, agentes, parametros, quantLotes,
-                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
-                 indexRotas, rotas, indexTrajetos, trajetos, indexTrajetosFaixaEtaria, 
-                 QUANTIDADE_AGENTES_INFECTADOS_JOVEM_MASCULINO, INFECTADO,
-                 MASCULINO, JOVEM, &i);
-  inserirAgentes(quantAgentes, agentes, parametros, quantLotes,
-                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
-                 indexRotas, rotas, indexTrajetos, trajetos, indexTrajetosFaixaEtaria, 
-                 QUANTIDADE_AGENTES_RECUPERADOS_JOVEM_MASCULINO, RECUPERADO,
-                 MASCULINO, JOVEM, &i);
-  inserirAgentes(quantAgentes, agentes, parametros, quantLotes,
-                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
-                 indexRotas, rotas, indexTrajetos, trajetos, indexTrajetosFaixaEtaria, 
-                 QUANTIDADE_AGENTES_SUSCETIVEIS_JOVEM_FEMININO, SUSCETIVEL,
-                 FEMININO, JOVEM, &i);
-  inserirAgentes(quantAgentes, agentes, parametros, quantLotes,
-                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
-                 indexRotas, rotas, indexTrajetos, trajetos, indexTrajetosFaixaEtaria, 
-                 QUANTIDADE_AGENTES_EXPOSTOS_JOVEM_FEMININO, EXPOSTO, FEMININO,
-                 JOVEM, &i);
-  inserirAgentes(quantAgentes, agentes, parametros, quantLotes,
-                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
-                 indexRotas, rotas, indexTrajetos, trajetos, indexTrajetosFaixaEtaria, 
-                 QUANTIDADE_AGENTES_INFECTADOS_JOVEM_FEMININO, INFECTADO,
-                 FEMININO, JOVEM, &i);
-  inserirAgentes(quantAgentes, agentes, parametros, quantLotes,
-                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
-                 indexRotas, rotas, indexTrajetos, trajetos, indexTrajetosFaixaEtaria, 
-                 QUANTIDADE_AGENTES_RECUPERADOS_JOVEM_FEMININO, RECUPERADO,
-                 FEMININO, JOVEM, &i);
+                 QUANTIDADE_AGENTES_RECUPERADOS_CRIANCA_MASCULINO_LOCAL, RECUPERADO,
+                 MASCULINO, CRIANCA, &i, LOCAL);
   
   inserirAgentes(quantAgentes, agentes, parametros, quantLotes,
                  quantQuadras, indexQuadras, indexPosicoes, posicoes,
                  indexRotas, rotas, indexTrajetos, trajetos, indexTrajetosFaixaEtaria, 
-                 QUANTIDADE_AGENTES_SUSCETIVEIS_ADULTO_MASCULINO, SUSCETIVEL,
-                 MASCULINO, ADULTO, &i);
+                 QUANTIDADE_AGENTES_SUSCETIVEIS_CRIANCA_MASCULINO_ALEATORIO, SUSCETIVEL,
+                 MASCULINO, CRIANCA, &i, ALEATORIO);
   inserirAgentes(quantAgentes, agentes, parametros, quantLotes,
                  quantQuadras, indexQuadras, indexPosicoes, posicoes,
                  indexRotas, rotas, indexTrajetos, trajetos, indexTrajetosFaixaEtaria, 
-                 QUANTIDADE_AGENTES_EXPOSTOS_ADULTO_MASCULINO, EXPOSTO,
-                 MASCULINO, ADULTO, &i);
+                 QUANTIDADE_AGENTES_EXPOSTOS_CRIANCA_MASCULINO_ALEATORIO, EXPOSTO,
+                 MASCULINO, CRIANCA, &i, ALEATORIO);
   inserirAgentes(quantAgentes, agentes, parametros, quantLotes,
                  quantQuadras, indexQuadras, indexPosicoes, posicoes,
                  indexRotas, rotas, indexTrajetos, trajetos, indexTrajetosFaixaEtaria, 
-                 QUANTIDADE_AGENTES_INFECTADOS_ADULTO_MASCULINO, INFECTADO,
-                 MASCULINO, ADULTO, &i);
+                 QUANTIDADE_AGENTES_INFECTADOS_CRIANCA_MASCULINO_ALEATORIO, INFECTADO,
+                 MASCULINO, CRIANCA, &i, ALEATORIO);
   inserirAgentes(quantAgentes, agentes, parametros, quantLotes,
                  quantQuadras, indexQuadras, indexPosicoes, posicoes,
                  indexRotas, rotas, indexTrajetos, trajetos, indexTrajetosFaixaEtaria, 
-                 QUANTIDADE_AGENTES_RECUPERADOS_ADULTO_MASCULINO, RECUPERADO,
-                 MASCULINO, ADULTO, &i);
+                 QUANTIDADE_AGENTES_RECUPERADOS_CRIANCA_MASCULINO_ALEATORIO, RECUPERADO,
+                 MASCULINO, CRIANCA, &i, ALEATORIO);
+                 
   inserirAgentes(quantAgentes, agentes, parametros, quantLotes,
                  quantQuadras, indexQuadras, indexPosicoes, posicoes,
                  indexRotas, rotas, indexTrajetos, trajetos, indexTrajetosFaixaEtaria, 
-                 QUANTIDADE_AGENTES_SUSCETIVEIS_ADULTO_FEMININO, SUSCETIVEL,
-                 FEMININO, ADULTO, &i);
+                 QUANTIDADE_AGENTES_SUSCETIVEIS_CRIANCA_MASCULINO_LIVRE, SUSCETIVEL,
+                 MASCULINO, CRIANCA, &i, LIVRE);
   inserirAgentes(quantAgentes, agentes, parametros, quantLotes,
                  quantQuadras, indexQuadras, indexPosicoes, posicoes,
                  indexRotas, rotas, indexTrajetos, trajetos, indexTrajetosFaixaEtaria, 
-                 QUANTIDADE_AGENTES_EXPOSTOS_ADULTO_FEMININO, EXPOSTO, FEMININO,
-                 ADULTO, &i);
+                 QUANTIDADE_AGENTES_EXPOSTOS_CRIANCA_MASCULINO_LIVRE, EXPOSTO,
+                 MASCULINO, CRIANCA, &i, LIVRE);
   inserirAgentes(quantAgentes, agentes, parametros, quantLotes,
                  quantQuadras, indexQuadras, indexPosicoes, posicoes,
                  indexRotas, rotas, indexTrajetos, trajetos, indexTrajetosFaixaEtaria, 
-                 QUANTIDADE_AGENTES_INFECTADOS_ADULTO_FEMININO, INFECTADO,
-                 FEMININO, ADULTO, &i);
+                 QUANTIDADE_AGENTES_INFECTADOS_CRIANCA_MASCULINO_LIVRE, INFECTADO,
+                 MASCULINO, CRIANCA, &i, LIVRE);
   inserirAgentes(quantAgentes, agentes, parametros, quantLotes,
                  quantQuadras, indexQuadras, indexPosicoes, posicoes,
                  indexRotas, rotas, indexTrajetos, trajetos, indexTrajetosFaixaEtaria, 
-                 QUANTIDADE_AGENTES_RECUPERADOS_ADULTO_FEMININO, RECUPERADO,
-                 FEMININO, ADULTO, &i);
+                 QUANTIDADE_AGENTES_RECUPERADOS_CRIANCA_MASCULINO_LIVRE, RECUPERADO,
+                 MASCULINO, CRIANCA, &i, LIVRE);
+                 
+  inserirAgentes(quantAgentes, agentes, parametros, quantLotes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 indexRotas, rotas, indexTrajetos, trajetos, indexTrajetosFaixaEtaria, 
+                 QUANTIDADE_AGENTES_SUSCETIVEIS_CRIANCA_MASCULINO_TRAJETO, SUSCETIVEL,
+                 MASCULINO, CRIANCA, &i, TRAJETO);
+  inserirAgentes(quantAgentes, agentes, parametros, quantLotes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 indexRotas, rotas, indexTrajetos, trajetos, indexTrajetosFaixaEtaria, 
+                 QUANTIDADE_AGENTES_EXPOSTOS_CRIANCA_MASCULINO_TRAJETO, EXPOSTO,
+                 MASCULINO, CRIANCA, &i, TRAJETO);
+  inserirAgentes(quantAgentes, agentes, parametros, quantLotes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 indexRotas, rotas, indexTrajetos, trajetos, indexTrajetosFaixaEtaria, 
+                 QUANTIDADE_AGENTES_INFECTADOS_CRIANCA_MASCULINO_TRAJETO, INFECTADO,
+                 MASCULINO, CRIANCA, &i, TRAJETO);
+  inserirAgentes(quantAgentes, agentes, parametros, quantLotes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 indexRotas, rotas, indexTrajetos, trajetos, indexTrajetosFaixaEtaria, 
+                 QUANTIDADE_AGENTES_RECUPERADOS_CRIANCA_MASCULINO_TRAJETO, RECUPERADO,
+                 MASCULINO, CRIANCA, &i, TRAJETO);
+                 
 
   inserirAgentes(quantAgentes, agentes, parametros, quantLotes,
                  quantQuadras, indexQuadras, indexPosicoes, posicoes,
                  indexRotas, rotas, indexTrajetos, trajetos, indexTrajetosFaixaEtaria, 
-                 QUANTIDADE_AGENTES_SUSCETIVEIS_IDOSO_MASCULINO, SUSCETIVEL,
-                 MASCULINO, IDOSO, &i);
+                 QUANTIDADE_AGENTES_SUSCETIVEIS_JOVEM_MASCULINO_LOCAL, SUSCETIVEL,
+                 MASCULINO, JOVEM, &i, LOCAL);
   inserirAgentes(quantAgentes, agentes, parametros, quantLotes,
                  quantQuadras, indexQuadras, indexPosicoes, posicoes,
                  indexRotas, rotas, indexTrajetos, trajetos, indexTrajetosFaixaEtaria, 
-                 QUANTIDADE_AGENTES_EXPOSTOS_IDOSO_MASCULINO, EXPOSTO,
-                 MASCULINO, IDOSO, &i);
+                 QUANTIDADE_AGENTES_EXPOSTOS_JOVEM_MASCULINO_LOCAL, EXPOSTO,
+                 MASCULINO, JOVEM, &i, LOCAL);
   inserirAgentes(quantAgentes, agentes, parametros, quantLotes,
                  quantQuadras, indexQuadras, indexPosicoes, posicoes,
                  indexRotas, rotas, indexTrajetos, trajetos, indexTrajetosFaixaEtaria, 
-                 QUANTIDADE_AGENTES_INFECTADOS_IDOSO_MASCULINO, INFECTADO,
-                 MASCULINO, IDOSO, &i);
+                 QUANTIDADE_AGENTES_INFECTADOS_JOVEM_MASCULINO_LOCAL, INFECTADO,
+                 MASCULINO, JOVEM, &i, LOCAL);
   inserirAgentes(quantAgentes, agentes, parametros, quantLotes,
                  quantQuadras, indexQuadras, indexPosicoes, posicoes,
                  indexRotas, rotas, indexTrajetos, trajetos, indexTrajetosFaixaEtaria, 
-                 QUANTIDADE_AGENTES_RECUPERADOS_IDOSO_MASCULINO, RECUPERADO,
-                 MASCULINO, IDOSO, &i);
+                 QUANTIDADE_AGENTES_RECUPERADOS_JOVEM_MASCULINO_LOCAL, RECUPERADO,
+                 MASCULINO, JOVEM, &i, LOCAL);
+            
   inserirAgentes(quantAgentes, agentes, parametros, quantLotes,
                  quantQuadras, indexQuadras, indexPosicoes, posicoes,
                  indexRotas, rotas, indexTrajetos, trajetos, indexTrajetosFaixaEtaria, 
-                 QUANTIDADE_AGENTES_SUSCETIVEIS_IDOSO_FEMININO, SUSCETIVEL,
-                 FEMININO, IDOSO, &i);
+                 QUANTIDADE_AGENTES_SUSCETIVEIS_JOVEM_MASCULINO_ALEATORIO, SUSCETIVEL,
+                 MASCULINO, JOVEM, &i, ALEATORIO);
   inserirAgentes(quantAgentes, agentes, parametros, quantLotes,
                  quantQuadras, indexQuadras, indexPosicoes, posicoes,
                  indexRotas, rotas, indexTrajetos, trajetos, indexTrajetosFaixaEtaria, 
-                 QUANTIDADE_AGENTES_EXPOSTOS_IDOSO_FEMININO, EXPOSTO, FEMININO,
-                 IDOSO, &i);
+                 QUANTIDADE_AGENTES_EXPOSTOS_JOVEM_MASCULINO_ALEATORIO, EXPOSTO,
+                 MASCULINO, JOVEM, &i, ALEATORIO);
   inserirAgentes(quantAgentes, agentes, parametros, quantLotes,
                  quantQuadras, indexQuadras, indexPosicoes, posicoes,
                  indexRotas, rotas, indexTrajetos, trajetos, indexTrajetosFaixaEtaria, 
-                 QUANTIDADE_AGENTES_INFECTADOS_IDOSO_FEMININO, INFECTADO,
-                 FEMININO, IDOSO, &i);
+                 QUANTIDADE_AGENTES_INFECTADOS_JOVEM_MASCULINO_ALEATORIO, INFECTADO,
+                 MASCULINO, JOVEM, &i, ALEATORIO);
   inserirAgentes(quantAgentes, agentes, parametros, quantLotes,
                  quantQuadras, indexQuadras, indexPosicoes, posicoes,
                  indexRotas, rotas, indexTrajetos, trajetos, indexTrajetosFaixaEtaria, 
-                 QUANTIDADE_AGENTES_RECUPERADOS_IDOSO_FEMININO, RECUPERADO,
-                 FEMININO, IDOSO, &i);
+                 QUANTIDADE_AGENTES_RECUPERADOS_JOVEM_MASCULINO_ALEATORIO, RECUPERADO,
+                 MASCULINO, JOVEM, &i, ALEATORIO);
+                 
+  inserirAgentes(quantAgentes, agentes, parametros, quantLotes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 indexRotas, rotas, indexTrajetos, trajetos, indexTrajetosFaixaEtaria, 
+                 QUANTIDADE_AGENTES_SUSCETIVEIS_JOVEM_MASCULINO_LIVRE, SUSCETIVEL,
+                 MASCULINO, JOVEM, &i, LIVRE);
+  inserirAgentes(quantAgentes, agentes, parametros, quantLotes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 indexRotas, rotas, indexTrajetos, trajetos, indexTrajetosFaixaEtaria, 
+                 QUANTIDADE_AGENTES_EXPOSTOS_JOVEM_MASCULINO_LIVRE, EXPOSTO,
+                 MASCULINO, JOVEM, &i, LIVRE);
+  inserirAgentes(quantAgentes, agentes, parametros, quantLotes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 indexRotas, rotas, indexTrajetos, trajetos, indexTrajetosFaixaEtaria, 
+                 QUANTIDADE_AGENTES_INFECTADOS_JOVEM_MASCULINO_LIVRE, INFECTADO,
+                 MASCULINO, JOVEM, &i, LIVRE);
+  inserirAgentes(quantAgentes, agentes, parametros, quantLotes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 indexRotas, rotas, indexTrajetos, trajetos, indexTrajetosFaixaEtaria, 
+                 QUANTIDADE_AGENTES_RECUPERADOS_JOVEM_MASCULINO_LIVRE, RECUPERADO,
+                 MASCULINO, JOVEM, &i, LIVRE);
+                 
+  inserirAgentes(quantAgentes, agentes, parametros, quantLotes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 indexRotas, rotas, indexTrajetos, trajetos, indexTrajetosFaixaEtaria, 
+                 QUANTIDADE_AGENTES_SUSCETIVEIS_JOVEM_MASCULINO_TRAJETO, SUSCETIVEL,
+                 MASCULINO, JOVEM, &i, TRAJETO);
+  inserirAgentes(quantAgentes, agentes, parametros, quantLotes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 indexRotas, rotas, indexTrajetos, trajetos, indexTrajetosFaixaEtaria, 
+                 QUANTIDADE_AGENTES_EXPOSTOS_JOVEM_MASCULINO_TRAJETO, EXPOSTO,
+                 MASCULINO, JOVEM, &i, TRAJETO);
+  inserirAgentes(quantAgentes, agentes, parametros, quantLotes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 indexRotas, rotas, indexTrajetos, trajetos, indexTrajetosFaixaEtaria, 
+                 QUANTIDADE_AGENTES_INFECTADOS_JOVEM_MASCULINO_TRAJETO, INFECTADO,
+                 MASCULINO, JOVEM, &i, TRAJETO);
+  inserirAgentes(quantAgentes, agentes, parametros, quantLotes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 indexRotas, rotas, indexTrajetos, trajetos, indexTrajetosFaixaEtaria, 
+                 QUANTIDADE_AGENTES_RECUPERADOS_JOVEM_MASCULINO_TRAJETO, RECUPERADO,
+                 MASCULINO, JOVEM, &i, TRAJETO);
+                 
+  
+  inserirAgentes(quantAgentes, agentes, parametros, quantLotes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 indexRotas, rotas, indexTrajetos, trajetos, indexTrajetosFaixaEtaria, 
+                 QUANTIDADE_AGENTES_SUSCETIVEIS_ADULTO_MASCULINO_LOCAL, SUSCETIVEL,
+                 MASCULINO, ADULTO, &i, LOCAL);
+  inserirAgentes(quantAgentes, agentes, parametros, quantLotes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 indexRotas, rotas, indexTrajetos, trajetos, indexTrajetosFaixaEtaria, 
+                 QUANTIDADE_AGENTES_EXPOSTOS_ADULTO_MASCULINO_LOCAL, EXPOSTO,
+                 MASCULINO, ADULTO, &i, LOCAL);
+  inserirAgentes(quantAgentes, agentes, parametros, quantLotes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 indexRotas, rotas, indexTrajetos, trajetos, indexTrajetosFaixaEtaria, 
+                 QUANTIDADE_AGENTES_INFECTADOS_ADULTO_MASCULINO_LOCAL, INFECTADO,
+                 MASCULINO, ADULTO, &i, LOCAL);
+  inserirAgentes(quantAgentes, agentes, parametros, quantLotes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 indexRotas, rotas, indexTrajetos, trajetos, indexTrajetosFaixaEtaria, 
+                 QUANTIDADE_AGENTES_RECUPERADOS_ADULTO_MASCULINO_LOCAL, RECUPERADO,
+                 MASCULINO, ADULTO, &i, LOCAL);
+                 
+  inserirAgentes(quantAgentes, agentes, parametros, quantLotes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 indexRotas, rotas, indexTrajetos, trajetos, indexTrajetosFaixaEtaria, 
+                 QUANTIDADE_AGENTES_SUSCETIVEIS_ADULTO_MASCULINO_ALEATORIO, SUSCETIVEL,
+                 MASCULINO, ADULTO, &i, ALEATORIO);
+  inserirAgentes(quantAgentes, agentes, parametros, quantLotes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 indexRotas, rotas, indexTrajetos, trajetos, indexTrajetosFaixaEtaria, 
+                 QUANTIDADE_AGENTES_EXPOSTOS_ADULTO_MASCULINO_ALEATORIO, EXPOSTO,
+                 MASCULINO, ADULTO, &i, ALEATORIO);
+  inserirAgentes(quantAgentes, agentes, parametros, quantLotes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 indexRotas, rotas, indexTrajetos, trajetos, indexTrajetosFaixaEtaria, 
+                 QUANTIDADE_AGENTES_INFECTADOS_ADULTO_MASCULINO_ALEATORIO, INFECTADO,
+                 MASCULINO, ADULTO, &i, ALEATORIO);
+  inserirAgentes(quantAgentes, agentes, parametros, quantLotes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 indexRotas, rotas, indexTrajetos, trajetos, indexTrajetosFaixaEtaria, 
+                 QUANTIDADE_AGENTES_RECUPERADOS_ADULTO_MASCULINO_ALEATORIO, RECUPERADO,
+                 MASCULINO, ADULTO, &i, ALEATORIO);
+                 
+  inserirAgentes(quantAgentes, agentes, parametros, quantLotes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 indexRotas, rotas, indexTrajetos, trajetos, indexTrajetosFaixaEtaria, 
+                 QUANTIDADE_AGENTES_SUSCETIVEIS_ADULTO_MASCULINO_LIVRE, SUSCETIVEL,
+                 MASCULINO, ADULTO, &i, LIVRE);
+  inserirAgentes(quantAgentes, agentes, parametros, quantLotes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 indexRotas, rotas, indexTrajetos, trajetos, indexTrajetosFaixaEtaria, 
+                 QUANTIDADE_AGENTES_EXPOSTOS_ADULTO_MASCULINO_LIVRE, EXPOSTO,
+                 MASCULINO, ADULTO, &i, LIVRE);
+  inserirAgentes(quantAgentes, agentes, parametros, quantLotes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 indexRotas, rotas, indexTrajetos, trajetos, indexTrajetosFaixaEtaria, 
+                 QUANTIDADE_AGENTES_INFECTADOS_ADULTO_MASCULINO_LIVRE, INFECTADO,
+                 MASCULINO, ADULTO, &i, LIVRE);
+  inserirAgentes(quantAgentes, agentes, parametros, quantLotes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 indexRotas, rotas, indexTrajetos, trajetos, indexTrajetosFaixaEtaria, 
+                 QUANTIDADE_AGENTES_RECUPERADOS_ADULTO_MASCULINO_LIVRE, RECUPERADO,
+                 MASCULINO, ADULTO, &i, LIVRE);
+                 
+  inserirAgentes(quantAgentes, agentes, parametros, quantLotes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 indexRotas, rotas, indexTrajetos, trajetos, indexTrajetosFaixaEtaria, 
+                 QUANTIDADE_AGENTES_SUSCETIVEIS_ADULTO_MASCULINO_TRAJETO, SUSCETIVEL,
+                 MASCULINO, ADULTO, &i, TRAJETO);
+  inserirAgentes(quantAgentes, agentes, parametros, quantLotes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 indexRotas, rotas, indexTrajetos, trajetos, indexTrajetosFaixaEtaria, 
+                 QUANTIDADE_AGENTES_EXPOSTOS_ADULTO_MASCULINO_TRAJETO, EXPOSTO,
+                 MASCULINO, ADULTO, &i, TRAJETO);
+  inserirAgentes(quantAgentes, agentes, parametros, quantLotes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 indexRotas, rotas, indexTrajetos, trajetos, indexTrajetosFaixaEtaria, 
+                 QUANTIDADE_AGENTES_INFECTADOS_ADULTO_MASCULINO_TRAJETO, INFECTADO,
+                 MASCULINO, ADULTO, &i, TRAJETO);
+  inserirAgentes(quantAgentes, agentes, parametros, quantLotes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 indexRotas, rotas, indexTrajetos, trajetos, indexTrajetosFaixaEtaria, 
+                 QUANTIDADE_AGENTES_RECUPERADOS_ADULTO_MASCULINO_TRAJETO, RECUPERADO,
+                 MASCULINO, ADULTO, &i, TRAJETO);
+                 
+
+  inserirAgentes(quantAgentes, agentes, parametros, quantLotes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 indexRotas, rotas, indexTrajetos, trajetos, indexTrajetosFaixaEtaria, 
+                 QUANTIDADE_AGENTES_SUSCETIVEIS_IDOSO_MASCULINO_LOCAL, SUSCETIVEL,
+                 MASCULINO, IDOSO, &i, LOCAL);
+  inserirAgentes(quantAgentes, agentes, parametros, quantLotes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 indexRotas, rotas, indexTrajetos, trajetos, indexTrajetosFaixaEtaria, 
+                 QUANTIDADE_AGENTES_EXPOSTOS_IDOSO_MASCULINO_LOCAL, EXPOSTO,
+                 MASCULINO, IDOSO, &i, LOCAL);
+  inserirAgentes(quantAgentes, agentes, parametros, quantLotes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 indexRotas, rotas, indexTrajetos, trajetos, indexTrajetosFaixaEtaria, 
+                 QUANTIDADE_AGENTES_INFECTADOS_IDOSO_MASCULINO_LOCAL, INFECTADO,
+                 MASCULINO, IDOSO, &i, LOCAL);
+  inserirAgentes(quantAgentes, agentes, parametros, quantLotes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 indexRotas, rotas, indexTrajetos, trajetos, indexTrajetosFaixaEtaria, 
+                 QUANTIDADE_AGENTES_RECUPERADOS_IDOSO_MASCULINO_LOCAL, RECUPERADO,
+                 MASCULINO, IDOSO, &i, LOCAL);
+                 
+  inserirAgentes(quantAgentes, agentes, parametros, quantLotes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 indexRotas, rotas, indexTrajetos, trajetos, indexTrajetosFaixaEtaria, 
+                 QUANTIDADE_AGENTES_SUSCETIVEIS_IDOSO_MASCULINO_ALEATORIO, SUSCETIVEL,
+                 MASCULINO, IDOSO, &i, ALEATORIO);
+  inserirAgentes(quantAgentes, agentes, parametros, quantLotes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 indexRotas, rotas, indexTrajetos, trajetos, indexTrajetosFaixaEtaria, 
+                 QUANTIDADE_AGENTES_EXPOSTOS_IDOSO_MASCULINO_ALEATORIO, EXPOSTO,
+                 MASCULINO, IDOSO, &i, ALEATORIO);
+  inserirAgentes(quantAgentes, agentes, parametros, quantLotes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 indexRotas, rotas, indexTrajetos, trajetos, indexTrajetosFaixaEtaria, 
+                 QUANTIDADE_AGENTES_INFECTADOS_IDOSO_MASCULINO_ALEATORIO, INFECTADO,
+                 MASCULINO, IDOSO, &i, ALEATORIO);
+  inserirAgentes(quantAgentes, agentes, parametros, quantLotes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 indexRotas, rotas, indexTrajetos, trajetos, indexTrajetosFaixaEtaria, 
+                 QUANTIDADE_AGENTES_RECUPERADOS_IDOSO_MASCULINO_ALEATORIO, RECUPERADO,
+                 MASCULINO, IDOSO, &i, ALEATORIO);
+                 
+  inserirAgentes(quantAgentes, agentes, parametros, quantLotes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 indexRotas, rotas, indexTrajetos, trajetos, indexTrajetosFaixaEtaria, 
+                 QUANTIDADE_AGENTES_SUSCETIVEIS_IDOSO_MASCULINO_LIVRE, SUSCETIVEL,
+                 MASCULINO, IDOSO, &i, LIVRE);
+  inserirAgentes(quantAgentes, agentes, parametros, quantLotes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 indexRotas, rotas, indexTrajetos, trajetos, indexTrajetosFaixaEtaria, 
+                 QUANTIDADE_AGENTES_EXPOSTOS_IDOSO_MASCULINO_LIVRE, EXPOSTO,
+                 MASCULINO, IDOSO, &i, LIVRE);
+  inserirAgentes(quantAgentes, agentes, parametros, quantLotes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 indexRotas, rotas, indexTrajetos, trajetos, indexTrajetosFaixaEtaria, 
+                 QUANTIDADE_AGENTES_INFECTADOS_IDOSO_MASCULINO_LIVRE, INFECTADO,
+                 MASCULINO, IDOSO, &i, LIVRE);
+  inserirAgentes(quantAgentes, agentes, parametros, quantLotes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 indexRotas, rotas, indexTrajetos, trajetos, indexTrajetosFaixaEtaria, 
+                 QUANTIDADE_AGENTES_RECUPERADOS_IDOSO_MASCULINO_LIVRE, RECUPERADO,
+                 MASCULINO, IDOSO, &i, LIVRE);
+                 
+  inserirAgentes(quantAgentes, agentes, parametros, quantLotes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 indexRotas, rotas, indexTrajetos, trajetos, indexTrajetosFaixaEtaria, 
+                 QUANTIDADE_AGENTES_SUSCETIVEIS_IDOSO_MASCULINO_TRAJETO, SUSCETIVEL,
+                 MASCULINO, IDOSO, &i, TRAJETO);
+  inserirAgentes(quantAgentes, agentes, parametros, quantLotes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 indexRotas, rotas, indexTrajetos, trajetos, indexTrajetosFaixaEtaria, 
+                 QUANTIDADE_AGENTES_EXPOSTOS_IDOSO_MASCULINO_TRAJETO, EXPOSTO,
+                 MASCULINO, IDOSO, &i, TRAJETO);
+  inserirAgentes(quantAgentes, agentes, parametros, quantLotes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 indexRotas, rotas, indexTrajetos, trajetos, indexTrajetosFaixaEtaria, 
+                 QUANTIDADE_AGENTES_INFECTADOS_IDOSO_MASCULINO_TRAJETO, INFECTADO,
+                 MASCULINO, IDOSO, &i, TRAJETO);
+  inserirAgentes(quantAgentes, agentes, parametros, quantLotes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 indexRotas, rotas, indexTrajetos, trajetos, indexTrajetosFaixaEtaria, 
+                 QUANTIDADE_AGENTES_RECUPERADOS_IDOSO_MASCULINO_TRAJETO, RECUPERADO,
+                 MASCULINO, IDOSO, &i, TRAJETO);
+  
+  
+
+  inserirAgentes(quantAgentes, agentes, parametros, quantLotes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 indexRotas, rotas, indexTrajetos, trajetos, indexTrajetosFaixaEtaria, 
+                 QUANTIDADE_AGENTES_SUSCETIVEIS_CRIANCA_FEMININO_LOCAL, SUSCETIVEL,
+                 FEMININO, CRIANCA, &i, LOCAL);
+  inserirAgentes(quantAgentes, agentes, parametros, quantLotes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 indexRotas, rotas, indexTrajetos, trajetos, indexTrajetosFaixaEtaria, 
+                 QUANTIDADE_AGENTES_EXPOSTOS_CRIANCA_FEMININO_LOCAL, EXPOSTO,
+                 FEMININO, CRIANCA, &i, LOCAL);
+  inserirAgentes(quantAgentes, agentes, parametros, quantLotes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 indexRotas, rotas, indexTrajetos, trajetos, indexTrajetosFaixaEtaria, 
+                 QUANTIDADE_AGENTES_INFECTADOS_CRIANCA_FEMININO_LOCAL, INFECTADO,
+                 FEMININO, CRIANCA, &i, LOCAL);
+  inserirAgentes(quantAgentes, agentes, parametros, quantLotes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 indexRotas, rotas, indexTrajetos, trajetos, indexTrajetosFaixaEtaria, 
+                 QUANTIDADE_AGENTES_RECUPERADOS_CRIANCA_FEMININO_LOCAL, RECUPERADO,
+                 FEMININO, CRIANCA, &i, LOCAL);
+                 
+  inserirAgentes(quantAgentes, agentes, parametros, quantLotes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 indexRotas, rotas, indexTrajetos, trajetos, indexTrajetosFaixaEtaria, 
+                 QUANTIDADE_AGENTES_SUSCETIVEIS_CRIANCA_FEMININO_ALEATORIO, SUSCETIVEL,
+                 FEMININO, CRIANCA, &i, ALEATORIO);
+  inserirAgentes(quantAgentes, agentes, parametros, quantLotes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 indexRotas, rotas, indexTrajetos, trajetos, indexTrajetosFaixaEtaria, 
+                 QUANTIDADE_AGENTES_EXPOSTOS_CRIANCA_FEMININO_ALEATORIO, EXPOSTO,
+                 FEMININO, CRIANCA, &i, ALEATORIO);
+  inserirAgentes(quantAgentes, agentes, parametros, quantLotes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 indexRotas, rotas, indexTrajetos, trajetos, indexTrajetosFaixaEtaria, 
+                 QUANTIDADE_AGENTES_INFECTADOS_CRIANCA_FEMININO_ALEATORIO, INFECTADO,
+                 FEMININO, CRIANCA, &i, ALEATORIO);
+  inserirAgentes(quantAgentes, agentes, parametros, quantLotes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 indexRotas, rotas, indexTrajetos, trajetos, indexTrajetosFaixaEtaria, 
+                 QUANTIDADE_AGENTES_RECUPERADOS_CRIANCA_FEMININO_ALEATORIO, RECUPERADO,
+                 FEMININO, CRIANCA, &i, ALEATORIO);
+                 
+  inserirAgentes(quantAgentes, agentes, parametros, quantLotes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 indexRotas, rotas, indexTrajetos, trajetos, indexTrajetosFaixaEtaria, 
+                 QUANTIDADE_AGENTES_SUSCETIVEIS_CRIANCA_FEMININO_LIVRE, SUSCETIVEL,
+                 FEMININO, CRIANCA, &i, LIVRE);
+  inserirAgentes(quantAgentes, agentes, parametros, quantLotes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 indexRotas, rotas, indexTrajetos, trajetos, indexTrajetosFaixaEtaria, 
+                 QUANTIDADE_AGENTES_EXPOSTOS_CRIANCA_FEMININO_LIVRE, EXPOSTO,
+                 FEMININO, CRIANCA, &i, LIVRE);
+  inserirAgentes(quantAgentes, agentes, parametros, quantLotes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 indexRotas, rotas, indexTrajetos, trajetos, indexTrajetosFaixaEtaria, 
+                 QUANTIDADE_AGENTES_INFECTADOS_CRIANCA_FEMININO_LIVRE, INFECTADO,
+                 FEMININO, CRIANCA, &i, LIVRE);
+  inserirAgentes(quantAgentes, agentes, parametros, quantLotes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 indexRotas, rotas, indexTrajetos, trajetos, indexTrajetosFaixaEtaria, 
+                 QUANTIDADE_AGENTES_RECUPERADOS_CRIANCA_FEMININO_LIVRE, RECUPERADO,
+                 FEMININO, CRIANCA, &i, LIVRE);
+                 
+  inserirAgentes(quantAgentes, agentes, parametros, quantLotes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 indexRotas, rotas, indexTrajetos, trajetos, indexTrajetosFaixaEtaria, 
+                 QUANTIDADE_AGENTES_SUSCETIVEIS_CRIANCA_FEMININO_TRAJETO, SUSCETIVEL,
+                 FEMININO, CRIANCA, &i, TRAJETO);
+  inserirAgentes(quantAgentes, agentes, parametros, quantLotes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 indexRotas, rotas, indexTrajetos, trajetos, indexTrajetosFaixaEtaria, 
+                 QUANTIDADE_AGENTES_EXPOSTOS_CRIANCA_FEMININO_TRAJETO, EXPOSTO,
+                 FEMININO, CRIANCA, &i, TRAJETO);
+  inserirAgentes(quantAgentes, agentes, parametros, quantLotes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 indexRotas, rotas, indexTrajetos, trajetos, indexTrajetosFaixaEtaria, 
+                 QUANTIDADE_AGENTES_INFECTADOS_CRIANCA_FEMININO_TRAJETO, INFECTADO,
+                 FEMININO, CRIANCA, &i, TRAJETO);
+  inserirAgentes(quantAgentes, agentes, parametros, quantLotes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 indexRotas, rotas, indexTrajetos, trajetos, indexTrajetosFaixaEtaria, 
+                 QUANTIDADE_AGENTES_RECUPERADOS_CRIANCA_FEMININO_TRAJETO, RECUPERADO,
+                 FEMININO, CRIANCA, &i, TRAJETO);
+                 
+                 
+  inserirAgentes(quantAgentes, agentes, parametros, quantLotes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 indexRotas, rotas, indexTrajetos, trajetos, indexTrajetosFaixaEtaria, 
+                 QUANTIDADE_AGENTES_SUSCETIVEIS_JOVEM_FEMININO_LOCAL, SUSCETIVEL,
+                 FEMININO, JOVEM, &i, LOCAL);
+  inserirAgentes(quantAgentes, agentes, parametros, quantLotes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 indexRotas, rotas, indexTrajetos, trajetos, indexTrajetosFaixaEtaria, 
+                 QUANTIDADE_AGENTES_EXPOSTOS_JOVEM_FEMININO_LOCAL, EXPOSTO, FEMININO,
+                 JOVEM, &i, LOCAL);
+  inserirAgentes(quantAgentes, agentes, parametros, quantLotes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 indexRotas, rotas, indexTrajetos, trajetos, indexTrajetosFaixaEtaria, 
+                 QUANTIDADE_AGENTES_INFECTADOS_JOVEM_FEMININO_LOCAL, INFECTADO,
+                 FEMININO, JOVEM, &i, LOCAL);
+  inserirAgentes(quantAgentes, agentes, parametros, quantLotes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 indexRotas, rotas, indexTrajetos, trajetos, indexTrajetosFaixaEtaria, 
+                 QUANTIDADE_AGENTES_RECUPERADOS_JOVEM_FEMININO_LOCAL, RECUPERADO,
+                 FEMININO, JOVEM, &i, LOCAL);
+                 
+  inserirAgentes(quantAgentes, agentes, parametros, quantLotes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 indexRotas, rotas, indexTrajetos, trajetos, indexTrajetosFaixaEtaria, 
+                 QUANTIDADE_AGENTES_SUSCETIVEIS_JOVEM_FEMININO_ALEATORIO, SUSCETIVEL,
+                 FEMININO, JOVEM, &i, ALEATORIO);
+  inserirAgentes(quantAgentes, agentes, parametros, quantLotes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 indexRotas, rotas, indexTrajetos, trajetos, indexTrajetosFaixaEtaria, 
+                 QUANTIDADE_AGENTES_EXPOSTOS_JOVEM_FEMININO_ALEATORIO, EXPOSTO, FEMININO,
+                 JOVEM, &i, ALEATORIO);
+  inserirAgentes(quantAgentes, agentes, parametros, quantLotes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 indexRotas, rotas, indexTrajetos, trajetos, indexTrajetosFaixaEtaria, 
+                 QUANTIDADE_AGENTES_INFECTADOS_JOVEM_FEMININO_ALEATORIO, INFECTADO,
+                 FEMININO, JOVEM, &i, ALEATORIO);
+  inserirAgentes(quantAgentes, agentes, parametros, quantLotes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 indexRotas, rotas, indexTrajetos, trajetos, indexTrajetosFaixaEtaria, 
+                 QUANTIDADE_AGENTES_RECUPERADOS_JOVEM_FEMININO_ALEATORIO, RECUPERADO,
+                 FEMININO, JOVEM, &i, ALEATORIO);
+                 
+  inserirAgentes(quantAgentes, agentes, parametros, quantLotes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 indexRotas, rotas, indexTrajetos, trajetos, indexTrajetosFaixaEtaria, 
+                 QUANTIDADE_AGENTES_SUSCETIVEIS_JOVEM_FEMININO_LIVRE, SUSCETIVEL,
+                 FEMININO, JOVEM, &i, LIVRE);
+  inserirAgentes(quantAgentes, agentes, parametros, quantLotes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 indexRotas, rotas, indexTrajetos, trajetos, indexTrajetosFaixaEtaria, 
+                 QUANTIDADE_AGENTES_EXPOSTOS_JOVEM_FEMININO_LIVRE, EXPOSTO, FEMININO,
+                 JOVEM, &i, LIVRE);
+  inserirAgentes(quantAgentes, agentes, parametros, quantLotes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 indexRotas, rotas, indexTrajetos, trajetos, indexTrajetosFaixaEtaria, 
+                 QUANTIDADE_AGENTES_INFECTADOS_JOVEM_FEMININO_LIVRE, INFECTADO,
+                 FEMININO, JOVEM, &i, LIVRE);
+  inserirAgentes(quantAgentes, agentes, parametros, quantLotes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 indexRotas, rotas, indexTrajetos, trajetos, indexTrajetosFaixaEtaria, 
+                 QUANTIDADE_AGENTES_RECUPERADOS_JOVEM_FEMININO_LIVRE, RECUPERADO,
+                 FEMININO, JOVEM, &i, LIVRE);
+                 
+  inserirAgentes(quantAgentes, agentes, parametros, quantLotes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 indexRotas, rotas, indexTrajetos, trajetos, indexTrajetosFaixaEtaria, 
+                 QUANTIDADE_AGENTES_SUSCETIVEIS_JOVEM_FEMININO_TRAJETO, SUSCETIVEL,
+                 FEMININO, JOVEM, &i, TRAJETO);
+  inserirAgentes(quantAgentes, agentes, parametros, quantLotes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 indexRotas, rotas, indexTrajetos, trajetos, indexTrajetosFaixaEtaria, 
+                 QUANTIDADE_AGENTES_EXPOSTOS_JOVEM_FEMININO_TRAJETO, EXPOSTO, FEMININO,
+                 JOVEM, &i, TRAJETO);
+  inserirAgentes(quantAgentes, agentes, parametros, quantLotes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 indexRotas, rotas, indexTrajetos, trajetos, indexTrajetosFaixaEtaria, 
+                 QUANTIDADE_AGENTES_INFECTADOS_JOVEM_FEMININO_TRAJETO, INFECTADO,
+                 FEMININO, JOVEM, &i, TRAJETO);
+  inserirAgentes(quantAgentes, agentes, parametros, quantLotes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 indexRotas, rotas, indexTrajetos, trajetos, indexTrajetosFaixaEtaria, 
+                 QUANTIDADE_AGENTES_RECUPERADOS_JOVEM_FEMININO_TRAJETO, RECUPERADO,
+                 FEMININO, JOVEM, &i, TRAJETO);
+                 
+                 
+  inserirAgentes(quantAgentes, agentes, parametros, quantLotes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 indexRotas, rotas, indexTrajetos, trajetos, indexTrajetosFaixaEtaria, 
+                 QUANTIDADE_AGENTES_SUSCETIVEIS_ADULTO_FEMININO_LOCAL, SUSCETIVEL,
+                 FEMININO, ADULTO, &i, LOCAL);
+  inserirAgentes(quantAgentes, agentes, parametros, quantLotes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 indexRotas, rotas, indexTrajetos, trajetos, indexTrajetosFaixaEtaria, 
+                 QUANTIDADE_AGENTES_EXPOSTOS_ADULTO_FEMININO_LOCAL, EXPOSTO, FEMININO,
+                 ADULTO, &i, LOCAL);
+  inserirAgentes(quantAgentes, agentes, parametros, quantLotes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 indexRotas, rotas, indexTrajetos, trajetos, indexTrajetosFaixaEtaria, 
+                 QUANTIDADE_AGENTES_INFECTADOS_ADULTO_FEMININO_LOCAL, INFECTADO,
+                 FEMININO, ADULTO, &i, LOCAL);
+  inserirAgentes(quantAgentes, agentes, parametros, quantLotes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 indexRotas, rotas, indexTrajetos, trajetos, indexTrajetosFaixaEtaria, 
+                 QUANTIDADE_AGENTES_RECUPERADOS_ADULTO_FEMININO_LOCAL, RECUPERADO,
+                 FEMININO, ADULTO, &i, LOCAL);
+                 
+  inserirAgentes(quantAgentes, agentes, parametros, quantLotes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 indexRotas, rotas, indexTrajetos, trajetos, indexTrajetosFaixaEtaria, 
+                 QUANTIDADE_AGENTES_SUSCETIVEIS_ADULTO_FEMININO_ALEATORIO, SUSCETIVEL,
+                 FEMININO, ADULTO, &i, ALEATORIO);
+  inserirAgentes(quantAgentes, agentes, parametros, quantLotes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 indexRotas, rotas, indexTrajetos, trajetos, indexTrajetosFaixaEtaria, 
+                 QUANTIDADE_AGENTES_EXPOSTOS_ADULTO_FEMININO_ALEATORIO, EXPOSTO, FEMININO,
+                 ADULTO, &i, ALEATORIO);
+  inserirAgentes(quantAgentes, agentes, parametros, quantLotes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 indexRotas, rotas, indexTrajetos, trajetos, indexTrajetosFaixaEtaria, 
+                 QUANTIDADE_AGENTES_INFECTADOS_ADULTO_FEMININO_ALEATORIO, INFECTADO,
+                 FEMININO, ADULTO, &i, ALEATORIO);
+  inserirAgentes(quantAgentes, agentes, parametros, quantLotes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 indexRotas, rotas, indexTrajetos, trajetos, indexTrajetosFaixaEtaria, 
+                 QUANTIDADE_AGENTES_RECUPERADOS_ADULTO_FEMININO_ALEATORIO, RECUPERADO,
+                 FEMININO, ADULTO, &i, ALEATORIO);
+                 
+  inserirAgentes(quantAgentes, agentes, parametros, quantLotes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 indexRotas, rotas, indexTrajetos, trajetos, indexTrajetosFaixaEtaria, 
+                 QUANTIDADE_AGENTES_SUSCETIVEIS_ADULTO_FEMININO_LIVRE, SUSCETIVEL,
+                 FEMININO, ADULTO, &i, LIVRE);
+  inserirAgentes(quantAgentes, agentes, parametros, quantLotes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 indexRotas, rotas, indexTrajetos, trajetos, indexTrajetosFaixaEtaria, 
+                 QUANTIDADE_AGENTES_EXPOSTOS_ADULTO_FEMININO_LIVRE, EXPOSTO, FEMININO,
+                 ADULTO, &i, LIVRE);
+  inserirAgentes(quantAgentes, agentes, parametros, quantLotes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 indexRotas, rotas, indexTrajetos, trajetos, indexTrajetosFaixaEtaria, 
+                 QUANTIDADE_AGENTES_INFECTADOS_ADULTO_FEMININO_LIVRE, INFECTADO,
+                 FEMININO, ADULTO, &i, LIVRE);
+  inserirAgentes(quantAgentes, agentes, parametros, quantLotes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 indexRotas, rotas, indexTrajetos, trajetos, indexTrajetosFaixaEtaria, 
+                 QUANTIDADE_AGENTES_RECUPERADOS_ADULTO_FEMININO_LIVRE, RECUPERADO,
+                 FEMININO, ADULTO, &i, LIVRE);
+                 
+  inserirAgentes(quantAgentes, agentes, parametros, quantLotes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 indexRotas, rotas, indexTrajetos, trajetos, indexTrajetosFaixaEtaria, 
+                 QUANTIDADE_AGENTES_SUSCETIVEIS_ADULTO_FEMININO_TRAJETO, SUSCETIVEL,
+                 FEMININO, ADULTO, &i, TRAJETO);
+  inserirAgentes(quantAgentes, agentes, parametros, quantLotes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 indexRotas, rotas, indexTrajetos, trajetos, indexTrajetosFaixaEtaria, 
+                 QUANTIDADE_AGENTES_EXPOSTOS_ADULTO_FEMININO_TRAJETO, EXPOSTO, FEMININO,
+                 ADULTO, &i, TRAJETO);
+  inserirAgentes(quantAgentes, agentes, parametros, quantLotes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 indexRotas, rotas, indexTrajetos, trajetos, indexTrajetosFaixaEtaria, 
+                 QUANTIDADE_AGENTES_INFECTADOS_ADULTO_FEMININO_TRAJETO, INFECTADO,
+                 FEMININO, ADULTO, &i, TRAJETO);
+  inserirAgentes(quantAgentes, agentes, parametros, quantLotes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 indexRotas, rotas, indexTrajetos, trajetos, indexTrajetosFaixaEtaria, 
+                 QUANTIDADE_AGENTES_RECUPERADOS_ADULTO_FEMININO_TRAJETO, RECUPERADO,
+                 FEMININO, ADULTO, &i, TRAJETO);
+                 
+                 
+  inserirAgentes(quantAgentes, agentes, parametros, quantLotes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 indexRotas, rotas, indexTrajetos, trajetos, indexTrajetosFaixaEtaria, 
+                 QUANTIDADE_AGENTES_SUSCETIVEIS_IDOSO_FEMININO_LOCAL, SUSCETIVEL,
+                 FEMININO, IDOSO, &i, LOCAL);
+  inserirAgentes(quantAgentes, agentes, parametros, quantLotes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 indexRotas, rotas, indexTrajetos, trajetos, indexTrajetosFaixaEtaria, 
+                 QUANTIDADE_AGENTES_EXPOSTOS_IDOSO_FEMININO_LOCAL, EXPOSTO, FEMININO,
+                 IDOSO, &i, LOCAL);
+  inserirAgentes(quantAgentes, agentes, parametros, quantLotes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 indexRotas, rotas, indexTrajetos, trajetos, indexTrajetosFaixaEtaria, 
+                 QUANTIDADE_AGENTES_INFECTADOS_IDOSO_FEMININO_LOCAL, INFECTADO,
+                 FEMININO, IDOSO, &i, LOCAL);
+  inserirAgentes(quantAgentes, agentes, parametros, quantLotes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 indexRotas, rotas, indexTrajetos, trajetos, indexTrajetosFaixaEtaria, 
+                 QUANTIDADE_AGENTES_RECUPERADOS_IDOSO_FEMININO_LOCAL, RECUPERADO,
+                 FEMININO, IDOSO, &i, LOCAL);
+                 
+  inserirAgentes(quantAgentes, agentes, parametros, quantLotes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 indexRotas, rotas, indexTrajetos, trajetos, indexTrajetosFaixaEtaria, 
+                 QUANTIDADE_AGENTES_SUSCETIVEIS_IDOSO_FEMININO_ALEATORIO, SUSCETIVEL,
+                 FEMININO, IDOSO, &i, ALEATORIO);
+  inserirAgentes(quantAgentes, agentes, parametros, quantLotes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 indexRotas, rotas, indexTrajetos, trajetos, indexTrajetosFaixaEtaria, 
+                 QUANTIDADE_AGENTES_EXPOSTOS_IDOSO_FEMININO_ALEATORIO, EXPOSTO, FEMININO,
+                 IDOSO, &i, ALEATORIO);
+  inserirAgentes(quantAgentes, agentes, parametros, quantLotes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 indexRotas, rotas, indexTrajetos, trajetos, indexTrajetosFaixaEtaria, 
+                 QUANTIDADE_AGENTES_INFECTADOS_IDOSO_FEMININO_ALEATORIO, INFECTADO,
+                 FEMININO, IDOSO, &i, ALEATORIO);
+  inserirAgentes(quantAgentes, agentes, parametros, quantLotes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 indexRotas, rotas, indexTrajetos, trajetos, indexTrajetosFaixaEtaria, 
+                 QUANTIDADE_AGENTES_RECUPERADOS_IDOSO_FEMININO_ALEATORIO, RECUPERADO,
+                 FEMININO, IDOSO, &i, ALEATORIO);
+                 
+  inserirAgentes(quantAgentes, agentes, parametros, quantLotes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 indexRotas, rotas, indexTrajetos, trajetos, indexTrajetosFaixaEtaria, 
+                 QUANTIDADE_AGENTES_SUSCETIVEIS_IDOSO_FEMININO_LIVRE, SUSCETIVEL,
+                 FEMININO, IDOSO, &i, LIVRE);
+  inserirAgentes(quantAgentes, agentes, parametros, quantLotes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 indexRotas, rotas, indexTrajetos, trajetos, indexTrajetosFaixaEtaria, 
+                 QUANTIDADE_AGENTES_EXPOSTOS_IDOSO_FEMININO_LIVRE, EXPOSTO, FEMININO,
+                 IDOSO, &i, LIVRE);
+  inserirAgentes(quantAgentes, agentes, parametros, quantLotes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 indexRotas, rotas, indexTrajetos, trajetos, indexTrajetosFaixaEtaria, 
+                 QUANTIDADE_AGENTES_INFECTADOS_IDOSO_FEMININO_LIVRE, INFECTADO,
+                 FEMININO, IDOSO, &i, LIVRE);
+  inserirAgentes(quantAgentes, agentes, parametros, quantLotes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 indexRotas, rotas, indexTrajetos, trajetos, indexTrajetosFaixaEtaria, 
+                 QUANTIDADE_AGENTES_RECUPERADOS_IDOSO_FEMININO_LIVRE, RECUPERADO,
+                 FEMININO, IDOSO, &i, LIVRE);
+                 
+  inserirAgentes(quantAgentes, agentes, parametros, quantLotes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 indexRotas, rotas, indexTrajetos, trajetos, indexTrajetosFaixaEtaria, 
+                 QUANTIDADE_AGENTES_SUSCETIVEIS_IDOSO_FEMININO_TRAJETO, SUSCETIVEL,
+                 FEMININO, IDOSO, &i, TRAJETO);
+  inserirAgentes(quantAgentes, agentes, parametros, quantLotes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 indexRotas, rotas, indexTrajetos, trajetos, indexTrajetosFaixaEtaria, 
+                 QUANTIDADE_AGENTES_EXPOSTOS_IDOSO_FEMININO_TRAJETO, EXPOSTO, FEMININO,
+                 IDOSO, &i, TRAJETO);
+  inserirAgentes(quantAgentes, agentes, parametros, quantLotes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 indexRotas, rotas, indexTrajetos, trajetos, indexTrajetosFaixaEtaria, 
+                 QUANTIDADE_AGENTES_INFECTADOS_IDOSO_FEMININO_TRAJETO, INFECTADO,
+                 FEMININO, IDOSO, &i, TRAJETO);
+  inserirAgentes(quantAgentes, agentes, parametros, quantLotes,
+                 quantQuadras, indexQuadras, indexPosicoes, posicoes,
+                 indexRotas, rotas, indexTrajetos, trajetos, indexTrajetosFaixaEtaria, 
+                 QUANTIDADE_AGENTES_RECUPERADOS_IDOSO_FEMININO_TRAJETO, RECUPERADO,
+                 FEMININO, IDOSO, &i, TRAJETO);
+                 
   return agentes;
 }
 
 int contarTotalAgentes(const int *quantLotes, int quantQuadras,
                        const double *parametros) {
   int quantAgentes = 0;
-  quantAgentes += QUANTIDADE_AGENTES_SUSCETIVEIS_CRIANCA_MASCULINO +
-                  QUANTIDADE_AGENTES_EXPOSTOS_CRIANCA_MASCULINO +
-                  QUANTIDADE_AGENTES_INFECTADOS_CRIANCA_MASCULINO +
-                  QUANTIDADE_AGENTES_RECUPERADOS_CRIANCA_MASCULINO +
-                  QUANTIDADE_AGENTES_SUSCETIVEIS_CRIANCA_FEMININO +
-                  QUANTIDADE_AGENTES_EXPOSTOS_CRIANCA_FEMININO +
-                  QUANTIDADE_AGENTES_INFECTADOS_CRIANCA_FEMININO +
-                  QUANTIDADE_AGENTES_RECUPERADOS_CRIANCA_FEMININO +
+  quantAgentes += QUANTIDADE_AGENTES_SUSCETIVEIS_CRIANCA_MASCULINO_LOCAL +
+                  QUANTIDADE_AGENTES_EXPOSTOS_CRIANCA_MASCULINO_LOCAL +
+                  QUANTIDADE_AGENTES_INFECTADOS_CRIANCA_MASCULINO_LOCAL +
+                  QUANTIDADE_AGENTES_RECUPERADOS_CRIANCA_MASCULINO_LOCAL +
+                  
+                  QUANTIDADE_AGENTES_SUSCETIVEIS_CRIANCA_MASCULINO_ALEATORIO +
+                  QUANTIDADE_AGENTES_EXPOSTOS_CRIANCA_MASCULINO_ALEATORIO +
+                  QUANTIDADE_AGENTES_INFECTADOS_CRIANCA_MASCULINO_ALEATORIO +
+                  QUANTIDADE_AGENTES_RECUPERADOS_CRIANCA_MASCULINO_ALEATORIO +
+                  
+                  QUANTIDADE_AGENTES_SUSCETIVEIS_CRIANCA_MASCULINO_LIVRE +
+                  QUANTIDADE_AGENTES_EXPOSTOS_CRIANCA_MASCULINO_LIVRE +
+                  QUANTIDADE_AGENTES_INFECTADOS_CRIANCA_MASCULINO_LIVRE +
+                  QUANTIDADE_AGENTES_RECUPERADOS_CRIANCA_MASCULINO_LIVRE +
+                  
+                  QUANTIDADE_AGENTES_SUSCETIVEIS_CRIANCA_MASCULINO_TRAJETO +
+                  QUANTIDADE_AGENTES_EXPOSTOS_CRIANCA_MASCULINO_TRAJETO +
+                  QUANTIDADE_AGENTES_INFECTADOS_CRIANCA_MASCULINO_TRAJETO +
+                  QUANTIDADE_AGENTES_RECUPERADOS_CRIANCA_MASCULINO_TRAJETO +
+                  
+                  
 
-                  QUANTIDADE_AGENTES_SUSCETIVEIS_JOVEM_MASCULINO +
-                  QUANTIDADE_AGENTES_EXPOSTOS_JOVEM_MASCULINO +
-                  QUANTIDADE_AGENTES_INFECTADOS_JOVEM_MASCULINO +
-                  QUANTIDADE_AGENTES_RECUPERADOS_JOVEM_MASCULINO +
-                  QUANTIDADE_AGENTES_SUSCETIVEIS_JOVEM_FEMININO +
-                  QUANTIDADE_AGENTES_EXPOSTOS_JOVEM_FEMININO +
-                  QUANTIDADE_AGENTES_INFECTADOS_JOVEM_FEMININO +
-                  QUANTIDADE_AGENTES_RECUPERADOS_JOVEM_FEMININO +
+                  QUANTIDADE_AGENTES_SUSCETIVEIS_JOVEM_MASCULINO_LOCAL +
+                  QUANTIDADE_AGENTES_EXPOSTOS_JOVEM_MASCULINO_LOCAL +
+                  QUANTIDADE_AGENTES_INFECTADOS_JOVEM_MASCULINO_LOCAL +
+                  QUANTIDADE_AGENTES_RECUPERADOS_JOVEM_MASCULINO_LOCAL +
+                  
+                  QUANTIDADE_AGENTES_SUSCETIVEIS_JOVEM_MASCULINO_ALEATORIO +
+                  QUANTIDADE_AGENTES_EXPOSTOS_JOVEM_MASCULINO_ALEATORIO +
+                  QUANTIDADE_AGENTES_INFECTADOS_JOVEM_MASCULINO_ALEATORIO +
+                  QUANTIDADE_AGENTES_RECUPERADOS_JOVEM_MASCULINO_ALEATORIO +
+                  
+                  QUANTIDADE_AGENTES_SUSCETIVEIS_JOVEM_MASCULINO_LIVRE +
+                  QUANTIDADE_AGENTES_EXPOSTOS_JOVEM_MASCULINO_LIVRE +
+                  QUANTIDADE_AGENTES_INFECTADOS_JOVEM_MASCULINO_LIVRE +
+                  QUANTIDADE_AGENTES_RECUPERADOS_JOVEM_MASCULINO_LIVRE +
+                  
+                  QUANTIDADE_AGENTES_SUSCETIVEIS_JOVEM_MASCULINO_TRAJETO +
+                  QUANTIDADE_AGENTES_EXPOSTOS_JOVEM_MASCULINO_TRAJETO +
+                  QUANTIDADE_AGENTES_INFECTADOS_JOVEM_MASCULINO_TRAJETO +
+                  QUANTIDADE_AGENTES_RECUPERADOS_JOVEM_MASCULINO_TRAJETO +
+                  
+                  
 
-                  QUANTIDADE_AGENTES_SUSCETIVEIS_ADULTO_MASCULINO +
-                  QUANTIDADE_AGENTES_EXPOSTOS_ADULTO_MASCULINO +
-                  QUANTIDADE_AGENTES_INFECTADOS_ADULTO_MASCULINO +
-                  QUANTIDADE_AGENTES_RECUPERADOS_ADULTO_MASCULINO +
-                  QUANTIDADE_AGENTES_SUSCETIVEIS_ADULTO_FEMININO +
-                  QUANTIDADE_AGENTES_EXPOSTOS_ADULTO_FEMININO +
-                  QUANTIDADE_AGENTES_INFECTADOS_ADULTO_FEMININO +
-                  QUANTIDADE_AGENTES_RECUPERADOS_ADULTO_FEMININO +
+                  QUANTIDADE_AGENTES_SUSCETIVEIS_ADULTO_MASCULINO_LOCAL +
+                  QUANTIDADE_AGENTES_EXPOSTOS_ADULTO_MASCULINO_LOCAL +
+                  QUANTIDADE_AGENTES_INFECTADOS_ADULTO_MASCULINO_LOCAL +
+                  QUANTIDADE_AGENTES_RECUPERADOS_ADULTO_MASCULINO_LOCAL +
+                  
+                  QUANTIDADE_AGENTES_SUSCETIVEIS_ADULTO_MASCULINO_ALEATORIO +
+                  QUANTIDADE_AGENTES_EXPOSTOS_ADULTO_MASCULINO_ALEATORIO +
+                  QUANTIDADE_AGENTES_INFECTADOS_ADULTO_MASCULINO_ALEATORIO +
+                  QUANTIDADE_AGENTES_RECUPERADOS_ADULTO_MASCULINO_ALEATORIO +
+                  
+                  QUANTIDADE_AGENTES_SUSCETIVEIS_ADULTO_MASCULINO_LIVRE +
+                  QUANTIDADE_AGENTES_EXPOSTOS_ADULTO_MASCULINO_LIVRE +
+                  QUANTIDADE_AGENTES_INFECTADOS_ADULTO_MASCULINO_LIVRE +
+                  QUANTIDADE_AGENTES_RECUPERADOS_ADULTO_MASCULINO_LIVRE +
+                  
+                  QUANTIDADE_AGENTES_SUSCETIVEIS_ADULTO_MASCULINO_TRAJETO +
+                  QUANTIDADE_AGENTES_EXPOSTOS_ADULTO_MASCULINO_TRAJETO +
+                  QUANTIDADE_AGENTES_INFECTADOS_ADULTO_MASCULINO_TRAJETO +
+                  QUANTIDADE_AGENTES_RECUPERADOS_ADULTO_MASCULINO_TRAJETO +
+                  
+                  
 
-                  QUANTIDADE_AGENTES_SUSCETIVEIS_IDOSO_MASCULINO +
-                  QUANTIDADE_AGENTES_EXPOSTOS_IDOSO_MASCULINO +
-                  QUANTIDADE_AGENTES_INFECTADOS_IDOSO_MASCULINO +
-                  QUANTIDADE_AGENTES_RECUPERADOS_IDOSO_MASCULINO +
-                  QUANTIDADE_AGENTES_SUSCETIVEIS_IDOSO_FEMININO +
-                  QUANTIDADE_AGENTES_EXPOSTOS_IDOSO_FEMININO +
-                  QUANTIDADE_AGENTES_INFECTADOS_IDOSO_FEMININO +
-                  QUANTIDADE_AGENTES_RECUPERADOS_IDOSO_FEMININO;
+                  QUANTIDADE_AGENTES_SUSCETIVEIS_IDOSO_MASCULINO_LOCAL +
+                  QUANTIDADE_AGENTES_EXPOSTOS_IDOSO_MASCULINO_LOCAL +
+                  QUANTIDADE_AGENTES_INFECTADOS_IDOSO_MASCULINO_LOCAL +
+                  QUANTIDADE_AGENTES_RECUPERADOS_IDOSO_MASCULINO_LOCAL +
+                  
+                  QUANTIDADE_AGENTES_SUSCETIVEIS_IDOSO_MASCULINO_ALEATORIO +
+                  QUANTIDADE_AGENTES_EXPOSTOS_IDOSO_MASCULINO_ALEATORIO +
+                  QUANTIDADE_AGENTES_INFECTADOS_IDOSO_MASCULINO_ALEATORIO +
+                  QUANTIDADE_AGENTES_RECUPERADOS_IDOSO_MASCULINO_ALEATORIO +
+                  
+                  QUANTIDADE_AGENTES_SUSCETIVEIS_IDOSO_MASCULINO_LIVRE +
+                  QUANTIDADE_AGENTES_EXPOSTOS_IDOSO_MASCULINO_LIVRE +
+                  QUANTIDADE_AGENTES_INFECTADOS_IDOSO_MASCULINO_LIVRE +
+                  QUANTIDADE_AGENTES_RECUPERADOS_IDOSO_MASCULINO_LIVRE +
+                  
+                  QUANTIDADE_AGENTES_SUSCETIVEIS_IDOSO_MASCULINO_TRAJETO +
+                  QUANTIDADE_AGENTES_EXPOSTOS_IDOSO_MASCULINO_TRAJETO +
+                  QUANTIDADE_AGENTES_INFECTADOS_IDOSO_MASCULINO_TRAJETO +
+                  QUANTIDADE_AGENTES_RECUPERADOS_IDOSO_MASCULINO_TRAJETO +
+                  
+                  
+                  
+                  
+                  
+                  QUANTIDADE_AGENTES_SUSCETIVEIS_CRIANCA_FEMININO_LOCAL +
+                  QUANTIDADE_AGENTES_EXPOSTOS_CRIANCA_FEMININO_LOCAL +
+                  QUANTIDADE_AGENTES_INFECTADOS_CRIANCA_FEMININO_LOCAL +
+                  QUANTIDADE_AGENTES_RECUPERADOS_CRIANCA_FEMININO_LOCAL +
+                  
+                  QUANTIDADE_AGENTES_SUSCETIVEIS_CRIANCA_FEMININO_ALEATORIO +
+                  QUANTIDADE_AGENTES_EXPOSTOS_CRIANCA_FEMININO_ALEATORIO +
+                  QUANTIDADE_AGENTES_INFECTADOS_CRIANCA_FEMININO_ALEATORIO +
+                  QUANTIDADE_AGENTES_RECUPERADOS_CRIANCA_FEMININO_ALEATORIO +
+                  
+                  QUANTIDADE_AGENTES_SUSCETIVEIS_CRIANCA_FEMININO_LIVRE +
+                  QUANTIDADE_AGENTES_EXPOSTOS_CRIANCA_FEMININO_LIVRE +
+                  QUANTIDADE_AGENTES_INFECTADOS_CRIANCA_FEMININO_LIVRE +
+                  QUANTIDADE_AGENTES_RECUPERADOS_CRIANCA_FEMININO_LIVRE +
+                  
+                  QUANTIDADE_AGENTES_SUSCETIVEIS_CRIANCA_FEMININO_TRAJETO +
+                  QUANTIDADE_AGENTES_EXPOSTOS_CRIANCA_FEMININO_TRAJETO +
+                  QUANTIDADE_AGENTES_INFECTADOS_CRIANCA_FEMININO_TRAJETO +
+                  QUANTIDADE_AGENTES_RECUPERADOS_CRIANCA_FEMININO_TRAJETO +
+                  
+                  
+                  
+                  QUANTIDADE_AGENTES_SUSCETIVEIS_JOVEM_FEMININO_LOCAL +
+                  QUANTIDADE_AGENTES_EXPOSTOS_JOVEM_FEMININO_LOCAL +
+                  QUANTIDADE_AGENTES_INFECTADOS_JOVEM_FEMININO_LOCAL +
+                  QUANTIDADE_AGENTES_RECUPERADOS_JOVEM_FEMININO_LOCAL +
+                  
+                  QUANTIDADE_AGENTES_SUSCETIVEIS_JOVEM_FEMININO_ALEATORIO +
+                  QUANTIDADE_AGENTES_EXPOSTOS_JOVEM_FEMININO_ALEATORIO +
+                  QUANTIDADE_AGENTES_INFECTADOS_JOVEM_FEMININO_ALEATORIO +
+                  QUANTIDADE_AGENTES_RECUPERADOS_JOVEM_FEMININO_ALEATORIO +
+                  
+                  QUANTIDADE_AGENTES_SUSCETIVEIS_JOVEM_FEMININO_LIVRE +
+                  QUANTIDADE_AGENTES_EXPOSTOS_JOVEM_FEMININO_LIVRE +
+                  QUANTIDADE_AGENTES_INFECTADOS_JOVEM_FEMININO_LIVRE +
+                  QUANTIDADE_AGENTES_RECUPERADOS_JOVEM_FEMININO_LIVRE +
+                  
+                  QUANTIDADE_AGENTES_SUSCETIVEIS_JOVEM_FEMININO_TRAJETO +
+                  QUANTIDADE_AGENTES_EXPOSTOS_JOVEM_FEMININO_TRAJETO +
+                  QUANTIDADE_AGENTES_INFECTADOS_JOVEM_FEMININO_TRAJETO +
+                  QUANTIDADE_AGENTES_RECUPERADOS_JOVEM_FEMININO_TRAJETO +
+                  
+                  
+                  
+                  QUANTIDADE_AGENTES_SUSCETIVEIS_ADULTO_FEMININO_LOCAL +
+                  QUANTIDADE_AGENTES_EXPOSTOS_ADULTO_FEMININO_LOCAL +
+                  QUANTIDADE_AGENTES_INFECTADOS_ADULTO_FEMININO_LOCAL +
+                  QUANTIDADE_AGENTES_RECUPERADOS_ADULTO_FEMININO_LOCAL +
+                  
+                  QUANTIDADE_AGENTES_SUSCETIVEIS_ADULTO_FEMININO_ALEATORIO +
+                  QUANTIDADE_AGENTES_EXPOSTOS_ADULTO_FEMININO_ALEATORIO +
+                  QUANTIDADE_AGENTES_INFECTADOS_ADULTO_FEMININO_ALEATORIO +
+                  QUANTIDADE_AGENTES_RECUPERADOS_ADULTO_FEMININO_ALEATORIO +
+                  
+                  QUANTIDADE_AGENTES_SUSCETIVEIS_ADULTO_FEMININO_LIVRE +
+                  QUANTIDADE_AGENTES_EXPOSTOS_ADULTO_FEMININO_LIVRE +
+                  QUANTIDADE_AGENTES_INFECTADOS_ADULTO_FEMININO_LIVRE +
+                  QUANTIDADE_AGENTES_RECUPERADOS_ADULTO_FEMININO_LIVRE +
+                  
+                  QUANTIDADE_AGENTES_SUSCETIVEIS_ADULTO_FEMININO_TRAJETO +
+                  QUANTIDADE_AGENTES_EXPOSTOS_ADULTO_FEMININO_TRAJETO +
+                  QUANTIDADE_AGENTES_INFECTADOS_ADULTO_FEMININO_TRAJETO +
+                  QUANTIDADE_AGENTES_RECUPERADOS_ADULTO_FEMININO_TRAJETO +
+                  
+                  
+                  
+                  QUANTIDADE_AGENTES_SUSCETIVEIS_IDOSO_FEMININO_LOCAL +
+                  QUANTIDADE_AGENTES_EXPOSTOS_IDOSO_FEMININO_LOCAL +
+                  QUANTIDADE_AGENTES_INFECTADOS_IDOSO_FEMININO_LOCAL +
+                  QUANTIDADE_AGENTES_RECUPERADOS_IDOSO_FEMININO_LOCAL +
+                  
+                  QUANTIDADE_AGENTES_SUSCETIVEIS_IDOSO_FEMININO_ALEATORIO +
+                  QUANTIDADE_AGENTES_EXPOSTOS_IDOSO_FEMININO_ALEATORIO +
+                  QUANTIDADE_AGENTES_INFECTADOS_IDOSO_FEMININO_ALEATORIO +
+                  QUANTIDADE_AGENTES_RECUPERADOS_IDOSO_FEMININO_ALEATORIO +
+                  
+                  QUANTIDADE_AGENTES_SUSCETIVEIS_IDOSO_FEMININO_LIVRE +
+                  QUANTIDADE_AGENTES_EXPOSTOS_IDOSO_FEMININO_LIVRE +
+                  QUANTIDADE_AGENTES_INFECTADOS_IDOSO_FEMININO_LIVRE +
+                  QUANTIDADE_AGENTES_RECUPERADOS_IDOSO_FEMININO_LIVRE +
+                  
+                  QUANTIDADE_AGENTES_SUSCETIVEIS_IDOSO_FEMININO_TRAJETO +
+                  QUANTIDADE_AGENTES_EXPOSTOS_IDOSO_FEMININO_TRAJETO +
+                  QUANTIDADE_AGENTES_INFECTADOS_IDOSO_FEMININO_TRAJETO +
+                  QUANTIDADE_AGENTES_RECUPERADOS_IDOSO_FEMININO_TRAJETO;
+  
   return quantAgentes;
 }
 }
@@ -364,35 +1020,35 @@ CABECALHO_SAIDAS_QUANTIDADES {
     if (GET_S(id) == MASCULINO) {
       switch (GET_I(id)) {
       case CRIANCA: {
-        ATOMIC_ADD_TOTAL(ciclo, 0);
+        ATOMIC_ADD_TOTAL(ciclo, 0, GET_E(id));
       } break;
       case JOVEM: {
-        ATOMIC_ADD_TOTAL(ciclo, 4);
+        ATOMIC_ADD_TOTAL(ciclo, 4, GET_E(id));
       } break;
       case ADULTO: {
-        ATOMIC_ADD_TOTAL(ciclo, 8);
+        ATOMIC_ADD_TOTAL(ciclo, 8, GET_E(id));
       } break;
       case IDOSO: {
-        ATOMIC_ADD_TOTAL(ciclo, 12);
+        ATOMIC_ADD_TOTAL(ciclo, 12, GET_E(id));
       } break;
       }
     } else {
       switch (GET_I(id)) {
       case CRIANCA: {
-        ATOMIC_ADD_TOTAL(ciclo, 16);
+        ATOMIC_ADD_TOTAL(ciclo, 16, GET_E(id));
       } break;
       case JOVEM: {
-        ATOMIC_ADD_TOTAL(ciclo, 20);
+        ATOMIC_ADD_TOTAL(ciclo, 20, GET_E(id));
       } break;
       case ADULTO: {
-        ATOMIC_ADD_TOTAL(ciclo, 24);
+        ATOMIC_ADD_TOTAL(ciclo, 24, GET_E(id));
       } break;
       case IDOSO: {
-        ATOMIC_ADD_TOTAL(ciclo, 28);
+        ATOMIC_ADD_TOTAL(ciclo, 28, GET_E(id));
       } break;
       }
     }
-    ATOMIC_ADD_TOTAL(ciclo, 32);
+    ATOMIC_ADD_TOTAL(ciclo, 32, 0);
   }
 }
 
@@ -403,35 +1059,35 @@ CABECALHO_SAIDAS_QUANTIDADES {
     if (GET_S(id) == MASCULINO) {
       switch (GET_I(id)) {
       case CRIANCA: {
-        ATOMIC_ADD_QUADRAS(ciclo, 0);
+        ATOMIC_ADD_QUADRAS(ciclo, 0, GET_E(id));
       } break;
       case JOVEM: {
-        ATOMIC_ADD_QUADRAS(ciclo, 4);
+        ATOMIC_ADD_QUADRAS(ciclo, 4, GET_E(id));
       } break;
       case ADULTO: {
-        ATOMIC_ADD_QUADRAS(ciclo, 8);
+        ATOMIC_ADD_QUADRAS(ciclo, 8, GET_E(id));
       } break;
       case IDOSO: {
-        ATOMIC_ADD_QUADRAS(ciclo, 12);
+        ATOMIC_ADD_QUADRAS(ciclo, 12, GET_E(id));
       } break;
       }
     } else {
       switch (GET_I(id)) {
       case CRIANCA: {
-        ATOMIC_ADD_QUADRAS(ciclo, 16);
+        ATOMIC_ADD_QUADRAS(ciclo, 16, GET_E(id));
       } break;
       case JOVEM: {
-        ATOMIC_ADD_QUADRAS(ciclo, 20);
+        ATOMIC_ADD_QUADRAS(ciclo, 20, GET_E(id));
       } break;
       case ADULTO: {
-        ATOMIC_ADD_QUADRAS(ciclo, 24);
+        ATOMIC_ADD_QUADRAS(ciclo, 24, GET_E(id));
       } break;
       case IDOSO: {
-        ATOMIC_ADD_QUADRAS(ciclo, 28);
+        ATOMIC_ADD_QUADRAS(ciclo, 28, GET_E(id));
       } break;
       }
     }
-    ATOMIC_ADD_QUADRAS(ciclo, 32);
+    ATOMIC_ADD_QUADRAS(ciclo, 32, 0);
   }
 }
 
@@ -1368,7 +2024,7 @@ MARCADOR_DEVICE void movimentacaoTrajeto(int id, void *seeds, TIPO_AGENTE *agent
             } else {
               // Procura um ponto central de esquina que pertença a próxima
               // rua da rota atual
-              int pontoCentral;
+              int pontoCentral = 0;
               for (int i = indexCentrosEsquinas[l];
                    i < indexCentrosEsquinas[l + 1]; i += 3) {
                 if (centrosEsquinas[i + 2] ==

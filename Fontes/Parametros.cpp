@@ -1,97 +1,225 @@
 #ifndef __PARAMETROS__
 #define __PARAMETROS__
 
-#define QUANTIDADE_PARAMETROS_GERAIS 54
+#define QUANTIDADE_PARAMETROS_GERAIS 150
 #define ENTRE_FAIXA(min, max, percentual)                                      \
   ((min) + ((max) - (min)) * (percentual))
 
 #define QUANTIDADE_SIMULACOES (int)(parametros[0])
 #define NUMERO_CICLOS_SIMULACAO (int)(parametros[2])
 
-#define QUANTIDADE_AGENTES_SUSCETIVEIS_CRIANCA_MASCULINO (int)(parametros[4])
-#define QUANTIDADE_AGENTES_EXPOSTOS_CRIANCA_MASCULINO (int)(parametros[6])
-#define QUANTIDADE_AGENTES_INFECTADOS_CRIANCA_MASCULINO (int)(parametros[8])
-#define QUANTIDADE_AGENTES_RECUPERADOS_CRIANCA_MASCULINO (int)(parametros[10])
+#define QUANTIDADE_AGENTES_SUSCETIVEIS_CRIANCA_MASCULINO_LOCAL (int)(parametros[4])
+#define QUANTIDADE_AGENTES_EXPOSTOS_CRIANCA_MASCULINO_LOCAL (int)(parametros[6])
+#define QUANTIDADE_AGENTES_INFECTADOS_CRIANCA_MASCULINO_LOCAL (int)(parametros[8])
+#define QUANTIDADE_AGENTES_RECUPERADOS_CRIANCA_MASCULINO_LOCAL (int)(parametros[10])
 
-#define QUANTIDADE_AGENTES_SUSCETIVEIS_CRIANCA_FEMININO (int)(parametros[12])
-#define QUANTIDADE_AGENTES_EXPOSTOS_CRIANCA_FEMININO (int)(parametros[14])
-#define QUANTIDADE_AGENTES_INFECTADOS_CRIANCA_FEMININO (int)(parametros[16])
-#define QUANTIDADE_AGENTES_RECUPERADOS_CRIANCA_FEMININO (int)(parametros[18])
+#define QUANTIDADE_AGENTES_SUSCETIVEIS_CRIANCA_MASCULINO_ALEATORIO (int)(parametros[12])
+#define QUANTIDADE_AGENTES_EXPOSTOS_CRIANCA_MASCULINO_ALEATORIO (int)(parametros[14])
+#define QUANTIDADE_AGENTES_INFECTADOS_CRIANCA_MASCULINO_ALEATORIO (int)(parametros[16])
+#define QUANTIDADE_AGENTES_RECUPERADOS_CRIANCA_MASCULINO_ALEATORIO (int)(parametros[18])
 
-#define QUANTIDADE_AGENTES_SUSCETIVEIS_JOVEM_MASCULINO (int)(parametros[20])
-#define QUANTIDADE_AGENTES_EXPOSTOS_JOVEM_MASCULINO (int)(parametros[22])
-#define QUANTIDADE_AGENTES_INFECTADOS_JOVEM_MASCULINO (int)(parametros[24])
-#define QUANTIDADE_AGENTES_RECUPERADOS_JOVEM_MASCULINO (int)(parametros[26])
+#define QUANTIDADE_AGENTES_SUSCETIVEIS_CRIANCA_MASCULINO_LIVRE (int)(parametros[20])
+#define QUANTIDADE_AGENTES_EXPOSTOS_CRIANCA_MASCULINO_LIVRE (int)(parametros[22])
+#define QUANTIDADE_AGENTES_INFECTADOS_CRIANCA_MASCULINO_LIVRE (int)(parametros[24])
+#define QUANTIDADE_AGENTES_RECUPERADOS_CRIANCA_MASCULINO_LIVRE (int)(parametros[26])
 
-#define QUANTIDADE_AGENTES_SUSCETIVEIS_JOVEM_FEMININO (int)(parametros[28])
-#define QUANTIDADE_AGENTES_EXPOSTOS_JOVEM_FEMININO (int)(parametros[30])
-#define QUANTIDADE_AGENTES_INFECTADOS_JOVEM_FEMININO (int)(parametros[32])
-#define QUANTIDADE_AGENTES_RECUPERADOS_JOVEM_FEMININO (int)(parametros[34])
+#define QUANTIDADE_AGENTES_SUSCETIVEIS_CRIANCA_MASCULINO_TRAJETO (int)(parametros[28])
+#define QUANTIDADE_AGENTES_EXPOSTOS_CRIANCA_MASCULINO_TRAJETO (int)(parametros[30])
+#define QUANTIDADE_AGENTES_INFECTADOS_CRIANCA_MASCULINO_TRAJETO (int)(parametros[32])
+#define QUANTIDADE_AGENTES_RECUPERADOS_CRIANCA_MASCULINO_TRAJETO (int)(parametros[34])
 
-#define QUANTIDADE_AGENTES_SUSCETIVEIS_ADULTO_MASCULINO (int)(parametros[36])
-#define QUANTIDADE_AGENTES_EXPOSTOS_ADULTO_MASCULINO (int)(parametros[38])
-#define QUANTIDADE_AGENTES_INFECTADOS_ADULTO_MASCULINO (int)(parametros[40])
-#define QUANTIDADE_AGENTES_RECUPERADOS_ADULTO_MASCULINO (int)(parametros[42])
 
-#define QUANTIDADE_AGENTES_SUSCETIVEIS_ADULTO_FEMININO (int)(parametros[44])
-#define QUANTIDADE_AGENTES_EXPOSTOS_ADULTO_FEMININO (int)(parametros[46])
-#define QUANTIDADE_AGENTES_INFECTADOS_ADULTO_FEMININO (int)(parametros[48])
-#define QUANTIDADE_AGENTES_RECUPERADOS_ADULTO_FEMININO (int)(parametros[50])
+#define QUANTIDADE_AGENTES_SUSCETIVEIS_JOVEM_MASCULINO_LOCAL (int)(parametros[36])
+#define QUANTIDADE_AGENTES_EXPOSTOS_JOVEM_MASCULINO_LOCAL (int)(parametros[38])
+#define QUANTIDADE_AGENTES_INFECTADOS_JOVEM_MASCULINO_LOCAL (int)(parametros[40])
+#define QUANTIDADE_AGENTES_RECUPERADOS_JOVEM_MASCULINO_LOCAL (int)(parametros[42])
 
-#define QUANTIDADE_AGENTES_SUSCETIVEIS_IDOSO_MASCULINO (int)(parametros[52])
-#define QUANTIDADE_AGENTES_EXPOSTOS_IDOSO_MASCULINO (int)(parametros[54])
-#define QUANTIDADE_AGENTES_INFECTADOS_IDOSO_MASCULINO (int)(parametros[56])
-#define QUANTIDADE_AGENTES_RECUPERADOS_IDOSO_MASCULINO (int)(parametros[58])
+#define QUANTIDADE_AGENTES_SUSCETIVEIS_JOVEM_MASCULINO_ALEATORIO (int)(parametros[44])
+#define QUANTIDADE_AGENTES_EXPOSTOS_JOVEM_MASCULINO_ALEATORIO (int)(parametros[46])
+#define QUANTIDADE_AGENTES_INFECTADOS_JOVEM_MASCULINO_ALEATORIO (int)(parametros[48])
+#define QUANTIDADE_AGENTES_RECUPERADOS_JOVEM_MASCULINO_ALEATORIO (int)(parametros[50])
 
-#define QUANTIDADE_AGENTES_SUSCETIVEIS_IDOSO_FEMININO (int)(parametros[60])
-#define QUANTIDADE_AGENTES_EXPOSTOS_IDOSO_FEMININO (int)(parametros[62])
-#define QUANTIDADE_AGENTES_INFECTADOS_IDOSO_FEMININO (int)(parametros[64])
-#define QUANTIDADE_AGENTES_RECUPERADOS_IDOSO_FEMININO (int)(parametros[66])
+#define QUANTIDADE_AGENTES_SUSCETIVEIS_JOVEM_MASCULINO_LIVRE (int)(parametros[52])
+#define QUANTIDADE_AGENTES_EXPOSTOS_JOVEM_MASCULINO_LIVRE (int)(parametros[54])
+#define QUANTIDADE_AGENTES_INFECTADOS_JOVEM_MASCULINO_LIVRE (int)(parametros[56])
+#define QUANTIDADE_AGENTES_RECUPERADOS_JOVEM_MASCULINO_LIVRE (int)(parametros[58])
+
+#define QUANTIDADE_AGENTES_SUSCETIVEIS_JOVEM_MASCULINO_TRAJETO (int)(parametros[60])
+#define QUANTIDADE_AGENTES_EXPOSTOS_JOVEM_MASCULINO_TRAJETO (int)(parametros[62])
+#define QUANTIDADE_AGENTES_INFECTADOS_JOVEM_MASCULINO_TRAJETO (int)(parametros[64])
+#define QUANTIDADE_AGENTES_RECUPERADOS_JOVEM_MASCULINO_TRAJETO (int)(parametros[66])
+
+
+#define QUANTIDADE_AGENTES_SUSCETIVEIS_ADULTO_MASCULINO_LOCAL (int)(parametros[68])
+#define QUANTIDADE_AGENTES_EXPOSTOS_ADULTO_MASCULINO_LOCAL (int)(parametros[70])
+#define QUANTIDADE_AGENTES_INFECTADOS_ADULTO_MASCULINO_LOCAL (int)(parametros[72])
+#define QUANTIDADE_AGENTES_RECUPERADOS_ADULTO_MASCULINO_LOCAL (int)(parametros[74])
+
+#define QUANTIDADE_AGENTES_SUSCETIVEIS_ADULTO_MASCULINO_ALEATORIO (int)(parametros[76])
+#define QUANTIDADE_AGENTES_EXPOSTOS_ADULTO_MASCULINO_ALEATORIO (int)(parametros[78])
+#define QUANTIDADE_AGENTES_INFECTADOS_ADULTO_MASCULINO_ALEATORIO (int)(parametros[80])
+#define QUANTIDADE_AGENTES_RECUPERADOS_ADULTO_MASCULINO_ALEATORIO (int)(parametros[82])
+
+#define QUANTIDADE_AGENTES_SUSCETIVEIS_ADULTO_MASCULINO_LIVRE (int)(parametros[84])
+#define QUANTIDADE_AGENTES_EXPOSTOS_ADULTO_MASCULINO_LIVRE (int)(parametros[86])
+#define QUANTIDADE_AGENTES_INFECTADOS_ADULTO_MASCULINO_LIVRE (int)(parametros[88])
+#define QUANTIDADE_AGENTES_RECUPERADOS_ADULTO_MASCULINO_LIVRE (int)(parametros[90])
+
+#define QUANTIDADE_AGENTES_SUSCETIVEIS_ADULTO_MASCULINO_TRAJETO (int)(parametros[92])
+#define QUANTIDADE_AGENTES_EXPOSTOS_ADULTO_MASCULINO_TRAJETO (int)(parametros[94])
+#define QUANTIDADE_AGENTES_INFECTADOS_ADULTO_MASCULINO_TRAJETO (int)(parametros[96])
+#define QUANTIDADE_AGENTES_RECUPERADOS_ADULTO_MASCULINO_TRAJETO (int)(parametros[98])
+
+
+#define QUANTIDADE_AGENTES_SUSCETIVEIS_IDOSO_MASCULINO_LOCAL (int)(parametros[100])
+#define QUANTIDADE_AGENTES_EXPOSTOS_IDOSO_MASCULINO_LOCAL (int)(parametros[102])
+#define QUANTIDADE_AGENTES_INFECTADOS_IDOSO_MASCULINO_LOCAL (int)(parametros[104])
+#define QUANTIDADE_AGENTES_RECUPERADOS_IDOSO_MASCULINO_LOCAL (int)(parametros[106])
+
+#define QUANTIDADE_AGENTES_SUSCETIVEIS_IDOSO_MASCULINO_ALEATORIO (int)(parametros[108])
+#define QUANTIDADE_AGENTES_EXPOSTOS_IDOSO_MASCULINO_ALEATORIO (int)(parametros[110])
+#define QUANTIDADE_AGENTES_INFECTADOS_IDOSO_MASCULINO_ALEATORIO (int)(parametros[112])
+#define QUANTIDADE_AGENTES_RECUPERADOS_IDOSO_MASCULINO_ALEATORIO (int)(parametros[114])
+
+#define QUANTIDADE_AGENTES_SUSCETIVEIS_IDOSO_MASCULINO_LIVRE (int)(parametros[116])
+#define QUANTIDADE_AGENTES_EXPOSTOS_IDOSO_MASCULINO_LIVRE (int)(parametros[118])
+#define QUANTIDADE_AGENTES_INFECTADOS_IDOSO_MASCULINO_LIVRE (int)(parametros[120])
+#define QUANTIDADE_AGENTES_RECUPERADOS_IDOSO_MASCULINO_LIVRE (int)(parametros[122])
+
+#define QUANTIDADE_AGENTES_SUSCETIVEIS_IDOSO_MASCULINO_TRAJETO (int)(parametros[124])
+#define QUANTIDADE_AGENTES_EXPOSTOS_IDOSO_MASCULINO_TRAJETO (int)(parametros[126])
+#define QUANTIDADE_AGENTES_INFECTADOS_IDOSO_MASCULINO_TRAJETO (int)(parametros[128])
+#define QUANTIDADE_AGENTES_RECUPERADOS_IDOSO_MASCULINO_TRAJETO (int)(parametros[130])
+
+
+#define QUANTIDADE_AGENTES_SUSCETIVEIS_CRIANCA_FEMININO_LOCAL (int)(parametros[132])
+#define QUANTIDADE_AGENTES_EXPOSTOS_CRIANCA_FEMININO_LOCAL (int)(parametros[134])
+#define QUANTIDADE_AGENTES_INFECTADOS_CRIANCA_FEMININO_LOCAL (int)(parametros[136])
+#define QUANTIDADE_AGENTES_RECUPERADOS_CRIANCA_FEMININO_LOCAL (int)(parametros[138])
+
+#define QUANTIDADE_AGENTES_SUSCETIVEIS_CRIANCA_FEMININO_ALEATORIO (int)(parametros[140])
+#define QUANTIDADE_AGENTES_EXPOSTOS_CRIANCA_FEMININO_ALEATORIO (int)(parametros[142])
+#define QUANTIDADE_AGENTES_INFECTADOS_CRIANCA_FEMININO_ALEATORIO (int)(parametros[144])
+#define QUANTIDADE_AGENTES_RECUPERADOS_CRIANCA_FEMININO_ALEATORIO (int)(parametros[146])
+
+#define QUANTIDADE_AGENTES_SUSCETIVEIS_CRIANCA_FEMININO_LIVRE (int)(parametros[148])
+#define QUANTIDADE_AGENTES_EXPOSTOS_CRIANCA_FEMININO_LIVRE (int)(parametros[150])
+#define QUANTIDADE_AGENTES_INFECTADOS_CRIANCA_FEMININO_LIVRE (int)(parametros[152])
+#define QUANTIDADE_AGENTES_RECUPERADOS_CRIANCA_FEMININO_LIVRE (int)(parametros[154])
+
+#define QUANTIDADE_AGENTES_SUSCETIVEIS_CRIANCA_FEMININO_TRAJETO (int)(parametros[156])
+#define QUANTIDADE_AGENTES_EXPOSTOS_CRIANCA_FEMININO_TRAJETO (int)(parametros[158])
+#define QUANTIDADE_AGENTES_INFECTADOS_CRIANCA_FEMININO_TRAJETO (int)(parametros[160])
+#define QUANTIDADE_AGENTES_RECUPERADOS_CRIANCA_FEMININO_TRAJETO (int)(parametros[162])
+
+
+#define QUANTIDADE_AGENTES_SUSCETIVEIS_JOVEM_FEMININO_LOCAL (int)(parametros[164])
+#define QUANTIDADE_AGENTES_EXPOSTOS_JOVEM_FEMININO_LOCAL (int)(parametros[166])
+#define QUANTIDADE_AGENTES_INFECTADOS_JOVEM_FEMININO_LOCAL (int)(parametros[168])
+#define QUANTIDADE_AGENTES_RECUPERADOS_JOVEM_FEMININO_LOCAL (int)(parametros[170])
+
+#define QUANTIDADE_AGENTES_SUSCETIVEIS_JOVEM_FEMININO_ALEATORIO (int)(parametros[172])
+#define QUANTIDADE_AGENTES_EXPOSTOS_JOVEM_FEMININO_ALEATORIO (int)(parametros[174])
+#define QUANTIDADE_AGENTES_INFECTADOS_JOVEM_FEMININO_ALEATORIO (int)(parametros[176])
+#define QUANTIDADE_AGENTES_RECUPERADOS_JOVEM_FEMININO_ALEATORIO (int)(parametros[178])
+
+#define QUANTIDADE_AGENTES_SUSCETIVEIS_JOVEM_FEMININO_LIVRE (int)(parametros[180])
+#define QUANTIDADE_AGENTES_EXPOSTOS_JOVEM_FEMININO_LIVRE (int)(parametros[182])
+#define QUANTIDADE_AGENTES_INFECTADOS_JOVEM_FEMININO_LIVRE (int)(parametros[184])
+#define QUANTIDADE_AGENTES_RECUPERADOS_JOVEM_FEMININO_LIVRE (int)(parametros[186])
+
+#define QUANTIDADE_AGENTES_SUSCETIVEIS_JOVEM_FEMININO_TRAJETO (int)(parametros[188])
+#define QUANTIDADE_AGENTES_EXPOSTOS_JOVEM_FEMININO_TRAJETO (int)(parametros[190])
+#define QUANTIDADE_AGENTES_INFECTADOS_JOVEM_FEMININO_TRAJETO (int)(parametros[192])
+#define QUANTIDADE_AGENTES_RECUPERADOS_JOVEM_FEMININO_TRAJETO (int)(parametros[194])
+
+
+#define QUANTIDADE_AGENTES_SUSCETIVEIS_ADULTO_FEMININO_LOCAL (int)(parametros[196])
+#define QUANTIDADE_AGENTES_EXPOSTOS_ADULTO_FEMININO_LOCAL (int)(parametros[198])
+#define QUANTIDADE_AGENTES_INFECTADOS_ADULTO_FEMININO_LOCAL (int)(parametros[200])
+#define QUANTIDADE_AGENTES_RECUPERADOS_ADULTO_FEMININO_LOCAL (int)(parametros[202])
+
+#define QUANTIDADE_AGENTES_SUSCETIVEIS_ADULTO_FEMININO_ALEATORIO (int)(parametros[204])
+#define QUANTIDADE_AGENTES_EXPOSTOS_ADULTO_FEMININO_ALEATORIO (int)(parametros[206])
+#define QUANTIDADE_AGENTES_INFECTADOS_ADULTO_FEMININO_ALEATORIO (int)(parametros[208])
+#define QUANTIDADE_AGENTES_RECUPERADOS_ADULTO_FEMININO_ALEATORIO (int)(parametros[210])
+
+#define QUANTIDADE_AGENTES_SUSCETIVEIS_ADULTO_FEMININO_LIVRE (int)(parametros[212])
+#define QUANTIDADE_AGENTES_EXPOSTOS_ADULTO_FEMININO_LIVRE (int)(parametros[214])
+#define QUANTIDADE_AGENTES_INFECTADOS_ADULTO_FEMININO_LIVRE (int)(parametros[216])
+#define QUANTIDADE_AGENTES_RECUPERADOS_ADULTO_FEMININO_LIVRE (int)(parametros[218])
+
+#define QUANTIDADE_AGENTES_SUSCETIVEIS_ADULTO_FEMININO_TRAJETO (int)(parametros[220])
+#define QUANTIDADE_AGENTES_EXPOSTOS_ADULTO_FEMININO_TRAJETO (int)(parametros[222])
+#define QUANTIDADE_AGENTES_INFECTADOS_ADULTO_FEMININO_TRAJETO (int)(parametros[224])
+#define QUANTIDADE_AGENTES_RECUPERADOS_ADULTO_FEMININO_TRAJETO (int)(parametros[226])
+
+
+#define QUANTIDADE_AGENTES_SUSCETIVEIS_IDOSO_FEMININO_LOCAL (int)(parametros[228])
+#define QUANTIDADE_AGENTES_EXPOSTOS_IDOSO_FEMININO_LOCAL (int)(parametros[230])
+#define QUANTIDADE_AGENTES_INFECTADOS_IDOSO_FEMININO_LOCAL (int)(parametros[232])
+#define QUANTIDADE_AGENTES_RECUPERADOS_IDOSO_FEMININO_LOCAL (int)(parametros[234])
+
+#define QUANTIDADE_AGENTES_SUSCETIVEIS_IDOSO_FEMININO_ALEATORIO (int)(parametros[236])
+#define QUANTIDADE_AGENTES_EXPOSTOS_IDOSO_FEMININO_ALEATORIO (int)(parametros[238])
+#define QUANTIDADE_AGENTES_INFECTADOS_IDOSO_FEMININO_ALEATORIO (int)(parametros[240])
+#define QUANTIDADE_AGENTES_RECUPERADOS_IDOSO_FEMININO_ALEATORIO (int)(parametros[242])
+
+#define QUANTIDADE_AGENTES_SUSCETIVEIS_IDOSO_FEMININO_LIVRE (int)(parametros[244])
+#define QUANTIDADE_AGENTES_EXPOSTOS_IDOSO_FEMININO_LIVRE (int)(parametros[246])
+#define QUANTIDADE_AGENTES_INFECTADOS_IDOSO_FEMININO_LIVRE (int)(parametros[248])
+#define QUANTIDADE_AGENTES_RECUPERADOS_IDOSO_FEMININO_LIVRE (int)(parametros[250])
+
+#define QUANTIDADE_AGENTES_SUSCETIVEIS_IDOSO_FEMININO_TRAJETO (int)(parametros[252])
+#define QUANTIDADE_AGENTES_EXPOSTOS_IDOSO_FEMININO_TRAJETO (int)(parametros[254])
+#define QUANTIDADE_AGENTES_INFECTADOS_IDOSO_FEMININO_TRAJETO (int)(parametros[256])
+#define QUANTIDADE_AGENTES_RECUPERADOS_IDOSO_FEMININO_TRAJETO (int)(parametros[258])
+
 
 #define TAXA_INFECCAO_CRIANCA(percentual)                                      \
-  (double)(ENTRE_FAIXA(parametros[68], parametros[69], (percentual)))
+  (double)(ENTRE_FAIXA(parametros[260], parametros[261], (percentual)))
 #define PERIODO_EXPOSTO_CRIANCA(percentual)                                    \
-  (int)(ENTRE_FAIXA(parametros[70], parametros[71], (percentual)))
+  (int)(ENTRE_FAIXA(parametros[262], parametros[263], (percentual)))
 #define PERIODO_INFECTADO_CRIANCA(percentual)                                  \
-  (int)(ENTRE_FAIXA(parametros[72], parametros[73], (percentual)))
+  (int)(ENTRE_FAIXA(parametros[264], parametros[265], (percentual)))
 #define PERIODO_RECUPERADO_CRIANCA(percentual)                                 \
-  (int)(ENTRE_FAIXA(parametros[74], parametros[75], (percentual)))
+  (int)(ENTRE_FAIXA(parametros[266], parametros[267], (percentual)))
 
 #define TAXA_INFECCAO_JOVEM(percentual)                                        \
-  (double)(ENTRE_FAIXA(parametros[76], parametros[77], (percentual)))
+  (double)(ENTRE_FAIXA(parametros[268], parametros[269], (percentual)))
 #define PERIODO_EXPOSTO_JOVEM(percentual)                                      \
-  (int)(ENTRE_FAIXA(parametros[78], parametros[79], (percentual)))
+  (int)(ENTRE_FAIXA(parametros[270], parametros[271], (percentual)))
 #define PERIODO_INFECTADO_JOVEM(percentual)                                    \
-  (int)(ENTRE_FAIXA(parametros[80], parametros[81], (percentual)))
+  (int)(ENTRE_FAIXA(parametros[272], parametros[273], (percentual)))
 #define PERIODO_RECUPERADO_JOVEM(percentual)                                   \
-  (int)(ENTRE_FAIXA(parametros[82], parametros[83], (percentual)))
+  (int)(ENTRE_FAIXA(parametros[274], parametros[275], (percentual)))
 
 #define TAXA_INFECCAO_ADULTO(percentual)                                       \
-  (double)(ENTRE_FAIXA(parametros[84], parametros[85], (percentual)))
+  (double)(ENTRE_FAIXA(parametros[276], parametros[277], (percentual)))
 #define PERIODO_EXPOSTO_ADULTO(percentual)                                     \
-  (int)(ENTRE_FAIXA(parametros[86], parametros[87], (percentual)))
+  (int)(ENTRE_FAIXA(parametros[278], parametros[279], (percentual)))
 #define PERIODO_INFECTADO_ADULTO(percentual)                                   \
-  (int)(ENTRE_FAIXA(parametros[88], parametros[89], (percentual)))
+  (int)(ENTRE_FAIXA(parametros[280], parametros[281], (percentual)))
 #define PERIODO_RECUPERADO_ADULTO(percentual)                                  \
-  (int)(ENTRE_FAIXA(parametros[90], parametros[91], (percentual)))
+  (int)(ENTRE_FAIXA(parametros[282], parametros[283], (percentual)))
 
 #define TAXA_INFECCAO_IDOSO(percentual)                                        \
-  (double)(ENTRE_FAIXA(parametros[92], parametros[93], (percentual)))
+  (double)(ENTRE_FAIXA(parametros[284], parametros[285], (percentual)))
 #define PERIODO_EXPOSTO_IDOSO(percentual)                                      \
-  (int)(ENTRE_FAIXA(parametros[94], parametros[95], (percentual)))
+  (int)(ENTRE_FAIXA(parametros[286], parametros[287], (percentual)))
 #define PERIODO_INFECTADO_IDOSO(percentual)                                    \
-  (int)(ENTRE_FAIXA(parametros[96], parametros[97], (percentual)))
+  (int)(ENTRE_FAIXA(parametros[288], parametros[289], (percentual)))
 #define PERIODO_RECUPERADO_IDOSO(percentual)                                   \
-  (int)(ENTRE_FAIXA(parametros[98], parametros[99], (percentual)))
+  (int)(ENTRE_FAIXA(parametros[290], parametros[291], (percentual)))
 
 #define TAXA_MOBILIDADE_CRIANCA(percentual)                                    \
-  (double)(ENTRE_FAIXA(parametros[100], parametros[101], (percentual)))
+  (double)(ENTRE_FAIXA(parametros[292], parametros[293], (percentual)))
 #define TAXA_MOBILIDADE_JOVEM(percentual)                                      \
-  (double)(ENTRE_FAIXA(parametros[102], parametros[103], (percentual)))
+  (double)(ENTRE_FAIXA(parametros[294], parametros[295], (percentual)))
 #define TAXA_MOBILIDADE_ADULTO(percentual)                                     \
-  (double)(ENTRE_FAIXA(parametros[104], parametros[105], (percentual)))
+  (double)(ENTRE_FAIXA(parametros[296], parametros[297], (percentual)))
 #define TAXA_MOBILIDADE_IDOSO(percentual)                                      \
-  (double)(ENTRE_FAIXA(parametros[106], parametros[107], (percentual)))
+  (double)(ENTRE_FAIXA(parametros[298], parametros[299], (percentual)))
 
 #ifdef __CPU__
 
