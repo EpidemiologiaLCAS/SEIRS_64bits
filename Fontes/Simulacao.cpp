@@ -47,10 +47,10 @@ __global__ void initCurand(curandState *seeds, const int *rands,
                                      for (int id = 0; id < quantAgentes; id++)
                                      
 #define ATOMIC_ADD_TOTAL(ciclo, d, e) _Pragma("omp atomic") \
-                                   saidaQuantidadeTotal[VEC(ciclo, d + e, COLUNAS_SAIDAS_QUANTIDADES)]++
+                                      saidaQuantidadeTotal[VEC(ciclo, d + e, COLUNAS_SAIDAS_QUANTIDADES)]++
                    
 #define ATOMIC_ADD_QUADRAS(ciclo, d, e) _Pragma("omp atomic") \
-                                     saidaQuantidadeQuadras[indexSaidaQuantidadeQuadras[GET_Q(id)] + VEC(ciclo, d + e, COLUNAS_SAIDAS_QUANTIDADES)]++
+                                        saidaQuantidadeQuadras[indexSaidaQuantidadeQuadras[GET_Q(id)] + VEC(ciclo, d + e, COLUNAS_SAIDAS_QUANTIDADES)]++
 
 #define MARCADOR_GLOBAL
 #define MARCADOR_DEVICE
@@ -99,7 +99,7 @@ void inserirAgentes(int quantAgentes, TIPO_AGENTE *agentes,
   
   for (int j = 0; j < quantidade; ++j) {      
     t = ENTRE_FAIXA(indexTrajetosFaixaEtaria[3 - idade], indexTrajetosFaixaEtaria[(3 - idade) + 1], dis(gen));
-    
+
     l = rotas[indexRotas[trajetos[indexTrajetos[t]]] + 0];
     q = rotas[indexRotas[trajetos[indexTrajetos[t]]] + 1];
     posicoesLote = (indexPosicoes[indexQuadras[2 * q] + l + 1] -
@@ -1407,7 +1407,7 @@ MARCADOR_DEVICE void movimentacaoLivre(int id, void *seeds, TIPO_AGENTE *agentes
             for (int i = indexVizinhancas[indexQuadras[2 * q] + l];
                  i < indexVizinhancas[indexQuadras[2 * q] + l + 1]; i += 6) {
               if (vizinhancas[i + 0] == x && vizinhancas[i + 1] == y &&
-                  vizinhancas[i + 4] == l) {
+                  vizinhancas[i + 4] == l && vizinhancas[i + 5] == q) {
                 double dist = DIST(vizinhancas[i + 2], vizinhancas[i + 3],
                                    fronteiras[indMenorFront + 0],
                                    fronteiras[indMenorFront + 1]);
@@ -1872,7 +1872,7 @@ MARCADOR_DEVICE void movimentacaoTrajeto(int id, void *seeds, TIPO_AGENTE *agent
             for (int i = indexVizinhancas[indexQuadras[2 * q] + l];
                  i < indexVizinhancas[indexQuadras[2 * q] + l + 1]; i += 6) {
               if (vizinhancas[i + 0] == x && vizinhancas[i + 1] == y &&
-                  vizinhancas[i + 4] == l) {
+                  vizinhancas[i + 4] == l && vizinhancas[i + 5] == q) {
                 double dist = DIST(vizinhancas[i + 2], vizinhancas[i + 3],
                                    fronteiras[indMenorFront + 0],
                                    fronteiras[indMenorFront + 1]);
@@ -2024,7 +2024,7 @@ MARCADOR_DEVICE void movimentacaoTrajeto(int id, void *seeds, TIPO_AGENTE *agent
             } else {
               // Procura um ponto central de esquina que pertença a próxima
               // rua da rota atual
-              int pontoCentral = 0;
+              int pontoCentral = -1;
               for (int i = indexCentrosEsquinas[l];
                    i < indexCentrosEsquinas[l + 1]; i += 3) {
                 if (centrosEsquinas[i + 2] ==
@@ -2033,7 +2033,7 @@ MARCADOR_DEVICE void movimentacaoTrajeto(int id, void *seeds, TIPO_AGENTE *agent
                   pontoCentral = i;
                   break;
                 }
-              }
+              }              
               // Encontra na vizinhança do agente o ponto mais próximo ao
               // ponto central da esquina que pertença a próxima rua do
               // trajeto
