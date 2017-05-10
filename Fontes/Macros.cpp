@@ -111,14 +111,14 @@
  I = Idade                                        (3 bits, 8 valores)
  E = Estado                                       (3 bits, 8 valores)
  U = Sorotipo Atual                               (3 bits, 8 valores)
- H = Sorotipos contraídos                         (5 bits, Fixo)
+ H = Sorotipos contraídos                         (5 bits, 32 valores)
  C = Contador de transições de estados (Ciclo)    (8 bits, 256 valores)
  M = Contador de movimentação                     (7 bits, 128 valores)
  K = Tipo de movimentação                         (2 bits, 4 valores)
 
- X = Latitude                                     (32 bits)
- 
- Y = Longitude                                    (32 bits)
+ X = Latitude                                     (32 bits, 4294967296 valores)
+
+ Y = Longitude                                    (32 bits, 4294967296 valores)
 */
 
 // Macros bitstring
@@ -187,7 +187,6 @@
 
 #define MA_Y (TIPO_AGENTE)4294967295U
 
-
 #define NM_Q (TIPO_AGENTE)16777215U
 #define NM_L (TIPO_AGENTE)4278321151U
 #define NM_R (TIPO_AGENTE)4294852607U
@@ -234,7 +233,10 @@
 
 // Sets
 
-#define SET(i, d, novo, nm, a) (agentes[(i)*ATRIBUTOS_AGENTE + d] = ((agentes[(i)*ATRIBUTOS_AGENTE + d] & nm) | (((TIPO_AGENTE)(novo)) << a)))
+#define SET(i, d, novo, nm, a)                                                 \
+  (agentes[(i)*ATRIBUTOS_AGENTE + d] =                                         \
+       ((agentes[(i)*ATRIBUTOS_AGENTE + d] & nm) |                             \
+        (((TIPO_AGENTE)(novo)) << a)))
 
 #define SET_Q(i, novo) (SET(i, 0, novo, NM_Q, A_Q))
 #define SET_L(i, novo) (SET(i, 0, novo, NM_L, A_L))
@@ -252,9 +254,11 @@
 #define SET_M(i, novo) (SET(i, 1, novo, NM_M, A_M))
 #define SET_K(i, novo) (SET(i, 1, novo, NM_K, A_K))
 
-#define SET_X(i, novo) (agentes[(i)*ATRIBUTOS_AGENTE + 2] = ((TIPO_AGENTE)(novo)))
-  
-#define SET_Y(i, novo) (agentes[(i)*ATRIBUTOS_AGENTE + 3] = ((TIPO_AGENTE)(novo)))
+#define SET_X(i, novo)                                                         \
+  (agentes[(i)*ATRIBUTOS_AGENTE + 2] = ((TIPO_AGENTE)(novo)))
+
+#define SET_Y(i, novo)                                                         \
+  (agentes[(i)*ATRIBUTOS_AGENTE + 3] = ((TIPO_AGENTE)(novo)))
 
 #endif
 

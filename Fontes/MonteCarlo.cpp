@@ -97,7 +97,8 @@ void iniciarSimulacao(int idMonteCarlo, std::string pastaEntrada,
            vizinhancas, indexPosicoes, posicoes, indexFronteiras, fronteiras,
            indexEsquinas, esquinas, indexCentrosEsquinas, centrosEsquinas,
            quantRotas, indexRotas, rotas, quantTrajetos, indexTrajetos,
-           trajetos, indexPeriodos, periodos, indexTrajetosFaixaEtaria) = Parametros::lerVetores();
+           trajetos, indexPeriodos, periodos, indexTrajetosFaixaEtaria) =
+      Parametros::lerVetores();
   int sizeParametros;
   double *parametros;
   std::tie(sizeParametros, parametros) = Parametros::lerParametros(
@@ -118,13 +119,13 @@ void iniciarSimulacao(int idMonteCarlo, std::string pastaEntrada,
                                       std::string("Simulacao_") +
                                       std::to_string(idSimulacao) + SEPARADOR;
     Simulacao::iniciarSimulacao(
-        idSimulacao, parametros, sizeParametros,
-        pastaSaidaSimulacao, saidaQuantidadeTotal, quantLotes, quantQuadras,
-        indexQuadras, indexVizinhancas, vizinhancas, indexPosicoes, posicoes,
-        indexFronteiras, fronteiras, indexEsquinas, esquinas,
-        indexCentrosEsquinas, centrosEsquinas, indexSaidaQuantidadeQuadras,
-        saidaQuantidadeQuadras, quantRotas, indexRotas, rotas, quantTrajetos,
-        indexTrajetos, trajetos, indexPeriodos, periodos, indexTrajetosFaixaEtaria);
+        idSimulacao, parametros, sizeParametros, pastaSaidaSimulacao,
+        saidaQuantidadeTotal, quantLotes, quantQuadras, indexQuadras,
+        indexVizinhancas, vizinhancas, indexPosicoes, posicoes, indexFronteiras,
+        fronteiras, indexEsquinas, esquinas, indexCentrosEsquinas,
+        centrosEsquinas, indexSaidaQuantidadeQuadras, saidaQuantidadeQuadras,
+        quantRotas, indexRotas, rotas, quantTrajetos, indexTrajetos, trajetos,
+        indexPeriodos, periodos, indexTrajetosFaixaEtaria);
   }
 
   SaidasMonteCarlo::gerarSaidaQuantidadeQuadras(
