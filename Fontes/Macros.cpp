@@ -57,79 +57,87 @@
 
 #ifdef __BITSTRING__
 
-#define TIPO_AGENTE uint64_t
+#define UINT8 uint8_t
+#define UINT32 uint32_t
+
+struct Agente {
+  UINT8 t1;
+  UINT32 t2, t3;
+};
+
+#define TIPO_AGENTE Agente
 
 #define ATRIBUTOS_AGENTE 1
 
 // Macros bitstring
 
 // Tamanho em bits dos campos:
-#define T_Q 5  // MAX = 32 valores
+#define T_Q 7  // MAX = 128 valores
 #define T_S 1  // MAX = 2 valores
 #define T_I 2  // MAX = 4 valores
-#define T_L 5  // MAX = 32 valores
+#define T_L 11 // MAX = 2048 valores
 #define T_X 19 // MAX = 524288 valores
 #define T_Y 24 // MAX = 16777216 valores
 #define T_C 6  // MAX = 64 valores
 #define T_E 2  // MAX = 4 valores
 
 // Número de bits anteriores a cada campo:
-#define A_Q 59
-#define A_S 58
-#define A_I 56
-#define A_L 51
-#define A_X 32
+#define A_Q 1
+#define A_S 0
+#define A_I 30
+#define A_L 19
+#define A_X 0
 #define A_Y 8
 #define A_C 2
 #define A_E 0
 
 // Máscaras
 
-#define MA_Q (TIPO_AGENTE)17870283321406128128U
-#define MA_S (TIPO_AGENTE)288230376151711744U
-#define MA_I (TIPO_AGENTE)216172782113783808U
-#define MA_L (TIPO_AGENTE)69805794224242688U
-#define MA_X (TIPO_AGENTE)2251795518717952U
-#define MA_Y (TIPO_AGENTE)4294967040U
-#define MA_C (TIPO_AGENTE)252U
-#define MA_E (TIPO_AGENTE)3U
+#define MA_Q (UINT8)254U
+#define MA_S (UINT8)1U
+#define MA_I (UINT32)3221225472U
+#define MA_L (UINT32)1073217536U
+#define MA_X (UINT32)524287U
+#define MA_Y (UINT32)4294967040U
+#define MA_C (UINT32)252U
+#define MA_E (UINT32)3U
 
-#define NM_Q (TIPO_AGENTE)576460752303423487U
-#define NM_S (TIPO_AGENTE)18158513697557839871U
-#define NM_I (TIPO_AGENTE)18230571291595767807U
-#define NM_L (TIPO_AGENTE)18376938279485308927U
-#define NM_X (TIPO_AGENTE)18444492278190833663U
-#define NM_Y (TIPO_AGENTE)18446744069414584575U
-#define NM_C (TIPO_AGENTE)18446744073709551363U
-#define NM_E (TIPO_AGENTE)18446744073709551612U
+#define NM_Q (UINT8)4294967041U
+#define NM_S (UINT8)4294967294U
+#define NM_I (UINT32)1073741823U
+#define NM_L (UINT32)3221749759U
+#define NM_X (UINT32)4294443008U
+#define NM_Y (UINT32)255U
+#define NM_C (UINT32)4294967043U
+#define NM_E (UINT32)4294967292U
 
 // Gets
-#define GET_Q(i) (int)((agentes[i] & MA_Q) >> A_Q)
-#define GET_S(i) (int)((agentes[i] & MA_S) >> A_S)
-#define GET_I(i) (int)((agentes[i] & MA_I) >> A_I)
-#define GET_L(i) (int)((agentes[i] & MA_L) >> A_L)
-#define GET_X(i) (int)((agentes[i] & MA_X) >> A_X)
-#define GET_Y(i) (int)((agentes[i] & MA_Y) >> A_Y)
-#define GET_C(i) (int)((agentes[i] & MA_C) >> A_C)
-#define GET_E(i) (int)((agentes[i] & MA_E) >> A_E)
+#define GET_Q(i) (int)((agentes[i].t1 & MA_Q) >> A_Q)
+#define GET_S(i) (int)((agentes[i].t1 & MA_S) >> A_S)
+#define GET_I(i) (int)((agentes[i].t2 & MA_I) >> A_I)
+#define GET_L(i) (int)((agentes[i].t2 & MA_L) >> A_L)
+#define GET_X(i) (int)((agentes[i].t2 & MA_X) >> A_X)
+#define GET_Y(i) (int)((agentes[i].t3 & MA_Y) >> A_Y)
+#define GET_C(i) (int)((agentes[i].t3 & MA_C) >> A_C)
+#define GET_E(i) (int)((agentes[i].t3 & MA_E) >> A_E)
 
 // Sets
 #define SET_Q(i, novo)                                                         \
-  (agentes[i] = ((agentes[i] & NM_Q) | (((TIPO_AGENTE)novo) << A_Q)))
+  (agentes[i].t1 = ((agentes[i].t1 & NM_Q) | (((UINT8)novo) << A_Q)))
 #define SET_S(i, novo)                                                         \
-  (agentes[i] = ((agentes[i] & NM_S) | (((TIPO_AGENTE)novo) << A_S)))
+  (agentes[i].t1 = ((agentes[i].t1 & NM_S) | (((UINT8)novo) << A_S)))
 #define SET_I(i, novo)                                                         \
-  (agentes[i] = ((agentes[i] & NM_I) | (((TIPO_AGENTE)novo) << A_I)))
+  (agentes[i].t2 = ((agentes[i].t2 & NM_I) | (((UINT32)novo) << A_I)))
 #define SET_L(i, novo)                                                         \
-  (agentes[i] = ((agentes[i] & NM_L) | (((TIPO_AGENTE)novo) << A_L)))
+  (agentes[i].t2 = ((agentes[i].t2 & NM_L) | (((UINT32)novo) << A_L)))
 #define SET_X(i, novo)                                                         \
-  (agentes[i] = ((agentes[i] & NM_X) | (((TIPO_AGENTE)novo) << A_X)))
+  (agentes[i].t2 = ((agentes[i].t2 & NM_X) | (((UINT32)novo) << A_X)))
 #define SET_Y(i, novo)                                                         \
-  (agentes[i] = ((agentes[i] & NM_Y) | (((TIPO_AGENTE)novo) << A_Y)))
+  (agentes[i].t3 = ((agentes[i].t3 & NM_Y) | (((UINT32)novo) << A_Y)))
 #define SET_C(i, novo)                                                         \
-  (agentes[i] = ((agentes[i] & NM_C) | (((TIPO_AGENTE)novo) << A_C)))
+  (agentes[i].t3 = ((agentes[i].t3 & NM_C) | (((UINT32)novo) << A_C)))
 #define SET_E(i, novo)                                                         \
-  (agentes[i] = ((agentes[i] & NM_E) | (((TIPO_AGENTE)novo) << A_E)))
+  (agentes[i].t3 = ((agentes[i].t3 & NM_E) | (((UINT32)novo) << A_E)))
 
 #endif
 

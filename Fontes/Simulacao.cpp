@@ -1194,7 +1194,7 @@ void iniciarSimulacao(int idSimulacao, const double *parametros,
 
     insercaoHumanos<<<1, 1>>>(agentesDev, quantAgentes, nHumanosExe, 
                               sizeDistHumanos, distHumanosDev, ciclo);
-
+                              
     movimentacao<<<f1, numThreads>>>(
         seedsDev, agentesDev, quantAgentes, indexQuadrasDev,
         indexVizinhancasDev, vizinhancasDev, parametrosDev, indexParametrosDev);
@@ -1238,7 +1238,6 @@ void iniciarSimulacao(int idSimulacao, const double *parametros,
     
     insercaoHumanos(agentes, quantAgentes, nHumanosExe, sizeDistHumanos, 
                     distHumanos, ciclo);
-    
     movimentacao(agentes, quantAgentes, indexQuadras, indexVizinhancas,
                  vizinhancas, parametros, indexParametros);
     contato(agentes, quantAgentes, quantLotes, quantQuadras, parametros,
