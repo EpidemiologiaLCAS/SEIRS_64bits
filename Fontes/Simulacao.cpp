@@ -422,7 +422,7 @@ void gerarSaidaQuantidadeTotal(const TIPO_AGENTE *agentes, int quantAgentes,
                                int *saidaQuantidadeTotal, int ciclo) {
 #pragma omp parallel for
   for (int i = 0; i < quantAgentes; i++) {
-    if (GET_S(i) == MASCULINO && GET_X(id) != 0) {
+    if (GET_S(i) == MASCULINO && GET_X(i) != 0) {
       switch (GET_I(i)) {
       case CRIANCA: {
 #pragma omp atomic
@@ -479,7 +479,7 @@ void gerarSaidaQuantidadeQuadras(const TIPO_AGENTE *agentes, int quantAgentes,
                                  int *saidaQuantidadeQuadras, int ciclo) {
 #pragma omp parallel for
   for (int i = 0; i < quantAgentes; i++) {
-    if (GET_S(i) == MASCULINO && GET_X(id) != 0) {
+    if (GET_S(i) == MASCULINO && GET_X(i) != 0) {
       switch (GET_I(i)) {
       case CRIANCA: {
 #pragma omp atomic
@@ -812,7 +812,7 @@ __global__ void initCurand(curandState *seeds, const int *rands,
 
 void insercaoHumanos(TIPO_AGENTE *agentes, int quantAgentes, int nHumanosExe, 
                      int sizeDistHumanos, const int *distHumanos, int ciclo) {
-  int q, l, x, y, s, fe, sd, st;
+  int q, l, x, y, s, fe, sd;
   
   int id;
   for (id = quantAgentes - nHumanosExe; id < quantAgentes; id++) {
@@ -826,7 +826,7 @@ void insercaoHumanos(TIPO_AGENTE *agentes, int quantAgentes, int nHumanosExe,
       q = distHumanos[j + 0]; l = distHumanos[j + 1]; 
       x = distHumanos[j + 2]; y = distHumanos[j + 3]; 
       s = distHumanos[j + 4]; fe = distHumanos[j + 5]; 
-      sd = distHumanos[j + 6]; st = distHumanos[j + 7]; 
+      sd = distHumanos[j + 6]; //st = distHumanos[j + 7]; 
 
       SET_Q(id, q);
       SET_L(id, l);
@@ -960,7 +960,7 @@ void transicao(TIPO_AGENTE *agentes, int quantAgentes, const double *parametros,
 #pragma omp parallel for
   for (int i = 0; i < quantAgentes; i++) {
     int c = GET_C(i);
-    if (GET_X(id) == 0) continue;
+    if (GET_X(i) == 0) continue;
     switch (GET_E(i)) {
     case EXPOSTO: {
       double periodo;
