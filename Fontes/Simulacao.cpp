@@ -248,9 +248,8 @@ void salvarSaidaEspacial(string pastaSaida, const int *saidaEspacial,
 
 __global__ void gerarSaidaQuantidadeTotal(const TIPO_AGENTE *agentes,
                                           int quantAgentes,
-                                          int *saidaQuantidadeTotal, int ciclo,
-                                          int chunk) {
-  int i = (threadIdx.x + blockIdx.x * blockDim.x) + chunk;
+                                          int *saidaQuantidadeTotal, int ciclo) {
+  int i = (threadIdx.x + blockIdx.x * blockDim.x);
   if (i < quantAgentes) {
     if (GET_S(i) == MASCULINO) {
       switch (GET_I(i)) {
@@ -307,8 +306,8 @@ __global__ void gerarSaidaQuantidadeTotal(const TIPO_AGENTE *agentes,
 __global__ void
 gerarSaidaQuantidadeQuadras(const TIPO_AGENTE *agentes, int quantAgentes,
                             const int *indexSaidaQuantidadeQuadras,
-                            int *saidaQuantidadeQuadras, int ciclo, int chunk) {
-  int i = (threadIdx.x + blockIdx.x * blockDim.x) + chunk;
+                            int *saidaQuantidadeQuadras, int ciclo) {
+  int i = (threadIdx.x + blockIdx.x * blockDim.x);
   if (i < quantAgentes) {
     if (GET_S(i) == MASCULINO) {
       switch (GET_I(i)) {
@@ -385,8 +384,8 @@ __global__ void gerarSaidaEspacial(const TIPO_AGENTE *agentes, int quantAgentes,
                                    int quantQuadras, int ciclos,
                                    const int *indexQuadras,
                                    const int *indexPosicoes,
-                                   const int *posicoes, int chunk) {
-  int pos = (threadIdx.x + blockIdx.x * blockDim.x) + chunk;
+                                   const int *posicoes) {
+  int pos = (threadIdx.x + blockIdx.x * blockDim.x);
   if (pos < indexPosicoes[indexQuadras[quantQuadras * 2 - 1]] / 4) {
     int x = posicoes[pos * 4 + 0];
     int y = posicoes[pos * 4 + 1];
@@ -568,8 +567,8 @@ __global__ void movimentacao(curandState *seeds, TIPO_AGENTE *agentes,
                              int quantAgentes, const int *indexQuadras,
                              const int *indexVizinhancas,
                              const int *vizinhancas, const double *parametros,
-                             const int *indexParametros, int chunk) {
-  int id = (threadIdx.x + blockIdx.x * blockDim.x) + chunk;
+                             const int *indexParametros) {
+  int id = (threadIdx.x + blockIdx.x * blockDim.x);
   if (id < quantAgentes) {
     int q = GET_Q(id);
     int l = GET_L(id);
@@ -599,24 +598,22 @@ __global__ void movimentacao(curandState *seeds, TIPO_AGENTE *agentes,
         }
       }
       if (quantidade > 0) {
-        int *posicoes = new int[quantidade * 4];
         int k = 0;
+        int indice = (int)(curand_uniform_double(&seeds[id]) * quantidade);
         for (int i = indexVizinhancas[indexQuadras[2 * q] + l];
              i < indexVizinhancas[indexQuadras[2 * q] + l + 1]; i += 6) {
           if (vizinhancas[i + 0] == x && vizinhancas[i + 1] == y) {
-            posicoes[4 * k + 0] = vizinhancas[i + 2];
-            posicoes[4 * k + 1] = vizinhancas[i + 3];
-            posicoes[4 * k + 2] = vizinhancas[i + 4];
-            posicoes[4 * k + 3] = vizinhancas[i + 5];
-            k++;
+            if (k == indice) {
+              x = vizinhancas[i + 2];
+              y = vizinhancas[i + 3];
+              l = vizinhancas[i + 4];
+              q = vizinhancas[i + 5];
+              break;
+            } else {
+              k++;
+            }
           }
         }
-        int indice = (int)(curand_uniform_double(&seeds[id]) * quantidade);
-        x = posicoes[4 * indice + 0];
-        y = posicoes[4 * indice + 1];
-        l = posicoes[4 * indice + 2];
-        q = posicoes[4 * indice + 3];
-        delete[](posicoes);
         SET_X(id, x);
         SET_Y(id, y);
         SET_L(id, l);
@@ -630,9 +627,8 @@ __global__ void contato(curandState *seeds, TIPO_AGENTE *agentes,
                         int quantAgentes, const int *quantLotes,
                         int quantQuadras, const double *parametros,
                         const int *indexParametros, const int *indexQuadras,
-                        const int *indexPosicoes, const int *posicoes,
-                        int chunk) {
-  int pos = (threadIdx.x + blockIdx.x * blockDim.x) + chunk;
+                        const int *indexPosicoes, const int *posicoes) {
+  int pos = (threadIdx.x + blockIdx.x * blockDim.x);
   if (pos < indexPosicoes[indexQuadras[quantQuadras * 2 - 1]] / 4) {
     int x = posicoes[pos * 4 + 0];
     int y = posicoes[pos * 4 + 1];
@@ -681,8 +677,8 @@ __global__ void contato(curandState *seeds, TIPO_AGENTE *agentes,
 
 __global__ void transicao(curandState *seeds, TIPO_AGENTE *agentes,
                           int quantAgentes, const double *parametros,
-                          const int *indexParametros, int chunk) {
-  int i = (threadIdx.x + blockIdx.x * blockDim.x) + chunk;
+                          const int *indexParametros) {
+  int i = (threadIdx.x + blockIdx.x * blockDim.x);
   if (i < quantAgentes) {
     int c = GET_C(i);
     switch (GET_E(i)) {
@@ -805,24 +801,22 @@ void movimentacao(TIPO_AGENTE *agentes, int quantAgentes,
         }
       }
       if (quantidade > 0) {
-        int *posicoes = new int[quantidade * 4];
         int k = 0;
+        int indice = (int)(randomizarPercentual() * quantidade);
         for (int i = indexVizinhancas[indexQuadras[2 * q] + l];
              i < indexVizinhancas[indexQuadras[2 * q] + l + 1]; i += 6) {
           if (vizinhancas[i + 0] == x && vizinhancas[i + 1] == y) {
-            posicoes[4 * k + 0] = vizinhancas[i + 2];
-            posicoes[4 * k + 1] = vizinhancas[i + 3];
-            posicoes[4 * k + 2] = vizinhancas[i + 4];
-            posicoes[4 * k + 3] = vizinhancas[i + 5];
-            k++;
+            if (k == indice) {
+              x = vizinhancas[i + 2];
+              y = vizinhancas[i + 3];
+              l = vizinhancas[i + 4];
+              q = vizinhancas[i + 5];
+              break;
+            } else {
+              k++;
+            }
           }
         }
-        int indice = (int)(randomizarPercentual() * quantidade);
-        x = posicoes[4 * indice + 0];
-        y = posicoes[4 * indice + 1];
-        l = posicoes[4 * indice + 2];
-        q = posicoes[4 * indice + 3];
-        delete[](posicoes);
         SET_X(id, x);
         SET_Y(id, y);
         SET_L(id, l);
@@ -1096,92 +1090,44 @@ void iniciarSimulacao(int idSimulacao, const double *parametros,
 
 #ifdef __GPU__
 
-  cudaStream_t stream0, stream1;
+  SaidasSimulacao::gerarSaidaQuantidadeTotal<<<f1, numThreads>>>(
+      agentesDev, quantAgentes, saidaQuantidadeTotalDev, 0);
 
-  cudaStreamCreate(&stream0);
-  cudaStreamCreate(&stream1);
-
-  int b1 = f1 / 2 + 1;
-  int c1 = b1 * numThreads;
-  int d1 = f1 - b1;
-
-  int b2 = f2 / 2 + 1;
-  int c2 = b2 * numThreads;
-  int d2 = f2 - b2;
-
-  SaidasSimulacao::gerarSaidaQuantidadeTotal<<<b1, numThreads, 0, stream0>>>(
-      agentesDev, quantAgentes, saidaQuantidadeTotalDev, 0, 0);
-  SaidasSimulacao::gerarSaidaQuantidadeTotal<<<d1, numThreads, 0, stream1>>>(
-      agentesDev, quantAgentes, saidaQuantidadeTotalDev, 0, c1);
-
-  SaidasSimulacao::gerarSaidaQuantidadeQuadras<<<b1, numThreads, 0, stream0>>>(
+  SaidasSimulacao::gerarSaidaQuantidadeQuadras<<<f1, numThreads>>>(
       agentesDev, quantAgentes, indexSaidaQuantidadeQuadrasDev,
-      saidaQuantidadeQuadrasDev, 0, 0);
-  SaidasSimulacao::gerarSaidaQuantidadeQuadras<<<d1, numThreads, 0, stream1>>>(
-      agentesDev, quantAgentes, indexSaidaQuantidadeQuadrasDev,
-      saidaQuantidadeQuadrasDev, 0, c1);
+      saidaQuantidadeQuadrasDev, 0);
 
-  SaidasSimulacao::gerarSaidaEspacial<<<b2, numThreads, 0, stream0>>>(
+  SaidasSimulacao::gerarSaidaEspacial<<<f2, numThreads>>>(
       agentesDev, quantAgentes, saidaEspacialDev, 0, quantQuadras, ciclos,
-      indexQuadrasDev, indexPosicoesDev, posicoesDev, 0);
-  SaidasSimulacao::gerarSaidaEspacial<<<d2, numThreads, 0, stream1>>>(
-      agentesDev, quantAgentes, saidaEspacialDev, 0, quantQuadras, ciclos,
-      indexQuadrasDev, indexPosicoesDev, posicoesDev, c2);
+      indexQuadrasDev, indexPosicoesDev, posicoesDev);
 
   for (int ciclo = 1; ciclo < ciclos; ++ciclo) {
 
-    movimentacao<<<b1, numThreads, 0, stream0>>>(
+    movimentacao<<<f1, numThreads>>>(
         seedsDev, agentesDev, quantAgentes, indexQuadrasDev,
-        indexVizinhancasDev, vizinhancasDev, parametrosDev, indexParametrosDev,
-        0);
-    movimentacao<<<d1, numThreads, 0, stream1>>>(
-        seedsDev, agentesDev, quantAgentes, indexQuadrasDev,
-        indexVizinhancasDev, vizinhancasDev, parametrosDev, indexParametrosDev,
-        c1);
+        indexVizinhancasDev, vizinhancasDev, parametrosDev, indexParametrosDev);
 
-    contato<<<b2, numThreads, 0, stream0>>>(
+    contato<<<f2, numThreads>>>(
         seedsDev, agentesDev, quantAgentes, quantLotesDev, quantQuadras,
         parametrosDev, indexParametrosDev, indexQuadrasDev, indexPosicoesDev,
-        posicoesDev, 0);
-    contato<<<d2, numThreads, 0, stream1>>>(
-        seedsDev, agentesDev, quantAgentes, quantLotesDev, quantQuadras,
-        parametrosDev, indexParametrosDev, indexQuadrasDev, indexPosicoesDev,
-        posicoesDev, c2);
+        posicoesDev);
 
-    transicao<<<b1, numThreads, 0, stream0>>>(seedsDev, agentesDev,
+    transicao<<<f1, numThreads>>>(seedsDev, agentesDev,
                                               quantAgentes, parametrosDev,
-                                              indexParametrosDev, 0);
-    transicao<<<d1, numThreads, 0, stream1>>>(seedsDev, agentesDev,
-                                              quantAgentes, parametrosDev,
-                                              indexParametrosDev, c1);
+                                              indexParametrosDev);
 
-    SaidasSimulacao::gerarSaidaQuantidadeTotal<<<b1, numThreads, 0, stream0>>>(
-        agentesDev, quantAgentes, saidaQuantidadeTotalDev, ciclo, 0);
-    SaidasSimulacao::gerarSaidaQuantidadeTotal<<<d1, numThreads, 0, stream1>>>(
-        agentesDev, quantAgentes, saidaQuantidadeTotalDev, ciclo, c1);
+    SaidasSimulacao::gerarSaidaQuantidadeTotal<<<f1, numThreads>>>(
+        agentesDev, quantAgentes, saidaQuantidadeTotalDev, ciclo);
 
     SaidasSimulacao::
-        gerarSaidaQuantidadeQuadras<<<b1, numThreads, 0, stream0>>>(
+        gerarSaidaQuantidadeQuadras<<<f1, numThreads>>>(
             agentesDev, quantAgentes, indexSaidaQuantidadeQuadrasDev,
-            saidaQuantidadeQuadrasDev, ciclo, 0);
-    SaidasSimulacao::
-        gerarSaidaQuantidadeQuadras<<<d1, numThreads, 0, stream1>>>(
-            agentesDev, quantAgentes, indexSaidaQuantidadeQuadrasDev,
-            saidaQuantidadeQuadrasDev, ciclo, c1);
+            saidaQuantidadeQuadrasDev, ciclo);
 
-    SaidasSimulacao::gerarSaidaEspacial<<<b2, numThreads, 0, stream0>>>(
+    SaidasSimulacao::gerarSaidaEspacial<<<f2, numThreads>>>(
         agentesDev, quantAgentes, saidaEspacialDev, ciclo, quantQuadras, ciclos,
-        indexQuadrasDev, indexPosicoesDev, posicoesDev, 0);
-    SaidasSimulacao::gerarSaidaEspacial<<<d2, numThreads, 0, stream1>>>(
-        agentesDev, quantAgentes, saidaEspacialDev, ciclo, quantQuadras, ciclos,
-        indexQuadrasDev, indexPosicoesDev, posicoesDev, c2);
+        indexQuadrasDev, indexPosicoesDev, posicoesDev);
   }
-
-  cudaStreamSynchronize(stream0);
-  cudaStreamSynchronize(stream1);
-
-  cudaStreamDestroy(stream0);
-  cudaStreamDestroy(stream1);
 
 #endif
 

@@ -35,6 +35,17 @@ int main(int argc, char **argv) {
   }
 
 #endif
+
+#if defined(__GPU__)
+
+  if (argc == 2) {
+    cudaSetDevice(atoi(argv[1]));
+  } else {
+    cudaSetDevice(0);
+  }
+
+#endif
+
   string pastaEntrada, pastaSaida;
   system((COMANDO_EXCLUIR_PASTA + string("Saidas")).c_str());
   for (int idMonteCarlo = 0; idMonteCarlo < 1; idMonteCarlo++) {

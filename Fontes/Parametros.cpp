@@ -113,6 +113,7 @@ tuple<int, int *, int *, int *, int *, int *, int *> lerVetores() {
       string("Entradas") + SEPARADOR + string("Vetores.csv");
   ifstream arquivoEntrada(nomeArquivoEntrada);
   if (arquivoEntrada.is_open()) {
+    
     arquivoEntrada >> quantQuadras;
     arquivoEntrada.get();
     quantLotes = new int[quantQuadras];
@@ -120,27 +121,32 @@ tuple<int, int *, int *, int *, int *, int *, int *> lerVetores() {
       arquivoEntrada >> quantLotes[i];
       arquivoEntrada.get();
     }
+    
     indexQuadras = new int[quantQuadras * 2];
     for (int i = 0; i < quantQuadras * 2; ++i) {
       arquivoEntrada >> indexQuadras[i];
       arquivoEntrada.get();
     }
+    
     indexVizinhancas = new int[indexQuadras[quantQuadras * 2 - 1] + 1];
     for (int i = 0; i < indexQuadras[quantQuadras * 2 - 1] + 1; ++i) {
       arquivoEntrada >> indexVizinhancas[i];
       arquivoEntrada.get();
     }
+    
     vizinhancas = new int[indexVizinhancas[indexQuadras[quantQuadras * 2 - 1]]];
     for (int i = 0; i < indexVizinhancas[indexQuadras[quantQuadras * 2 - 1]];
          ++i) {
       arquivoEntrada >> vizinhancas[i];
       arquivoEntrada.get();
     }
+    
     indexPosicoes = new int[indexQuadras[quantQuadras * 2 - 1] + 1];
     for (int i = 0; i < indexQuadras[quantQuadras * 2 - 1] + 1; ++i) {
       arquivoEntrada >> indexPosicoes[i];
       arquivoEntrada.get();
     }
+    
     posicoes = new int[indexPosicoes[indexQuadras[quantQuadras * 2 - 1]]];
     for (int i = 0; i < indexPosicoes[indexQuadras[quantQuadras * 2 - 1]];
          ++i) {
