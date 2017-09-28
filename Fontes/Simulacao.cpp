@@ -43,7 +43,8 @@ void inserirAgentes(int quantAgentes, TIPO_AGENTE *agentes,
 TIPO_AGENTE *criarAgentes(int quantAgentes, const double *parametros,
                           const int *indexParametros, const int *quantLotes,
                           int quantQuadras, const int *indexQuadras,
-                          const int *indexPosicoes, const int *posicoes) {
+                          const int *indexPosicoes, const int *posicoes, 
+                          int nHumanosExe) {
   int i = 0;
   TIPO_AGENTE *agentes = new TIPO_AGENTE[quantAgentes * ATRIBUTOS_AGENTE];
   inserirAgentes(quantAgentes, agentes, parametros, indexParametros, quantLotes,
@@ -177,11 +178,18 @@ TIPO_AGENTE *criarAgentes(int quantAgentes, const double *parametros,
                  quantQuadras, indexQuadras, indexPosicoes, posicoes,
                  QUANTIDADE_AGENTES_RECUPERADOS_IDOSO_FEMININO, RECUPERADO,
                  FEMININO, IDOSO, &i);
+                 
+  for (int j = 0; j < nHumanosExe; ++j) {
+    inicializarAgente(agentes, i, 0, 0, 0, 0, 0, 0, 0);
+    i++;
+  }
+                 
   return agentes;
 }
 
 int contarTotalAgentes(const int *quantLotes, int quantQuadras,
-                       const double *parametros, const int *indexParametros) {
+                       const double *parametros, const int *indexParametros, 
+                       int nHumanosExe) {
   int quantAgentes = 0;
   quantAgentes += QUANTIDADE_AGENTES_SUSCETIVEIS_CRIANCA_MASCULINO +
                   QUANTIDADE_AGENTES_EXPOSTOS_CRIANCA_MASCULINO +
@@ -218,6 +226,7 @@ int contarTotalAgentes(const int *quantLotes, int quantQuadras,
                   QUANTIDADE_AGENTES_EXPOSTOS_IDOSO_FEMININO +
                   QUANTIDADE_AGENTES_INFECTADOS_IDOSO_FEMININO +
                   QUANTIDADE_AGENTES_RECUPERADOS_IDOSO_FEMININO;
+  quantAgentes += nHumanosExe;
   return quantAgentes;
 }
 }
@@ -250,7 +259,7 @@ __global__ void gerarSaidaQuantidadeTotal(const TIPO_AGENTE *agentes,
                                           int quantAgentes,
                                           int *saidaQuantidadeTotal, int ciclo) {
   int i = (threadIdx.x + blockIdx.x * blockDim.x);
-  if (i < quantAgentes) {
+  if (i < quantAgentes && GET_X(i) != 0) {
     if (GET_S(i) == MASCULINO) {
       switch (GET_I(i)) {
       case CRIANCA:
@@ -309,7 +318,7 @@ gerarSaidaQuantidadeQuadras(const TIPO_AGENTE *agentes, int quantAgentes,
                             int *saidaQuantidadeQuadras, int ciclo) {
   int i = (threadIdx.x + blockIdx.x * blockDim.x);
   if (i < quantAgentes) {
-    if (GET_S(i) == MASCULINO) {
+    if (GET_S(i) == MASCULINO && GET_X(i) != 0) {
       switch (GET_I(i)) {
       case CRIANCA:
         atomicAdd(
@@ -413,7 +422,7 @@ void gerarSaidaQuantidadeTotal(const TIPO_AGENTE *agentes, int quantAgentes,
                                int *saidaQuantidadeTotal, int ciclo) {
 #pragma omp parallel for
   for (int i = 0; i < quantAgentes; i++) {
-    if (GET_S(i) == MASCULINO) {
+    if (GET_S(i) == MASCULINO && GET_X(id) != 0) {
       switch (GET_I(i)) {
       case CRIANCA: {
 #pragma omp atomic
@@ -470,7 +479,7 @@ void gerarSaidaQuantidadeQuadras(const TIPO_AGENTE *agentes, int quantAgentes,
                                  int *saidaQuantidadeQuadras, int ciclo) {
 #pragma omp parallel for
   for (int i = 0; i < quantAgentes; i++) {
-    if (GET_S(i) == MASCULINO) {
+    if (GET_S(i) == MASCULINO && GET_X(id) != 0) {
       switch (GET_I(i)) {
       case CRIANCA: {
 #pragma omp atomic
@@ -563,13 +572,46 @@ namespace Simulacao {
 
 #ifdef __GPU__
 
+__global__ void insercaoHumanos(TIPO_AGENTE *agentes, int quantAgentes, 
+                                int nHumanosExe, int sizeDistHumanos, 
+                                const int *distHumanos, int ciclo) {
+  int q, l, x, y, s, fe, sd;
+  
+  int id;
+  for (id = quantAgentes - nHumanosExe; id < quantAgentes; id++) {
+    if (GET_X(id) == 0) {
+      break;
+    }
+  }
+  
+  for (int j = 0; j < sizeDistHumanos; j += 9) {
+    if (distHumanos[j + 8] == ciclo) {
+      q = distHumanos[j + 0]; l = distHumanos[j + 1]; 
+      x = distHumanos[j + 2]; y = distHumanos[j + 3]; 
+      s = distHumanos[j + 4]; fe = distHumanos[j + 5]; 
+      sd = distHumanos[j + 6]; //st = distHumanos[j + 7]; 
+
+      SET_Q(id, q);
+      SET_L(id, l);
+      SET_X(id, x);
+      SET_Y(id, y);
+      SET_S(id, s);
+      SET_I(id, fe);
+      SET_C(id, 0);
+      SET_E(id, sd);
+      
+      id++;
+    }
+  }
+}
+
 __global__ void movimentacao(curandState *seeds, TIPO_AGENTE *agentes,
                              int quantAgentes, const int *indexQuadras,
                              const int *indexVizinhancas,
                              const int *vizinhancas, const double *parametros,
                              const int *indexParametros) {
   int id = (threadIdx.x + blockIdx.x * blockDim.x);
-  if (id < quantAgentes) {
+  if (id < quantAgentes && GET_X(id) != 0) {
     int q = GET_Q(id);
     int l = GET_L(id);
     int x = GET_X(id);
@@ -680,7 +722,7 @@ __global__ void transicao(curandState *seeds, TIPO_AGENTE *agentes,
                           int quantAgentes, const double *parametros,
                           const int *indexParametros) {
   int i = (threadIdx.x + blockIdx.x * blockDim.x);
-  if (i < quantAgentes) {
+  if (i < quantAgentes && GET_X(i) != 0) {
     int c = GET_C(i);
     switch (GET_E(i)) {
     case EXPOSTO: {
@@ -768,6 +810,38 @@ __global__ void initCurand(curandState *seeds, const int *rands,
 
 #ifdef __CPU__
 
+void insercaoHumanos(TIPO_AGENTE *agentes, int quantAgentes, int nHumanosExe, 
+                     int sizeDistHumanos, const int *distHumanos, int ciclo) {
+  int q, l, x, y, s, fe, sd, st;
+  
+  int id;
+  for (id = quantAgentes - nHumanosExe; id < quantAgentes; id++) {
+    if (GET_X(id) == 0) {
+      break;
+    }
+  }
+  
+  for (int j = 0; j < sizeDistHumanos; j += 9) {
+    if (distHumanos[j + 8] == ciclo) {
+      q = distHumanos[j + 0]; l = distHumanos[j + 1]; 
+      x = distHumanos[j + 2]; y = distHumanos[j + 3]; 
+      s = distHumanos[j + 4]; fe = distHumanos[j + 5]; 
+      sd = distHumanos[j + 6]; st = distHumanos[j + 7]; 
+
+      SET_Q(id, q);
+      SET_L(id, l);
+      SET_X(id, x);
+      SET_Y(id, y);
+      SET_S(id, s);
+      SET_I(id, fe);
+      SET_C(id, 0);
+      SET_E(id, sd);
+      
+      id++;
+    }
+  }
+}
+
 void movimentacao(TIPO_AGENTE *agentes, int quantAgentes,
                   const int *indexQuadras, const int *indexVizinhancas,
                   const int *vizinhancas, const double *parametros,
@@ -778,6 +852,7 @@ void movimentacao(TIPO_AGENTE *agentes, int quantAgentes,
     int l = GET_L(id);
     int x = GET_X(id);
     int y = GET_Y(id);
+    if (x == 0) continue;
     double taxa;
     switch (GET_I(id)) {
     case CRIANCA:
@@ -885,6 +960,7 @@ void transicao(TIPO_AGENTE *agentes, int quantAgentes, const double *parametros,
 #pragma omp parallel for
   for (int i = 0; i < quantAgentes; i++) {
     int c = GET_C(i);
+    if (GET_X(id) == 0) continue;
     switch (GET_E(i)) {
     case EXPOSTO: {
       double periodo;
@@ -970,7 +1046,9 @@ void iniciarSimulacao(int idSimulacao, const double *parametros,
                       const int *posicoes,
                       const int *indexSaidaQuantidadeQuadras,
                       int *saidaQuantidadeQuadras, 
-                      int sizeTemps, const double *temps) {
+                      int sizeTemps, const double *temps, 
+                      int nHumanosExe, int sizeDistHumanos, 
+                      const int *distHumanos) {
   int ciclos = NUMERO_CICLOS_SIMULACAO + 1;
 
   int quantLinhasSaidaEspacial =
@@ -978,10 +1056,11 @@ void iniciarSimulacao(int idSimulacao, const double *parametros,
   int *saidaEspacial = new int[quantLinhasSaidaEspacial * ciclos]();
 
   int quantAgentes = Agentes::contarTotalAgentes(quantLotes, quantQuadras,
-                                                 parametros, indexParametros);
+                                                 parametros, indexParametros, 
+                                                 nHumanosExe);
   TIPO_AGENTE *agentes = Agentes::criarAgentes(
       quantAgentes, parametros, indexParametros, quantLotes, quantQuadras,
-      indexQuadras, indexPosicoes, posicoes);
+      indexQuadras, indexPosicoes, posicoes, nHumanosExe);
 
   if (idSimulacao == 0) {
     int totMem = (quantAgentes * ATRIBUTOS_AGENTE * sizeof(TIPO_AGENTE));
@@ -1009,6 +1088,7 @@ void iniciarSimulacao(int idSimulacao, const double *parametros,
   int *indexPosicoesDev;
   int *posicoesDev;
   double *tempsDev;
+  int *distHumanosDev;
 
   cudaMalloc((void **)&agentesDev,
              quantAgentes * ATRIBUTOS_AGENTE * sizeof(TIPO_AGENTE));
@@ -1034,6 +1114,7 @@ void iniciarSimulacao(int idSimulacao, const double *parametros,
   cudaMalloc((void **)&posicoesDev,
              indexPosicoes[indexQuadras[quantQuadras * 2 - 1]] * sizeof(int));
   cudaMalloc((void **)&tempsDev, sizeTemps * sizeof(double));
+  cudaMalloc((void **)&distHumanosDev, sizeDistHumanos * sizeof(int));
 
   cudaMemcpy(agentesDev, agentes,
              quantAgentes * ATRIBUTOS_AGENTE * sizeof(TIPO_AGENTE),
@@ -1071,12 +1152,13 @@ void iniciarSimulacao(int idSimulacao, const double *parametros,
              cudaMemcpyHostToDevice);
   cudaMemcpy(tempsDev, temps, sizeTemps * sizeof(double), 
              cudaMemcpyHostToDevice);
+  cudaMemcpy(distHumanosDev, distHumanos, sizeDistHumanos * sizeof(int), 
+             cudaMemcpyHostToDevice);
 
   int numThreads = 1024;
   int f1 = (int)((quantAgentes / numThreads) + 1);
   int f2 = (int)((indexPosicoes[indexQuadras[quantQuadras * 2 - 1]] / 4 /
-                  numThreads) +
-                 1);
+                  numThreads) + 1);
   int f = (f1 > f2) ? f1 : f2;
   int maxThreads = f * numThreads;
 
@@ -1109,6 +1191,9 @@ void iniciarSimulacao(int idSimulacao, const double *parametros,
       indexQuadrasDev, indexPosicoesDev, posicoesDev);
 
   for (int ciclo = 1; ciclo < ciclos; ++ciclo) {
+
+    insercaoHumanos<<<1, 1>>>(agentesDev, quantAgentes, nHumanosExe, 
+                              sizeDistHumanos, distHumanosDev, ciclo);
 
     movimentacao<<<f1, numThreads>>>(
         seedsDev, agentesDev, quantAgentes, indexQuadrasDev,
@@ -1150,6 +1235,10 @@ void iniciarSimulacao(int idSimulacao, const double *parametros,
                                       indexPosicoes, posicoes);
 
   for (int ciclo = 1; ciclo < ciclos; ++ciclo) {
+    
+    insercaoHumanos(agentes, quantAgentes, nHumanosExe, sizeDistHumanos, 
+                    distHumanos, ciclo);
+    
     movimentacao(agentes, quantAgentes, indexQuadras, indexVizinhancas,
                  vizinhancas, parametros, indexParametros);
     contato(agentes, quantAgentes, quantLotes, quantQuadras, parametros,
@@ -1196,6 +1285,7 @@ void iniciarSimulacao(int idSimulacao, const double *parametros,
   cudaFree(indexPosicoesDev);
   cudaFree(posicoesDev);
   cudaFree(tempsDev);
+  cudaFree(distHumanosDev);
 
 #endif
 

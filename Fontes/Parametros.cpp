@@ -179,8 +179,74 @@ tuple<int, double *> lerTemperaturas() {
   } else {
     cerr << "Arquivo: " << nomeArquivoEntrada << " nao foi aberto!" << endl;
     exit(1);
+  }  
+  return make_tuple(sizeTemps, temps);
+}
+
+tuple<int, int, int *> lerArquivoDistribuicaoHumanos() {
+  string entrada = string("Entradas");
+  entrada += SEPARADOR;
+  entrada += string("DistribuicaoHumanos.csv");
+
+  ifstream arquivo;
+  arquivo.open(entrada);
+  if (not arquivo.is_open()) {
+    cerr << "Arquivo: ";
+    cerr << entrada;
+    cerr << " nao foi aberto!" << endl;
+    exit(1);
   }
-  return make_tuple(sizeTemp, temps);
+
+  streamsize sMax = numeric_limits<streamsize>::max();
+
+  int nHumanos;
+  arquivo >> nHumanos;
+  arquivo.get();
+  arquivo.ignore(sMax, '\n');
+
+  int sizeDistHumanos = nHumanos * 9;
+  int *distHumanos = new int[sizeDistHumanos]();
+
+  int q, l, x, y, s, fe, sd, st, cic;
+  char s1, fe1, sd1;
+
+  for (int i = 0; i < nHumanos; ++i) {
+    arquivo >> q; arquivo.get();
+    arquivo >> l; arquivo.get();
+    arquivo >> x; arquivo.get();
+    arquivo >> y; arquivo.get();
+    arquivo >> s1; arquivo.get();
+    arquivo >> fe1; arquivo.get();
+    arquivo >> sd1; arquivo.get();
+    arquivo >> st; arquivo.get();
+    arquivo >> cic; arquivo.get();
+
+    switch (s1) {
+      case 'M': s = MASCULINO; break;
+      case 'F': s = FEMININO; break;
+    }
+
+    switch (fe1) {
+      case 'C': fe = CRIANCA; break;
+      case 'J': fe = JOVEM; break;
+      case 'A': fe = ADULTO; break;
+      case 'I': fe = IDOSO; break;
+    }
+
+    switch (sd1) {
+      case 'S': sd = SUSCETIVEL; break;
+      case 'I': sd = INFECTADO; break;
+    }
+
+    distHumanos[9 * i + 0] = q; distHumanos[9 * i + 1] = l;
+    distHumanos[9 * i + 2] = x; distHumanos[9 * i + 3] = y;
+    distHumanos[9 * i + 4] = s; distHumanos[9 * i + 5] = fe;
+    distHumanos[9 * i + 6] = sd; distHumanos[9 * i + 7] = st;
+    distHumanos[9 * i + 8] = cic;
+  }
+  arquivo.close();
+  
+  return make_tuple(nHumanos, sizeDistHumanos, distHumanos);
 }
 
 tuple<int, double *> lerParametros(string pastaEntrada, const int *quantLotes,
