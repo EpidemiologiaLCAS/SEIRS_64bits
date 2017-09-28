@@ -162,6 +162,27 @@ tuple<int, int *, int *, int *, int *, int *, int *> lerVetores() {
                     vizinhancas, indexPosicoes, posicoes);
 }
 
+tuple<int, double *> lerTemperaturas() {
+  int sizeTemps;
+  double *temps;
+  string nomeArquivoEntrada =
+      string("Entradas") + SEPARADOR + string("Temperaturas.csv");
+  ifstream arquivoEntrada(nomeArquivoEntrada);
+  if (arquivoEntrada.is_open()) {
+    arquivoEntrada >> sizeTemps;
+    arquivoEntrada.get();
+    temps = new double[sizeTemps];
+    for (int i = 0; i < sizeTemps; ++i) {
+      arquivoEntrada >> temps[i];
+      arquivoEntrada.get();
+    }
+  } else {
+    cerr << "Arquivo: " << nomeArquivoEntrada << " nao foi aberto!" << endl;
+    exit(1);
+  }
+  return make_tuple(sizeTemp, temps);
+}
+
 tuple<int, double *> lerParametros(string pastaEntrada, const int *quantLotes,
                                    int quantQuadras) {
   int quantParametros = QUANTIDADE_PARAMETROS_GERAIS;

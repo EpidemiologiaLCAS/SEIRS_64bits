@@ -25,7 +25,7 @@ void inserirAgentes(int quantAgentes, TIPO_AGENTE *agentes,
   for (int j = 0; j < quantidade; ++j) {
     q = (int)(randomizarPercentual() * quantQuadras);
     l = (int)(randomizarPercentual() * quantLotes[q]);
-    if (q == 0 || quantLotes[q] < 3) {
+    if (q == 0) {
       j--;
       continue;
     }
@@ -627,7 +627,8 @@ __global__ void contato(curandState *seeds, TIPO_AGENTE *agentes,
                         int quantAgentes, const int *quantLotes,
                         int quantQuadras, const double *parametros,
                         const int *indexParametros, const int *indexQuadras,
-                        const int *indexPosicoes, const int *posicoes) {
+                        const int *indexPosicoes, const int *posicoes, 
+                        int ciclo, const double *temps) {
   int pos = (threadIdx.x + blockIdx.x * blockDim.x);
   if (pos < indexPosicoes[indexQuadras[quantQuadras * 2 - 1]] / 4) {
     int x = posicoes[pos * 4 + 0];
@@ -665,7 +666,7 @@ __global__ void contato(curandState *seeds, TIPO_AGENTE *agentes,
               taxa = TAXA_INFECCAO_IDOSO(curand_uniform_double(&seeds[pos]));
               break;
             }
-            if (curand_uniform_double(&seeds[pos]) <= taxa) {
+            if (curand_uniform_double(&seeds[pos]) <= (taxa * temps[ciclo])) {
               SET_E(i, EXPOSTO);
             }
           }
@@ -829,7 +830,8 @@ void movimentacao(TIPO_AGENTE *agentes, int quantAgentes,
 void contato(TIPO_AGENTE *agentes, int quantAgentes, const int *quantLotes,
              int quantQuadras, const double *parametros,
              const int *indexParametros, const int *indexQuadras,
-             const int *indexPosicoes, const int *posicoes) {
+             const int *indexPosicoes, const int *posicoes, 
+             int ciclo, const double *temps) {
 #pragma omp parallel for
   for (int pos = 0; pos < indexPosicoes[indexQuadras[quantQuadras * 2 - 1]] / 4;
        pos++) {
@@ -868,7 +870,7 @@ void contato(TIPO_AGENTE *agentes, int quantAgentes, const int *quantLotes,
               taxa = TAXA_INFECCAO_IDOSO(randomizarPercentual());
               break;
             }
-            if (randomizarPercentual() <= taxa) {
+            if (randomizarPercentual() <= (taxa * temps[ciclo])) {
               SET_E(i, EXPOSTO);
             }
           }
@@ -967,7 +969,8 @@ void iniciarSimulacao(int idSimulacao, const double *parametros,
                       const int *vizinhancas, const int *indexPosicoes,
                       const int *posicoes,
                       const int *indexSaidaQuantidadeQuadras,
-                      int *saidaQuantidadeQuadras) {
+                      int *saidaQuantidadeQuadras, 
+                      int sizeTemps, const double *temps) {
   int ciclos = NUMERO_CICLOS_SIMULACAO + 1;
 
   int quantLinhasSaidaEspacial =
@@ -1005,6 +1008,7 @@ void iniciarSimulacao(int idSimulacao, const double *parametros,
   int *vizinhancasDev;
   int *indexPosicoesDev;
   int *posicoesDev;
+  double *tempsDev;
 
   cudaMalloc((void **)&agentesDev,
              quantAgentes * ATRIBUTOS_AGENTE * sizeof(TIPO_AGENTE));
@@ -1029,6 +1033,7 @@ void iniciarSimulacao(int idSimulacao, const double *parametros,
              (indexQuadras[quantQuadras * 2 - 1] + 1) * sizeof(int));
   cudaMalloc((void **)&posicoesDev,
              indexPosicoes[indexQuadras[quantQuadras * 2 - 1]] * sizeof(int));
+  cudaMalloc((void **)&tempsDev, sizeTemps * sizeof(double));
 
   cudaMemcpy(agentesDev, agentes,
              quantAgentes * ATRIBUTOS_AGENTE * sizeof(TIPO_AGENTE),
@@ -1063,6 +1068,8 @@ void iniciarSimulacao(int idSimulacao, const double *parametros,
              cudaMemcpyHostToDevice);
   cudaMemcpy(posicoesDev, posicoes,
              indexPosicoes[indexQuadras[quantQuadras * 2 - 1]] * sizeof(int),
+             cudaMemcpyHostToDevice);
+  cudaMemcpy(tempsDev, temps, sizeTemps * sizeof(double), 
              cudaMemcpyHostToDevice);
 
   int numThreads = 1024;
@@ -1110,7 +1117,7 @@ void iniciarSimulacao(int idSimulacao, const double *parametros,
     contato<<<f2, numThreads>>>(
         seedsDev, agentesDev, quantAgentes, quantLotesDev, quantQuadras,
         parametrosDev, indexParametrosDev, indexQuadrasDev, indexPosicoesDev,
-        posicoesDev);
+        posicoesDev, ciclo - 1, tempsDev);
 
     transicao<<<f1, numThreads>>>(seedsDev, agentesDev,
                                               quantAgentes, parametrosDev,
@@ -1146,7 +1153,8 @@ void iniciarSimulacao(int idSimulacao, const double *parametros,
     movimentacao(agentes, quantAgentes, indexQuadras, indexVizinhancas,
                  vizinhancas, parametros, indexParametros);
     contato(agentes, quantAgentes, quantLotes, quantQuadras, parametros,
-            indexParametros, indexQuadras, indexPosicoes, posicoes);
+            indexParametros, indexQuadras, indexPosicoes, posicoes, 
+            ciclo - 1, temps);
     transicao(agentes, quantAgentes, parametros, indexParametros);
 
     SaidasSimulacao::gerarSaidaQuantidadeTotal(agentes, quantAgentes,
@@ -1187,6 +1195,7 @@ void iniciarSimulacao(int idSimulacao, const double *parametros,
   cudaFree(vizinhancasDev);
   cudaFree(indexPosicoesDev);
   cudaFree(posicoesDev);
+  cudaFree(tempsDev);
 
 #endif
 
