@@ -113,7 +113,7 @@ tuple<int, int *, int *, int *, int *, int *, int *> lerVetores() {
       string("Entradas") + SEPARADOR + string("Vetores.csv");
   ifstream arquivoEntrada(nomeArquivoEntrada);
   if (arquivoEntrada.is_open()) {
-    
+
     arquivoEntrada >> quantQuadras;
     arquivoEntrada.get();
     quantLotes = new int[quantQuadras];
@@ -121,32 +121,32 @@ tuple<int, int *, int *, int *, int *, int *, int *> lerVetores() {
       arquivoEntrada >> quantLotes[i];
       arquivoEntrada.get();
     }
-    
+
     indexQuadras = new int[quantQuadras * 2];
     for (int i = 0; i < quantQuadras * 2; ++i) {
       arquivoEntrada >> indexQuadras[i];
       arquivoEntrada.get();
     }
-    
+
     indexVizinhancas = new int[indexQuadras[quantQuadras * 2 - 1] + 1];
     for (int i = 0; i < indexQuadras[quantQuadras * 2 - 1] + 1; ++i) {
       arquivoEntrada >> indexVizinhancas[i];
       arquivoEntrada.get();
     }
-    
+
     vizinhancas = new int[indexVizinhancas[indexQuadras[quantQuadras * 2 - 1]]];
     for (int i = 0; i < indexVizinhancas[indexQuadras[quantQuadras * 2 - 1]];
          ++i) {
       arquivoEntrada >> vizinhancas[i];
       arquivoEntrada.get();
     }
-    
+
     indexPosicoes = new int[indexQuadras[quantQuadras * 2 - 1] + 1];
     for (int i = 0; i < indexQuadras[quantQuadras * 2 - 1] + 1; ++i) {
       arquivoEntrada >> indexPosicoes[i];
       arquivoEntrada.get();
     }
-    
+
     posicoes = new int[indexPosicoes[indexQuadras[quantQuadras * 2 - 1]]];
     for (int i = 0; i < indexPosicoes[indexQuadras[quantQuadras * 2 - 1]];
          ++i) {
@@ -179,7 +179,7 @@ tuple<int, double *> lerTemperaturas() {
   } else {
     cerr << "Arquivo: " << nomeArquivoEntrada << " nao foi aberto!" << endl;
     exit(1);
-  }  
+  }
   return make_tuple(sizeTemps, temps);
 }
 
@@ -211,41 +211,70 @@ tuple<int, int, int *> lerArquivoDistribuicaoHumanos() {
   char s1, fe1, sd1;
 
   for (int i = 0; i < nHumanos; ++i) {
-    arquivo >> q; arquivo.get();
-    arquivo >> l; arquivo.get();
-    arquivo >> x; arquivo.get();
-    arquivo >> y; arquivo.get();
-    arquivo >> s1; arquivo.get();
-    arquivo >> fe1; arquivo.get();
-    arquivo >> sd1; arquivo.get();
-    arquivo >> st; arquivo.get();
-    arquivo >> cic; arquivo.get();
+    arquivo >> q;
+    arquivo.get();
+    arquivo >> l;
+    arquivo.get();
+    arquivo >> x;
+    arquivo.get();
+    arquivo >> y;
+    arquivo.get();
+    arquivo >> s1;
+    arquivo.get();
+    arquivo >> fe1;
+    arquivo.get();
+    arquivo >> sd1;
+    arquivo.get();
+    arquivo >> st;
+    arquivo.get();
+    arquivo >> cic;
+    arquivo.get();
 
     switch (s1) {
-      case 'M': s = MASCULINO; break;
-      case 'F': s = FEMININO; break;
+    case 'M':
+      s = MASCULINO;
+      break;
+    case 'F':
+      s = FEMININO;
+      break;
     }
 
     switch (fe1) {
-      case 'C': fe = CRIANCA; break;
-      case 'J': fe = JOVEM; break;
-      case 'A': fe = ADULTO; break;
-      case 'I': fe = IDOSO; break;
+    case 'C':
+      fe = CRIANCA;
+      break;
+    case 'J':
+      fe = JOVEM;
+      break;
+    case 'A':
+      fe = ADULTO;
+      break;
+    case 'I':
+      fe = IDOSO;
+      break;
     }
 
     switch (sd1) {
-      case 'S': sd = SUSCETIVEL; break;
-      case 'I': sd = INFECTADO; break;
+    case 'S':
+      sd = SUSCETIVEL;
+      break;
+    case 'I':
+      sd = INFECTADO;
+      break;
     }
 
-    distHumanos[9 * i + 0] = q; distHumanos[9 * i + 1] = l;
-    distHumanos[9 * i + 2] = x; distHumanos[9 * i + 3] = y;
-    distHumanos[9 * i + 4] = s; distHumanos[9 * i + 5] = fe;
-    distHumanos[9 * i + 6] = sd; distHumanos[9 * i + 7] = st;
+    distHumanos[9 * i + 0] = q;
+    distHumanos[9 * i + 1] = l;
+    distHumanos[9 * i + 2] = x;
+    distHumanos[9 * i + 3] = y;
+    distHumanos[9 * i + 4] = s;
+    distHumanos[9 * i + 5] = fe;
+    distHumanos[9 * i + 6] = sd;
+    distHumanos[9 * i + 7] = st;
     distHumanos[9 * i + 8] = cic;
   }
   arquivo.close();
-  
+
   return make_tuple(nHumanos, sizeDistHumanos, distHumanos);
 }
 
