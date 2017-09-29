@@ -235,11 +235,14 @@ namespace SaidasSimulacao {
 
 void salvarSaidaEspacial(string pastaSaida, const int *saidaEspacial,
                          int quantLinhasSaidaEspacial,
-                         int quantColunasSaidaEspacial) {
+                         int quantColunasSaidaEspacial, 
+                         const int *posicoes) {
   string nomeArquivoSaida = pastaSaida + string("Espacial_Geo.csv");
   ofstream arquivoSaida(nomeArquivoSaida);
   if (arquivoSaida.is_open()) {
     for (int i = 0; i < quantLinhasSaidaEspacial; ++i) {
+      arquivoSaida << posicoes[i * 4 + 0] << ";";
+      arquivoSaida << posicoes[i * 4 + 1] << ";";
       for (int j = 0; j < quantColunasSaidaEspacial; ++j) {
         arquivoSaida << saidaEspacial[VEC(i, j, quantColunasSaidaEspacial)]
                      << ";";
@@ -260,56 +263,58 @@ __global__ void gerarSaidaQuantidadeTotal(const TIPO_AGENTE *agentes,
                                           int *saidaQuantidadeTotal,
                                           int ciclo) {
   int i = (threadIdx.x + blockIdx.x * blockDim.x);
-  if (i < quantAgentes && GET_X(i) != 0) {
-    if (GET_S(i) == MASCULINO) {
-      switch (GET_I(i)) {
-      case CRIANCA:
-        atomicAdd(&saidaQuantidadeTotal[VEC(ciclo, 1 + GET_E(i),
-                                            COLUNAS_SAIDAS_QUANTIDADES)],
-                  1);
-        break;
-      case JOVEM:
-        atomicAdd(&saidaQuantidadeTotal[VEC(ciclo, 5 + GET_E(i),
-                                            COLUNAS_SAIDAS_QUANTIDADES)],
-                  1);
-        break;
-      case ADULTO:
-        atomicAdd(&saidaQuantidadeTotal[VEC(ciclo, 9 + GET_E(i),
-                                            COLUNAS_SAIDAS_QUANTIDADES)],
-                  1);
-        break;
-      case IDOSO:
-        atomicAdd(&saidaQuantidadeTotal[VEC(ciclo, 13 + GET_E(i),
-                                            COLUNAS_SAIDAS_QUANTIDADES)],
-                  1);
-        break;
+  if (i < quantAgentes) {
+    if (GET_X(i) != 0) {
+      if (GET_S(i) == MASCULINO) {
+        switch (GET_I(i)) {
+        case CRIANCA:
+          atomicAdd(&saidaQuantidadeTotal[VEC(ciclo, 1 + GET_E(i),
+                                              COLUNAS_SAIDAS_QUANTIDADES)],
+                    1);
+          break;
+        case JOVEM:
+          atomicAdd(&saidaQuantidadeTotal[VEC(ciclo, 5 + GET_E(i),
+                                              COLUNAS_SAIDAS_QUANTIDADES)],
+                    1);
+          break;
+        case ADULTO:
+          atomicAdd(&saidaQuantidadeTotal[VEC(ciclo, 9 + GET_E(i),
+                                              COLUNAS_SAIDAS_QUANTIDADES)],
+                    1);
+          break;
+        case IDOSO:
+          atomicAdd(&saidaQuantidadeTotal[VEC(ciclo, 13 + GET_E(i),
+                                              COLUNAS_SAIDAS_QUANTIDADES)],
+                    1);
+          break;
+        }
+      } else {
+        switch (GET_I(i)) {
+        case CRIANCA:
+          atomicAdd(&saidaQuantidadeTotal[VEC(ciclo, 17 + GET_E(i),
+                                              COLUNAS_SAIDAS_QUANTIDADES)],
+                    1);
+          break;
+        case JOVEM:
+          atomicAdd(&saidaQuantidadeTotal[VEC(ciclo, 21 + GET_E(i),
+                                              COLUNAS_SAIDAS_QUANTIDADES)],
+                    1);
+          break;
+        case ADULTO:
+          atomicAdd(&saidaQuantidadeTotal[VEC(ciclo, 25 + GET_E(i),
+                                              COLUNAS_SAIDAS_QUANTIDADES)],
+                    1);
+          break;
+        case IDOSO:
+          atomicAdd(&saidaQuantidadeTotal[VEC(ciclo, 29 + GET_E(i),
+                                              COLUNAS_SAIDAS_QUANTIDADES)],
+                    1);
+          break;
+        }
       }
-    } else {
-      switch (GET_I(i)) {
-      case CRIANCA:
-        atomicAdd(&saidaQuantidadeTotal[VEC(ciclo, 17 + GET_E(i),
-                                            COLUNAS_SAIDAS_QUANTIDADES)],
-                  1);
-        break;
-      case JOVEM:
-        atomicAdd(&saidaQuantidadeTotal[VEC(ciclo, 21 + GET_E(i),
-                                            COLUNAS_SAIDAS_QUANTIDADES)],
-                  1);
-        break;
-      case ADULTO:
-        atomicAdd(&saidaQuantidadeTotal[VEC(ciclo, 25 + GET_E(i),
-                                            COLUNAS_SAIDAS_QUANTIDADES)],
-                  1);
-        break;
-      case IDOSO:
-        atomicAdd(&saidaQuantidadeTotal[VEC(ciclo, 29 + GET_E(i),
-                                            COLUNAS_SAIDAS_QUANTIDADES)],
-                  1);
-        break;
-      }
+      atomicAdd(
+          &saidaQuantidadeTotal[VEC(ciclo, 33, COLUNAS_SAIDAS_QUANTIDADES)], 1);
     }
-    atomicAdd(&saidaQuantidadeTotal[VEC(ciclo, 33, COLUNAS_SAIDAS_QUANTIDADES)],
-              1);
   }
 }
 
@@ -319,73 +324,75 @@ gerarSaidaQuantidadeQuadras(const TIPO_AGENTE *agentes, int quantAgentes,
                             int *saidaQuantidadeQuadras, int ciclo) {
   int i = (threadIdx.x + blockIdx.x * blockDim.x);
   if (i < quantAgentes) {
-    if (GET_S(i) == MASCULINO && GET_X(i) != 0) {
-      switch (GET_I(i)) {
-      case CRIANCA:
-        atomicAdd(
-            &saidaQuantidadeQuadras[indexSaidaQuantidadeQuadras[GET_Q(i)] +
-                                    VEC(ciclo, 1 + GET_E(i),
-                                        COLUNAS_SAIDAS_QUANTIDADES)],
-            1);
-        break;
-      case JOVEM:
-        atomicAdd(
-            &saidaQuantidadeQuadras[indexSaidaQuantidadeQuadras[GET_Q(i)] +
-                                    VEC(ciclo, 5 + GET_E(i),
-                                        COLUNAS_SAIDAS_QUANTIDADES)],
-            1);
-        break;
-      case ADULTO:
-        atomicAdd(
-            &saidaQuantidadeQuadras[indexSaidaQuantidadeQuadras[GET_Q(i)] +
-                                    VEC(ciclo, 9 + GET_E(i),
-                                        COLUNAS_SAIDAS_QUANTIDADES)],
-            1);
-        break;
-      case IDOSO:
-        atomicAdd(
-            &saidaQuantidadeQuadras[indexSaidaQuantidadeQuadras[GET_Q(i)] +
-                                    VEC(ciclo, 13 + GET_E(i),
-                                        COLUNAS_SAIDAS_QUANTIDADES)],
-            1);
-        break;
+    if (GET_X(i) != 0) {
+      if (GET_S(i) == MASCULINO) {
+        switch (GET_I(i)) {
+        case CRIANCA:
+          atomicAdd(
+              &saidaQuantidadeQuadras[indexSaidaQuantidadeQuadras[GET_Q(i)] +
+                                      VEC(ciclo, 1 + GET_E(i),
+                                          COLUNAS_SAIDAS_QUANTIDADES)],
+              1);
+          break;
+        case JOVEM:
+          atomicAdd(
+              &saidaQuantidadeQuadras[indexSaidaQuantidadeQuadras[GET_Q(i)] +
+                                      VEC(ciclo, 5 + GET_E(i),
+                                          COLUNAS_SAIDAS_QUANTIDADES)],
+              1);
+          break;
+        case ADULTO:
+          atomicAdd(
+              &saidaQuantidadeQuadras[indexSaidaQuantidadeQuadras[GET_Q(i)] +
+                                      VEC(ciclo, 9 + GET_E(i),
+                                          COLUNAS_SAIDAS_QUANTIDADES)],
+              1);
+          break;
+        case IDOSO:
+          atomicAdd(
+              &saidaQuantidadeQuadras[indexSaidaQuantidadeQuadras[GET_Q(i)] +
+                                      VEC(ciclo, 13 + GET_E(i),
+                                          COLUNAS_SAIDAS_QUANTIDADES)],
+              1);
+          break;
+        }
+      } else {
+        switch (GET_I(i)) {
+        case CRIANCA:
+          atomicAdd(
+              &saidaQuantidadeQuadras[indexSaidaQuantidadeQuadras[GET_Q(i)] +
+                                      VEC(ciclo, 17 + GET_E(i),
+                                          COLUNAS_SAIDAS_QUANTIDADES)],
+              1);
+          break;
+        case JOVEM:
+          atomicAdd(
+              &saidaQuantidadeQuadras[indexSaidaQuantidadeQuadras[GET_Q(i)] +
+                                      VEC(ciclo, 21 + GET_E(i),
+                                          COLUNAS_SAIDAS_QUANTIDADES)],
+              1);
+          break;
+        case ADULTO:
+          atomicAdd(
+              &saidaQuantidadeQuadras[indexSaidaQuantidadeQuadras[GET_Q(i)] +
+                                      VEC(ciclo, 25 + GET_E(i),
+                                          COLUNAS_SAIDAS_QUANTIDADES)],
+              1);
+          break;
+        case IDOSO:
+          atomicAdd(
+              &saidaQuantidadeQuadras[indexSaidaQuantidadeQuadras[GET_Q(i)] +
+                                      VEC(ciclo, 29 + GET_E(i),
+                                          COLUNAS_SAIDAS_QUANTIDADES)],
+              1);
+          break;
+        }
       }
-    } else {
-      switch (GET_I(i)) {
-      case CRIANCA:
-        atomicAdd(
-            &saidaQuantidadeQuadras[indexSaidaQuantidadeQuadras[GET_Q(i)] +
-                                    VEC(ciclo, 17 + GET_E(i),
-                                        COLUNAS_SAIDAS_QUANTIDADES)],
-            1);
-        break;
-      case JOVEM:
-        atomicAdd(
-            &saidaQuantidadeQuadras[indexSaidaQuantidadeQuadras[GET_Q(i)] +
-                                    VEC(ciclo, 21 + GET_E(i),
-                                        COLUNAS_SAIDAS_QUANTIDADES)],
-            1);
-        break;
-      case ADULTO:
-        atomicAdd(
-            &saidaQuantidadeQuadras[indexSaidaQuantidadeQuadras[GET_Q(i)] +
-                                    VEC(ciclo, 25 + GET_E(i),
-                                        COLUNAS_SAIDAS_QUANTIDADES)],
-            1);
-        break;
-      case IDOSO:
-        atomicAdd(
-            &saidaQuantidadeQuadras[indexSaidaQuantidadeQuadras[GET_Q(i)] +
-                                    VEC(ciclo, 29 + GET_E(i),
-                                        COLUNAS_SAIDAS_QUANTIDADES)],
-            1);
-        break;
-      }
+      atomicAdd(
+          &saidaQuantidadeQuadras[indexSaidaQuantidadeQuadras[GET_Q(i)] +
+                                  VEC(ciclo, 33, COLUNAS_SAIDAS_QUANTIDADES)],
+          1);
     }
-    atomicAdd(
-        &saidaQuantidadeQuadras[indexSaidaQuantidadeQuadras[GET_Q(i)] +
-                                VEC(ciclo, 33, COLUNAS_SAIDAS_QUANTIDADES)],
-        1);
   }
 }
 
@@ -423,55 +430,57 @@ void gerarSaidaQuantidadeTotal(const TIPO_AGENTE *agentes, int quantAgentes,
                                int *saidaQuantidadeTotal, int ciclo) {
 #pragma omp parallel for
   for (int i = 0; i < quantAgentes; i++) {
-    if (GET_S(i) == MASCULINO && GET_X(i) != 0) {
-      switch (GET_I(i)) {
-      case CRIANCA: {
+    if (GET_X(i) != 0) {
+      if (GET_S(i) == MASCULINO) {
+        switch (GET_I(i)) {
+        case CRIANCA: {
 #pragma omp atomic
-        saidaQuantidadeTotal[VEC(ciclo, 1 + GET_E(i),
-                                 COLUNAS_SAIDAS_QUANTIDADES)]++;
-      } break;
-      case JOVEM: {
+          saidaQuantidadeTotal[VEC(ciclo, 1 + GET_E(i),
+                                   COLUNAS_SAIDAS_QUANTIDADES)]++;
+        } break;
+        case JOVEM: {
 #pragma omp atomic
-        saidaQuantidadeTotal[VEC(ciclo, 5 + GET_E(i),
-                                 COLUNAS_SAIDAS_QUANTIDADES)]++;
-      } break;
-      case ADULTO: {
+          saidaQuantidadeTotal[VEC(ciclo, 5 + GET_E(i),
+                                   COLUNAS_SAIDAS_QUANTIDADES)]++;
+        } break;
+        case ADULTO: {
 #pragma omp atomic
-        saidaQuantidadeTotal[VEC(ciclo, 9 + GET_E(i),
-                                 COLUNAS_SAIDAS_QUANTIDADES)]++;
-      } break;
-      case IDOSO: {
+          saidaQuantidadeTotal[VEC(ciclo, 9 + GET_E(i),
+                                   COLUNAS_SAIDAS_QUANTIDADES)]++;
+        } break;
+        case IDOSO: {
 #pragma omp atomic
-        saidaQuantidadeTotal[VEC(ciclo, 13 + GET_E(i),
-                                 COLUNAS_SAIDAS_QUANTIDADES)]++;
-      } break;
+          saidaQuantidadeTotal[VEC(ciclo, 13 + GET_E(i),
+                                   COLUNAS_SAIDAS_QUANTIDADES)]++;
+        } break;
+        }
+      } else {
+        switch (GET_I(i)) {
+        case CRIANCA: {
+#pragma omp atomic
+          saidaQuantidadeTotal[VEC(ciclo, 17 + GET_E(i),
+                                   COLUNAS_SAIDAS_QUANTIDADES)]++;
+        } break;
+        case JOVEM: {
+#pragma omp atomic
+          saidaQuantidadeTotal[VEC(ciclo, 21 + GET_E(i),
+                                   COLUNAS_SAIDAS_QUANTIDADES)]++;
+        } break;
+        case ADULTO: {
+#pragma omp atomic
+          saidaQuantidadeTotal[VEC(ciclo, 25 + GET_E(i),
+                                   COLUNAS_SAIDAS_QUANTIDADES)]++;
+        } break;
+        case IDOSO: {
+#pragma omp atomic
+          saidaQuantidadeTotal[VEC(ciclo, 29 + GET_E(i),
+                                   COLUNAS_SAIDAS_QUANTIDADES)]++;
+        } break;
+        }
       }
-    } else {
-      switch (GET_I(i)) {
-      case CRIANCA: {
 #pragma omp atomic
-        saidaQuantidadeTotal[VEC(ciclo, 17 + GET_E(i),
-                                 COLUNAS_SAIDAS_QUANTIDADES)]++;
-      } break;
-      case JOVEM: {
-#pragma omp atomic
-        saidaQuantidadeTotal[VEC(ciclo, 21 + GET_E(i),
-                                 COLUNAS_SAIDAS_QUANTIDADES)]++;
-      } break;
-      case ADULTO: {
-#pragma omp atomic
-        saidaQuantidadeTotal[VEC(ciclo, 25 + GET_E(i),
-                                 COLUNAS_SAIDAS_QUANTIDADES)]++;
-      } break;
-      case IDOSO: {
-#pragma omp atomic
-        saidaQuantidadeTotal[VEC(ciclo, 29 + GET_E(i),
-                                 COLUNAS_SAIDAS_QUANTIDADES)]++;
-      } break;
-      }
+      saidaQuantidadeTotal[VEC(ciclo, 33, COLUNAS_SAIDAS_QUANTIDADES)]++;
     }
-#pragma omp atomic
-    saidaQuantidadeTotal[VEC(ciclo, 33, COLUNAS_SAIDAS_QUANTIDADES)]++;
   }
 }
 
@@ -480,64 +489,66 @@ void gerarSaidaQuantidadeQuadras(const TIPO_AGENTE *agentes, int quantAgentes,
                                  int *saidaQuantidadeQuadras, int ciclo) {
 #pragma omp parallel for
   for (int i = 0; i < quantAgentes; i++) {
-    if (GET_S(i) == MASCULINO && GET_X(i) != 0) {
-      switch (GET_I(i)) {
-      case CRIANCA: {
+    if (GET_X(i) != 0) {
+      if (GET_S(i) == MASCULINO) {
+        switch (GET_I(i)) {
+        case CRIANCA: {
 #pragma omp atomic
-        saidaQuantidadeQuadras[indexSaidaQuantidadeQuadras[GET_Q(i)] +
-                               VEC(ciclo, 1 + GET_E(i),
-                                   COLUNAS_SAIDAS_QUANTIDADES)]++;
-      } break;
-      case JOVEM: {
+          saidaQuantidadeQuadras[indexSaidaQuantidadeQuadras[GET_Q(i)] +
+                                 VEC(ciclo, 1 + GET_E(i),
+                                     COLUNAS_SAIDAS_QUANTIDADES)]++;
+        } break;
+        case JOVEM: {
 #pragma omp atomic
-        saidaQuantidadeQuadras[indexSaidaQuantidadeQuadras[GET_Q(i)] +
-                               VEC(ciclo, 5 + GET_E(i),
-                                   COLUNAS_SAIDAS_QUANTIDADES)]++;
-      } break;
-      case ADULTO: {
+          saidaQuantidadeQuadras[indexSaidaQuantidadeQuadras[GET_Q(i)] +
+                                 VEC(ciclo, 5 + GET_E(i),
+                                     COLUNAS_SAIDAS_QUANTIDADES)]++;
+        } break;
+        case ADULTO: {
 #pragma omp atomic
-        saidaQuantidadeQuadras[indexSaidaQuantidadeQuadras[GET_Q(i)] +
-                               VEC(ciclo, 9 + GET_E(i),
-                                   COLUNAS_SAIDAS_QUANTIDADES)]++;
-      } break;
-      case IDOSO: {
+          saidaQuantidadeQuadras[indexSaidaQuantidadeQuadras[GET_Q(i)] +
+                                 VEC(ciclo, 9 + GET_E(i),
+                                     COLUNAS_SAIDAS_QUANTIDADES)]++;
+        } break;
+        case IDOSO: {
 #pragma omp atomic
-        saidaQuantidadeQuadras[indexSaidaQuantidadeQuadras[GET_Q(i)] +
-                               VEC(ciclo, 13 + GET_E(i),
-                                   COLUNAS_SAIDAS_QUANTIDADES)]++;
-      } break;
+          saidaQuantidadeQuadras[indexSaidaQuantidadeQuadras[GET_Q(i)] +
+                                 VEC(ciclo, 13 + GET_E(i),
+                                     COLUNAS_SAIDAS_QUANTIDADES)]++;
+        } break;
+        }
+      } else {
+        switch (GET_I(i)) {
+        case CRIANCA: {
+#pragma omp atomic
+          saidaQuantidadeQuadras[indexSaidaQuantidadeQuadras[GET_Q(i)] +
+                                 VEC(ciclo, 17 + GET_E(i),
+                                     COLUNAS_SAIDAS_QUANTIDADES)]++;
+        } break;
+        case JOVEM: {
+#pragma omp atomic
+          saidaQuantidadeQuadras[indexSaidaQuantidadeQuadras[GET_Q(i)] +
+                                 VEC(ciclo, 21 + GET_E(i),
+                                     COLUNAS_SAIDAS_QUANTIDADES)]++;
+        } break;
+        case ADULTO: {
+#pragma omp atomic
+          saidaQuantidadeQuadras[indexSaidaQuantidadeQuadras[GET_Q(i)] +
+                                 VEC(ciclo, 25 + GET_E(i),
+                                     COLUNAS_SAIDAS_QUANTIDADES)]++;
+        } break;
+        case IDOSO: {
+#pragma omp atomic
+          saidaQuantidadeQuadras[indexSaidaQuantidadeQuadras[GET_Q(i)] +
+                                 VEC(ciclo, 29 + GET_E(i),
+                                     COLUNAS_SAIDAS_QUANTIDADES)]++;
+        } break;
+        }
       }
-    } else {
-      switch (GET_I(i)) {
-      case CRIANCA: {
 #pragma omp atomic
-        saidaQuantidadeQuadras[indexSaidaQuantidadeQuadras[GET_Q(i)] +
-                               VEC(ciclo, 17 + GET_E(i),
-                                   COLUNAS_SAIDAS_QUANTIDADES)]++;
-      } break;
-      case JOVEM: {
-#pragma omp atomic
-        saidaQuantidadeQuadras[indexSaidaQuantidadeQuadras[GET_Q(i)] +
-                               VEC(ciclo, 21 + GET_E(i),
-                                   COLUNAS_SAIDAS_QUANTIDADES)]++;
-      } break;
-      case ADULTO: {
-#pragma omp atomic
-        saidaQuantidadeQuadras[indexSaidaQuantidadeQuadras[GET_Q(i)] +
-                               VEC(ciclo, 25 + GET_E(i),
-                                   COLUNAS_SAIDAS_QUANTIDADES)]++;
-      } break;
-      case IDOSO: {
-#pragma omp atomic
-        saidaQuantidadeQuadras[indexSaidaQuantidadeQuadras[GET_Q(i)] +
-                               VEC(ciclo, 29 + GET_E(i),
-                                   COLUNAS_SAIDAS_QUANTIDADES)]++;
-      } break;
-      }
+      saidaQuantidadeQuadras[indexSaidaQuantidadeQuadras[GET_Q(i)] +
+                             VEC(ciclo, 33, COLUNAS_SAIDAS_QUANTIDADES)]++;
     }
-#pragma omp atomic
-    saidaQuantidadeQuadras[indexSaidaQuantidadeQuadras[GET_Q(i)] +
-                           VEC(ciclo, 33, COLUNAS_SAIDAS_QUANTIDADES)]++;
   }
 }
 
@@ -859,52 +870,52 @@ void movimentacao(TIPO_AGENTE *agentes, int quantAgentes,
     int l = GET_L(id);
     int x = GET_X(id);
     int y = GET_Y(id);
-    if (x == 0)
-      continue;
-    double taxa;
-    switch (GET_I(id)) {
-    case CRIANCA:
-      taxa = TAXA_MOBILIDADE_CRIANCA(randomizarPercentual());
-      break;
-    case JOVEM:
-      taxa = TAXA_MOBILIDADE_JOVEM(randomizarPercentual());
-      break;
-    case ADULTO:
-      taxa = TAXA_MOBILIDADE_ADULTO(randomizarPercentual());
-      break;
-    case IDOSO:
-      taxa = TAXA_MOBILIDADE_IDOSO(randomizarPercentual());
-      break;
-    }
-    if (randomizarPercentual() <= taxa) {
-      int quantidade = 0;
-      for (int i = indexVizinhancas[indexQuadras[2 * q] + l];
-           i < indexVizinhancas[indexQuadras[2 * q] + l + 1]; i += 6) {
-        if (vizinhancas[i + 0] == x && vizinhancas[i + 1] == y) {
-          quantidade++;
-        }
+    if (x != 0) {
+      double taxa;
+      switch (GET_I(id)) {
+      case CRIANCA:
+        taxa = TAXA_MOBILIDADE_CRIANCA(randomizarPercentual());
+        break;
+      case JOVEM:
+        taxa = TAXA_MOBILIDADE_JOVEM(randomizarPercentual());
+        break;
+      case ADULTO:
+        taxa = TAXA_MOBILIDADE_ADULTO(randomizarPercentual());
+        break;
+      case IDOSO:
+        taxa = TAXA_MOBILIDADE_IDOSO(randomizarPercentual());
+        break;
       }
-      if (quantidade > 0) {
-        int k = 0;
-        int indice = (int)(randomizarPercentual() * quantidade);
+      if (randomizarPercentual() <= taxa) {
+        int quantidade = 0;
         for (int i = indexVizinhancas[indexQuadras[2 * q] + l];
              i < indexVizinhancas[indexQuadras[2 * q] + l + 1]; i += 6) {
           if (vizinhancas[i + 0] == x && vizinhancas[i + 1] == y) {
-            if (k == indice) {
-              x = vizinhancas[i + 2];
-              y = vizinhancas[i + 3];
-              l = vizinhancas[i + 4];
-              q = vizinhancas[i + 5];
-              break;
-            } else {
-              k++;
-            }
+            quantidade++;
           }
         }
-        SET_X(id, x);
-        SET_Y(id, y);
-        SET_L(id, l);
-        SET_Q(id, q);
+        if (quantidade > 0) {
+          int k = 0;
+          int indice = (int)(randomizarPercentual() * quantidade);
+          for (int i = indexVizinhancas[indexQuadras[2 * q] + l];
+               i < indexVizinhancas[indexQuadras[2 * q] + l + 1]; i += 6) {
+            if (vizinhancas[i + 0] == x && vizinhancas[i + 1] == y) {
+              if (k == indice) {
+                x = vizinhancas[i + 2];
+                y = vizinhancas[i + 3];
+                l = vizinhancas[i + 4];
+                q = vizinhancas[i + 5];
+                break;
+              } else {
+                k++;
+              }
+            }
+          }
+          SET_X(id, x);
+          SET_Y(id, y);
+          SET_L(id, l);
+          SET_Q(id, q);
+        }
       }
     }
   }
@@ -968,78 +979,78 @@ void transicao(TIPO_AGENTE *agentes, int quantAgentes, const double *parametros,
 #pragma omp parallel for
   for (int i = 0; i < quantAgentes; i++) {
     int c = GET_C(i);
-    if (GET_X(i) == 0)
-      continue;
-    switch (GET_E(i)) {
-    case EXPOSTO: {
-      double periodo;
-      switch (GET_I(i)) {
-      case CRIANCA:
-        periodo = PERIODO_EXPOSTO_CRIANCA(randomizarPercentual());
-        break;
-      case JOVEM:
-        periodo = PERIODO_EXPOSTO_JOVEM(randomizarPercentual());
-        break;
-      case ADULTO:
-        periodo = PERIODO_EXPOSTO_ADULTO(randomizarPercentual());
-        break;
-      case IDOSO:
-        periodo = PERIODO_EXPOSTO_IDOSO(randomizarPercentual());
-        break;
+    if (GET_X(i) != 0) {
+      switch (GET_E(i)) {
+      case EXPOSTO: {
+        double periodo;
+        switch (GET_I(i)) {
+        case CRIANCA:
+          periodo = PERIODO_EXPOSTO_CRIANCA(randomizarPercentual());
+          break;
+        case JOVEM:
+          periodo = PERIODO_EXPOSTO_JOVEM(randomizarPercentual());
+          break;
+        case ADULTO:
+          periodo = PERIODO_EXPOSTO_ADULTO(randomizarPercentual());
+          break;
+        case IDOSO:
+          periodo = PERIODO_EXPOSTO_IDOSO(randomizarPercentual());
+          break;
+        }
+        if (c >= periodo) {
+          SET_E(i, INFECTADO);
+          SET_C(i, 0);
+        } else {
+          SET_C(i, c + 1);
+        }
+      } break;
+      case INFECTADO: {
+        double periodo;
+        switch (GET_I(i)) {
+        case CRIANCA:
+          periodo = PERIODO_INFECTADO_CRIANCA(randomizarPercentual());
+          break;
+        case JOVEM:
+          periodo = PERIODO_INFECTADO_JOVEM(randomizarPercentual());
+          break;
+        case ADULTO:
+          periodo = PERIODO_INFECTADO_ADULTO(randomizarPercentual());
+          break;
+        case IDOSO:
+          periodo = PERIODO_INFECTADO_IDOSO(randomizarPercentual());
+          break;
+        }
+        if (c >= periodo) {
+          SET_E(i, RECUPERADO);
+          SET_C(i, 0);
+        } else {
+          SET_C(i, c + 1);
+        }
+      } break;
+      case RECUPERADO: {
+        double periodo;
+        switch (GET_I(i)) {
+        case CRIANCA:
+          periodo = PERIODO_RECUPERADO_CRIANCA(randomizarPercentual());
+          break;
+        case JOVEM:
+          periodo = PERIODO_RECUPERADO_JOVEM(randomizarPercentual());
+          break;
+        case ADULTO:
+          periodo = PERIODO_RECUPERADO_ADULTO(randomizarPercentual());
+          break;
+        case IDOSO:
+          periodo = PERIODO_RECUPERADO_IDOSO(randomizarPercentual());
+          break;
+        }
+        if (c >= periodo) {
+          SET_E(i, SUSCETIVEL);
+          SET_C(i, 0);
+        } else {
+          SET_C(i, c + 1);
+        }
+      } break;
       }
-      if (c >= periodo) {
-        SET_E(i, INFECTADO);
-        SET_C(i, 0);
-      } else {
-        SET_C(i, c + 1);
-      }
-    } break;
-    case INFECTADO: {
-      double periodo;
-      switch (GET_I(i)) {
-      case CRIANCA:
-        periodo = PERIODO_INFECTADO_CRIANCA(randomizarPercentual());
-        break;
-      case JOVEM:
-        periodo = PERIODO_INFECTADO_JOVEM(randomizarPercentual());
-        break;
-      case ADULTO:
-        periodo = PERIODO_INFECTADO_ADULTO(randomizarPercentual());
-        break;
-      case IDOSO:
-        periodo = PERIODO_INFECTADO_IDOSO(randomizarPercentual());
-        break;
-      }
-      if (c >= periodo) {
-        SET_E(i, RECUPERADO);
-        SET_C(i, 0);
-      } else {
-        SET_C(i, c + 1);
-      }
-    } break;
-    case RECUPERADO: {
-      double periodo;
-      switch (GET_I(i)) {
-      case CRIANCA:
-        periodo = PERIODO_RECUPERADO_CRIANCA(randomizarPercentual());
-        break;
-      case JOVEM:
-        periodo = PERIODO_RECUPERADO_JOVEM(randomizarPercentual());
-        break;
-      case ADULTO:
-        periodo = PERIODO_RECUPERADO_ADULTO(randomizarPercentual());
-        break;
-      case IDOSO:
-        periodo = PERIODO_RECUPERADO_IDOSO(randomizarPercentual());
-        break;
-      }
-      if (c >= periodo) {
-        SET_E(i, SUSCETIVEL);
-        SET_C(i, 0);
-      } else {
-        SET_C(i, c + 1);
-      }
-    } break;
     }
   }
 }
@@ -1296,7 +1307,8 @@ void iniciarSimulacao(int idSimulacao, const double *parametros,
 
   system((COMANDO_CRIAR_PASTA + pastaSaida).c_str());
   SaidasSimulacao::salvarSaidaEspacial(pastaSaida, saidaEspacial,
-                                       quantLinhasSaidaEspacial, ciclos);
+                                       quantLinhasSaidaEspacial, ciclos, 
+                                       posicoes);
 
   delete[](saidaEspacial);
   delete[](agentes);

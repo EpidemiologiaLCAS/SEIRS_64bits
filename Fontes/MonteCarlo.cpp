@@ -7,7 +7,7 @@
 namespace SaidasMonteCarlo {
 
 void gerarSaidaQuantidadeTotal(int idMonteCarlo, int ciclos, int simulacoes,
-                               int *saidaQuantidadeTotal) {
+                               int *saidaQuantidadeTotal, string pastaRaiz) {
   for (int i = 0; i < ciclos; ++i) {
     for (int j = 0; j < COLUNAS_SAIDAS_QUANTIDADES; ++j) {
       saidaQuantidadeTotal[VEC(i, j, COLUNAS_SAIDAS_QUANTIDADES)] /=
@@ -17,7 +17,7 @@ void gerarSaidaQuantidadeTotal(int idMonteCarlo, int ciclos, int simulacoes,
   for (int i = 0; i < ciclos; ++i) {
     saidaQuantidadeTotal[VEC(i, 0, COLUNAS_SAIDAS_QUANTIDADES)] = i;
   }
-  string nomeArquivoSaida = string("Saidas") + SEPARADOR + "MonteCarlo_" +
+  string nomeArquivoSaida = pastaRaiz + SEPARADOR + "MonteCarlo_" +
                             to_string(idMonteCarlo) + SEPARADOR +
                             string("Quantidades_Total.csv");
   ofstream arquivoSaida(nomeArquivoSaida);
@@ -42,7 +42,8 @@ void gerarSaidaQuantidadeTotal(int idMonteCarlo, int ciclos, int simulacoes,
 void gerarSaidaQuantidadeQuadras(int idMonteCarlo, int quantQuadras, int ciclos,
                                  int simulacoes,
                                  const int *indexSaidaQuantidadeQuadras,
-                                 int *saidaQuantidadeQuadras) {
+                                 int *saidaQuantidadeQuadras,
+                                 string pastaRaiz) {
   for (int idQuadra = 0; idQuadra < quantQuadras; ++idQuadra) {
     for (int i = 0; i < ciclos; ++i) {
       for (int j = 0; j < COLUNAS_SAIDAS_QUANTIDADES; ++j) {
@@ -55,9 +56,9 @@ void gerarSaidaQuantidadeQuadras(int idMonteCarlo, int quantQuadras, int ciclos,
       saidaQuantidadeQuadras[indexSaidaQuantidadeQuadras[idQuadra] +
                              VEC(i, 0, COLUNAS_SAIDAS_QUANTIDADES)] = i;
     }
-    string nomeArquivoSaida = string("Saidas") + SEPARADOR +
-                              string("MonteCarlo_") + to_string(idMonteCarlo) +
-                              SEPARADOR + string("Quantidades_Quadra-") +
+    string nomeArquivoSaida = pastaRaiz + SEPARADOR + string("MonteCarlo_") +
+                              to_string(idMonteCarlo) + SEPARADOR +
+                              string("Quantidades_Quadra-") +
                               to_string(idQuadra) + string(".csv");
     ofstream arquivoSaida(nomeArquivoSaida);
     if (arquivoSaida.is_open()) {
@@ -96,8 +97,8 @@ int *calcularIndexSaidaQuantidadeQuadras(int quantQuadras, int ciclos) {
 
 namespace MonteCarlo {
 
-void iniciarSimulacao(int idMonteCarlo, string pastaEntrada,
-                      string pastaSaida) {
+void iniciarSimulacao(int idMonteCarlo, string pastaEntrada, string pastaSaida,
+                      string pastaRaiz) {
   string pastaEntradaMonteCarlo = pastaEntrada,
          pastaSaidaMonteCarlo = pastaSaida;
 
@@ -147,9 +148,9 @@ void iniciarSimulacao(int idMonteCarlo, string pastaEntrada,
 
   SaidasMonteCarlo::gerarSaidaQuantidadeQuadras(
       idMonteCarlo, quantQuadras, ciclos, simulacoes,
-      indexSaidaQuantidadeQuadras, saidaQuantidadeQuadras);
+      indexSaidaQuantidadeQuadras, saidaQuantidadeQuadras, pastaRaiz);
   SaidasMonteCarlo::gerarSaidaQuantidadeTotal(idMonteCarlo, ciclos, simulacoes,
-                                              saidaQuantidadeTotal);
+                                              saidaQuantidadeTotal, pastaRaiz);
 
   delete[](saidaQuantidadeTotal);
   delete[](indexQuadras);
