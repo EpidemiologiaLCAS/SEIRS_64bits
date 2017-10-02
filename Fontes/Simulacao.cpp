@@ -235,8 +235,7 @@ namespace SaidasSimulacao {
 
 void salvarSaidaEspacial(string pastaSaida, const int *saidaEspacial,
                          int quantLinhasSaidaEspacial,
-                         int quantColunasSaidaEspacial, 
-                         const int *posicoes) {
+                         int quantColunasSaidaEspacial, const int *posicoes) {
   string nomeArquivoSaida = pastaSaida + string("Espacial_Geo.csv");
   ofstream arquivoSaida(nomeArquivoSaida);
   if (arquivoSaida.is_open()) {
@@ -584,40 +583,16 @@ namespace Simulacao {
 
 #ifdef __GPU__
 
-__global__ void insercaoHumanos(TIPO_AGENTE *agentes, int quantAgentes,
-                                int nHumanosExe, int sizeDistHumanos,
-                                const int *distHumanos, int ciclo) {
-  int q, l, x, y, s, fe, sd;
-
-  int id;
-  for (id = quantAgentes - nHumanosExe; id < quantAgentes; id++) {
-    if (GET_X(id) == 0) {
-      break;
-    }
-  }
-
-  for (int j = 0; j < sizeDistHumanos; j += 9) {
-    if (distHumanos[j + 8] == ciclo) {
-      q = distHumanos[j + 0];
-      l = distHumanos[j + 1];
-      x = distHumanos[j + 2];
-      y = distHumanos[j + 3];
-      s = distHumanos[j + 4];
-      fe = distHumanos[j + 5];
-      sd = distHumanos[j + 6]; // st = distHumanos[j + 7];
-
-      SET_Q(id, q);
-      SET_L(id, l);
-      SET_X(id, x);
-      SET_Y(id, y);
-      SET_S(id, s);
-      SET_I(id, fe);
-      SET_C(id, 0);
-      SET_E(id, sd);
-
-      id++;
-    }
-  }
+__global__ void initHumano(TIPO_AGENTE *agentes, int id, int q, int l, int x,
+                           int y, int s, int i, int c, int e) {
+  SET_Q(id, q);
+  SET_L(id, l);
+  SET_X(id, x);
+  SET_Y(id, y);
+  SET_S(id, s);
+  SET_I(id, i);
+  SET_C(id, c);
+  SET_E(id, e);
 }
 
 __global__ void movimentacao(curandState *seeds, TIPO_AGENTE *agentes,
@@ -825,39 +800,16 @@ __global__ void initCurand(curandState *seeds, const int *rands,
 
 #ifdef __CPU__
 
-void insercaoHumanos(TIPO_AGENTE *agentes, int quantAgentes, int nHumanosExe,
-                     int sizeDistHumanos, const int *distHumanos, int ciclo) {
-  int q, l, x, y, s, fe, sd;
-
-  int id;
-  for (id = quantAgentes - nHumanosExe; id < quantAgentes; id++) {
-    if (GET_X(id) == 0) {
-      break;
-    }
-  }
-
-  for (int j = 0; j < sizeDistHumanos; j += 9) {
-    if (distHumanos[j + 8] == ciclo) {
-      q = distHumanos[j + 0];
-      l = distHumanos[j + 1];
-      x = distHumanos[j + 2];
-      y = distHumanos[j + 3];
-      s = distHumanos[j + 4];
-      fe = distHumanos[j + 5];
-      sd = distHumanos[j + 6]; // st = distHumanos[j + 7];
-
-      SET_Q(id, q);
-      SET_L(id, l);
-      SET_X(id, x);
-      SET_Y(id, y);
-      SET_S(id, s);
-      SET_I(id, fe);
-      SET_C(id, 0);
-      SET_E(id, sd);
-
-      id++;
-    }
-  }
+void initHumano(TIPO_AGENTE *agentes, int id, int q, int l, int x, int y, int s,
+                int i, int c, int e) {
+  SET_Q(id, q);
+  SET_L(id, l);
+  SET_X(id, x);
+  SET_Y(id, y);
+  SET_S(id, s);
+  SET_I(id, i);
+  SET_C(id, c);
+  SET_E(id, e);
 }
 
 void movimentacao(TIPO_AGENTE *agentes, int quantAgentes,
@@ -1106,7 +1058,6 @@ void iniciarSimulacao(int idSimulacao, const double *parametros,
   int *indexPosicoesDev;
   int *posicoesDev;
   double *tempsDev;
-  int *distHumanosDev;
 
   cudaMalloc((void **)&agentesDev,
              quantAgentes * ATRIBUTOS_AGENTE * sizeof(TIPO_AGENTE));
@@ -1132,7 +1083,6 @@ void iniciarSimulacao(int idSimulacao, const double *parametros,
   cudaMalloc((void **)&posicoesDev,
              indexPosicoes[indexQuadras[quantQuadras * 2 - 1]] * sizeof(int));
   cudaMalloc((void **)&tempsDev, sizeTemps * sizeof(double));
-  cudaMalloc((void **)&distHumanosDev, sizeDistHumanos * sizeof(int));
 
   cudaMemcpy(agentesDev, agentes,
              quantAgentes * ATRIBUTOS_AGENTE * sizeof(TIPO_AGENTE),
@@ -1169,8 +1119,6 @@ void iniciarSimulacao(int idSimulacao, const double *parametros,
              indexPosicoes[indexQuadras[quantQuadras * 2 - 1]] * sizeof(int),
              cudaMemcpyHostToDevice);
   cudaMemcpy(tempsDev, temps, sizeTemps * sizeof(double),
-             cudaMemcpyHostToDevice);
-  cudaMemcpy(distHumanosDev, distHumanos, sizeDistHumanos * sizeof(int),
              cudaMemcpyHostToDevice);
 
   int numThreads = 1024;
@@ -1209,10 +1157,26 @@ void iniciarSimulacao(int idSimulacao, const double *parametros,
       agentesDev, quantAgentes, saidaEspacialDev, 0, quantQuadras, ciclos,
       indexQuadrasDev, indexPosicoesDev, posicoesDev);
 
+  int q, l, x, y, s, fe, sd;
+  int idHumanoExe = quantAgentes - nHumanosExe;
+
   for (int ciclo = 1; ciclo < ciclos; ++ciclo) {
 
-    insercaoHumanos<<<1, 1>>>(agentesDev, quantAgentes, nHumanosExe,
-                              sizeDistHumanos, distHumanosDev, ciclo);
+    for (int j = 0; j < sizeDistHumanos; j += 9) {
+      if (distHumanos[j + 8] == ciclo) {
+        q = distHumanos[j + 0];
+        l = distHumanos[j + 1];
+        x = distHumanos[j + 2];
+        y = distHumanos[j + 3];
+        s = distHumanos[j + 4];
+        fe = distHumanos[j + 5];
+        sd = distHumanos[j + 6]; // st = distHumanos[j + 7];
+
+        initHumano<<<1, 1>>>(agentesDev, idHumanoExe, q, l, x, y, s, fe, 0, sd);
+
+        idHumanoExe++;
+      }
+    }
 
     movimentacao<<<f1, numThreads>>>(
         seedsDev, agentesDev, quantAgentes, indexQuadrasDev,
@@ -1251,10 +1215,27 @@ void iniciarSimulacao(int idSimulacao, const double *parametros,
                                       quantQuadras, ciclos, indexQuadras,
                                       indexPosicoes, posicoes);
 
+  int q, l, x, y, s, fe, sd;
+  int idHumanoExe = quantAgentes - nHumanosExe;
+
   for (int ciclo = 1; ciclo < ciclos; ++ciclo) {
 
-    insercaoHumanos(agentes, quantAgentes, nHumanosExe, sizeDistHumanos,
-                    distHumanos, ciclo);
+    for (int j = 0; j < sizeDistHumanos; j += 9) {
+      if (distHumanos[j + 8] == ciclo) {
+        q = distHumanos[j + 0];
+        l = distHumanos[j + 1];
+        x = distHumanos[j + 2];
+        y = distHumanos[j + 3];
+        s = distHumanos[j + 4];
+        fe = distHumanos[j + 5];
+        sd = distHumanos[j + 6]; // st = distHumanos[j + 7];
+
+        initHumano(agentes, idHumanoExe, q, l, x, y, s, fe, 0, sd);
+
+        idHumanoExe++;
+      }
+    }
+
     movimentacao(agentes, quantAgentes, indexQuadras, indexVizinhancas,
                  vizinhancas, parametros, indexParametros);
     contato(agentes, quantAgentes, quantLotes, quantQuadras, parametros,
@@ -1301,14 +1282,12 @@ void iniciarSimulacao(int idSimulacao, const double *parametros,
   cudaFree(indexPosicoesDev);
   cudaFree(posicoesDev);
   cudaFree(tempsDev);
-  cudaFree(distHumanosDev);
 
 #endif
 
   system((COMANDO_CRIAR_PASTA + pastaSaida).c_str());
-  SaidasSimulacao::salvarSaidaEspacial(pastaSaida, saidaEspacial,
-                                       quantLinhasSaidaEspacial, ciclos, 
-                                       posicoes);
+  SaidasSimulacao::salvarSaidaEspacial(
+      pastaSaida, saidaEspacial, quantLinhasSaidaEspacial, ciclos, posicoes);
 
   delete[](saidaEspacial);
   delete[](agentes);

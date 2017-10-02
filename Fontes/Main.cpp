@@ -47,7 +47,12 @@ int main(int argc, char **argv) {
 
 #endif
 
-  string pastaRaiz = string(argv[1]);
+  string pastaRaiz;
+  if (argc > 1) {
+    pastaRaiz = string(argv[1]);
+  } else {
+    cout << "Informe a pasta de saida!" << endl;
+  }
 
   string pastaEntrada, pastaSaida;
   system((COMANDO_EXCLUIR_PASTA + pastaRaiz).c_str());
