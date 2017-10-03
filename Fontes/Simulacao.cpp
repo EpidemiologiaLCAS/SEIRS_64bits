@@ -1034,11 +1034,12 @@ void iniciarSimulacao(int idSimulacao, const double *parametros,
 
   if (idSimulacao == 0) {
     int totMem = (quantAgentes * ATRIBUTOS_AGENTE * sizeof(TIPO_AGENTE));
-    totMem += (ciclos * COLUNAS_SAIDAS_QUANTIDADES * sizeof(int));
-    totMem += (sizeParametros * sizeof(double));
-    totMem +=
-        (indexVizinhancas[indexQuadras[quantQuadras * 2 - 1]] * sizeof(int));
-    totMem += indexPosicoes[indexQuadras[quantQuadras * 2 - 1]] * sizeof(int);
+    // totMem += (ciclos * COLUNAS_SAIDAS_QUANTIDADES * sizeof(int));
+    // totMem += (sizeParametros * sizeof(double));
+    // totMem +=
+    //    (indexVizinhancas[indexQuadras[quantQuadras * 2 - 1]] * sizeof(int));
+    // totMem += indexPosicoes[indexQuadras[quantQuadras * 2 - 1]] *
+    // sizeof(int);
     cout << totMem << endl;
   }
 
