@@ -1,37 +1,37 @@
 Min;Max;Descricao
 1;1;Quantidade de Simulacoes
-360;360;Numero de Ciclos por Simulacao
-450;450;Quantidade de Agentes Suscetiveis Crianca Masculino
+214;214;Numero de Ciclos por Simulacao
+33029;33029;Quantidade de Agentes Suscetiveis Crianca Masculino
 0;0;Quantidade de Agentes Expostos Crianca Masculino
-50;50;Quantidade de Agentes Infectados Crianca Masculino
+0;0;Quantidade de Agentes Infectados Crianca Masculino
 0;0;Quantidade de Agentes Recuperados Crianca Masculino
-450;450;Quantidade de Agentes Suscetiveis Crianca Feminino
+32029;32029;Quantidade de Agentes Suscetiveis Crianca Feminino
 0;0;Quantidade de Agentes Expostos Crianca Feminino 
-50;50;Quantidade de Agentes Infectados Crianca Feminino
+0;0;Quantidade de Agentes Infectados Crianca Feminino
 0;0;Quantidade de Agentes Recuperados Crianca Feminino
-450;450;Quantidade de Agentes Suscetiveis Jovem Masculino
+27508;27508;Quantidade de Agentes Suscetiveis Jovem Masculino
 0;0;Quantidade de Agentes Expostos Jovem Masculino
-50;50;Quantidade de Agentes Infectados Jovem Masculino
+0;0;Quantidade de Agentes Infectados Jovem Masculino
 0;0;Quantidade de Agentes Recuperados Jovem Masculino
-450;450;Quantidade de Agentes Suscetiveis Jovem Feminino
+27144;27144;Quantidade de Agentes Suscetiveis Jovem Feminino
 0;0;Quantidade de Agentes Expostos Jovem Feminino
-50;50;Quantidade de Agentes Infectados Jovem Feminino
+0;0;Quantidade de Agentes Infectados Jovem Feminino
 0;0;Quantidade de Agentes Recuperados Jovem Feminino
-450;450;Quantidade de Agentes Suscetiveis Adulto Masculino
+67768;67768;Quantidade de Agentes Suscetiveis Adulto Masculino
 0;0;Quantidade de Agentes Expostos Adulto Masculino
-50;50;Quantidade de Agentes Infectados Adulto Masculino
+0;0;Quantidade de Agentes Infectados Adulto Masculino
 0;0;Quantidade de Agentes Recuperados Adulto Masculino
-450;450;Quantidade de Agentes Suscetiveis Adulto Feminino
+73023;73023;Quantidade de Agentes Suscetiveis Adulto Feminino
 0;0;Quantidade de Agentes Expostos Adulto Feminino
-50;50;Quantidade de Agentes Infectados Adulto Feminino
+0;0;Quantidade de Agentes Infectados Adulto Feminino
 0;0;Quantidade de Agentes Recuperados Adulto Feminino
-450;450;Quantidade de Agentes Suscetiveis Idoso Masculino
+11466;11466;Quantidade de Agentes Suscetiveis Idoso Masculino
 0;0;Quantidade de Agentes Expostos Idoso Masculino
-50;50;Quantidade de Agentes Infectados Idoso Masculino
+0;0;Quantidade de Agentes Infectados Idoso Masculino
 0;0;Quantidade de Agentes Recuperados Idoso Masculino
-450;450;Quantidade de Agentes Suscetiveis Idoso Feminino
+14238;14238;Quantidade de Agentes Suscetiveis Idoso Feminino
 0;0;Quantidade de Agentes Expostos Idoso Feminino
-50;50;Quantidade de Agentes Infectados Idoso Feminino
+0;0;Quantidade de Agentes Infectados Idoso Feminino
 0;0;Quantidade de Agentes Recuperados Idoso Feminino
 0.64;0.95;Taxa de Infeccao Crianca
 3;5;Numero de Ciclos para Agente Exposto Crianca

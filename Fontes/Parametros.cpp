@@ -162,25 +162,25 @@ tuple<int, int *, int *, int *, int *, int *, int *> lerVetores() {
                     vizinhancas, indexPosicoes, posicoes);
 }
 
-tuple<int, double *> lerTemperaturas() {
-  int sizeTemps;
-  double *temps;
+tuple<int, double *> lerSazonalidade() {
+  int sizeSazo;
+  double *sazo;
   string nomeArquivoEntrada =
-      string("Entradas") + SEPARADOR + string("Temperaturas.csv");
+      string("Entradas") + SEPARADOR + string("Sazonalidade.csv");
   ifstream arquivoEntrada(nomeArquivoEntrada);
   if (arquivoEntrada.is_open()) {
-    arquivoEntrada >> sizeTemps;
+    arquivoEntrada >> sizeSazo;
     arquivoEntrada.get();
-    temps = new double[sizeTemps];
-    for (int i = 0; i < sizeTemps; ++i) {
-      arquivoEntrada >> temps[i];
+    sazo = new double[sizeSazo];
+    for (int i = 0; i < sizeSazo; ++i) {
+      arquivoEntrada >> sazo[i];
       arquivoEntrada.get();
     }
   } else {
     cerr << "Arquivo: " << nomeArquivoEntrada << " nao foi aberto!" << endl;
     exit(1);
   }
-  return make_tuple(sizeTemps, temps);
+  return make_tuple(sizeSazo, sazo);
 }
 
 tuple<int, int, int *> lerArquivoDistribuicaoHumanos() {

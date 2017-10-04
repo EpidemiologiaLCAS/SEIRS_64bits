@@ -111,9 +111,9 @@ void iniciarSimulacao(int idMonteCarlo, string pastaEntrada, string pastaSaida,
   int *posicoes;
   tie(quantQuadras, quantLotes, indexQuadras, indexVizinhancas, vizinhancas,
       indexPosicoes, posicoes) = Parametros::lerVetores();
-  int sizeTemps;
-  double *temps;
-  tie(sizeTemps, temps) = Parametros::lerTemperaturas();
+  int sizeSazo;
+  double *sazo;
+  tie(sizeSazo, sazo) = Parametros::lerSazonalidade();
   int nHumanosExe, sizeDistHumanos;
   int *distHumanos;
   tie(nHumanosExe, sizeDistHumanos, distHumanos) =
@@ -142,7 +142,7 @@ void iniciarSimulacao(int idMonteCarlo, string pastaEntrada, string pastaSaida,
         idSimulacao, parametros, sizeParametros, indexParametros,
         pastaSaidaSimulacao, saidaQuantidadeTotal, quantLotes, quantQuadras,
         indexQuadras, indexVizinhancas, vizinhancas, indexPosicoes, posicoes,
-        indexSaidaQuantidadeQuadras, saidaQuantidadeQuadras, sizeTemps, temps,
+        indexSaidaQuantidadeQuadras, saidaQuantidadeQuadras, sizeSazo, sazo,
         nHumanosExe, sizeDistHumanos, distHumanos);
   }
 
@@ -163,7 +163,7 @@ void iniciarSimulacao(int idMonteCarlo, string pastaEntrada, string pastaSaida,
   delete[](parametros);
   delete[](indexParametros);
   delete[](quantLotes);
-  delete[](temps);
+  delete[](sazo);
   delete[](distHumanos);
 }
 }
