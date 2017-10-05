@@ -82,6 +82,83 @@ void gerarSaidaQuantidadeQuadras(int idMonteCarlo, int quantQuadras, int ciclos,
   }
 }
 
+void gerarSaidaQuantidadeTotalAcum(int idMonteCarlo, int ciclos, int simulacoes,
+                                   int *saidaQuantidadeTotal,
+                                   string pastaRaiz) {
+  for (int i = 0; i < ciclos; ++i) {
+    for (int j = 0; j < COLUNAS_SAIDAS_QUANTIDADES; ++j) {
+      saidaQuantidadeTotal[VEC(i, j, COLUNAS_SAIDAS_QUANTIDADES)] /=
+          (double)simulacoes;
+    }
+  }
+  for (int i = 0; i < ciclos; ++i) {
+    saidaQuantidadeTotal[VEC(i, 0, COLUNAS_SAIDAS_QUANTIDADES)] = i;
+  }
+  string nomeArquivoSaida = pastaRaiz + SEPARADOR + "MonteCarlo_" +
+                            to_string(idMonteCarlo) + SEPARADOR +
+                            string("Quantidades_Novo_Total.csv");
+  ofstream arquivoSaida(nomeArquivoSaida);
+  if (arquivoSaida.is_open()) {
+    for (int i = 0; i < ciclos; ++i) {
+      arquivoSaida
+          << saidaQuantidadeTotal[VEC(i, 0, COLUNAS_SAIDAS_QUANTIDADES)];
+      for (int j = 1; j < COLUNAS_SAIDAS_QUANTIDADES; ++j) {
+        arquivoSaida
+            << ";"
+            << saidaQuantidadeTotal[VEC(i, j, COLUNAS_SAIDAS_QUANTIDADES)];
+      }
+      arquivoSaida << endl;
+    }
+    arquivoSaida.close();
+  } else {
+    cerr << "Arquivo: " << nomeArquivoSaida << " nao foi aberto!" << endl;
+    exit(1);
+  }
+}
+
+void gerarSaidaQuantidadeQuadrasAcum(int idMonteCarlo, int quantQuadras,
+                                     int ciclos, int simulacoes,
+                                     const int *indexSaidaQuantidadeQuadras,
+                                     int *saidaQuantidadeQuadras,
+                                     string pastaRaiz) {
+  for (int idQuadra = 0; idQuadra < quantQuadras; ++idQuadra) {
+    for (int i = 0; i < ciclos; ++i) {
+      for (int j = 0; j < COLUNAS_SAIDAS_QUANTIDADES; ++j) {
+        saidaQuantidadeQuadras[indexSaidaQuantidadeQuadras[idQuadra] +
+                               VEC(i, j, COLUNAS_SAIDAS_QUANTIDADES)] /=
+            (double)simulacoes;
+      }
+    }
+    for (int i = 0; i < ciclos; ++i) {
+      saidaQuantidadeQuadras[indexSaidaQuantidadeQuadras[idQuadra] +
+                             VEC(i, 0, COLUNAS_SAIDAS_QUANTIDADES)] = i;
+    }
+    string nomeArquivoSaida = pastaRaiz + SEPARADOR + string("MonteCarlo_") +
+                              to_string(idMonteCarlo) + SEPARADOR +
+                              string("Quantidades_Novo_Quadra-") +
+                              to_string(idQuadra) + string(".csv");
+    ofstream arquivoSaida(nomeArquivoSaida);
+    if (arquivoSaida.is_open()) {
+      for (int i = 0; i < ciclos; ++i) {
+        arquivoSaida
+            << saidaQuantidadeQuadras[indexSaidaQuantidadeQuadras[idQuadra] +
+                                      VEC(i, 0, COLUNAS_SAIDAS_QUANTIDADES)];
+        for (int j = 1; j < COLUNAS_SAIDAS_QUANTIDADES; ++j) {
+          arquivoSaida
+              << ";"
+              << saidaQuantidadeQuadras[indexSaidaQuantidadeQuadras[idQuadra] +
+                                        VEC(i, j, COLUNAS_SAIDAS_QUANTIDADES)];
+        }
+        arquivoSaida << endl;
+      }
+      arquivoSaida.close();
+    } else {
+      cerr << "Arquivo: " << nomeArquivoSaida << " nao foi aberto!" << endl;
+      exit(1);
+    }
+  }
+}
+
 int *calcularIndexSaidaQuantidadeQuadras(int quantQuadras, int ciclos) {
   int i = 0, size = 0;
   int *deslocamentos = new int[quantQuadras + 1];
@@ -129,37 +206,54 @@ void iniciarSimulacao(int idMonteCarlo, string pastaEntrada, string pastaSaida,
   int simulacoes = QUANTIDADE_SIMULACOES;
 
   int *saidaQuantidadeTotal = new int[ciclos * COLUNAS_SAIDAS_QUANTIDADES]();
-  int *indexSaidaQuantidadeQuadras =
-      SaidasMonteCarlo::calcularIndexSaidaQuantidadeQuadras(quantQuadras,
-                                                            ciclos);
-  int *saidaQuantidadeQuadras =
-      new int[indexSaidaQuantidadeQuadras[quantQuadras]]();
+  // int *indexSaidaQuantidadeQuadras =
+  //    SaidasMonteCarlo::calcularIndexSaidaQuantidadeQuadras(quantQuadras,
+  //                                                          ciclos);
+  int *indexSaidaQuantidadeQuadras = NULL;
+  // int *saidaQuantidadeQuadras =
+  //    new int[indexSaidaQuantidadeQuadras[quantQuadras]]();
+  int *saidaQuantidadeQuadras = NULL;
+
+  int *saidaQuantidadeTotalAcum =
+      new int[ciclos * COLUNAS_SAIDAS_QUANTIDADES]();
+  // int *saidaQuantidadeQuadrasAcum = new
+  // int[indexSaidaQuantidadeQuadras[quantQuadras]]();
+  int *saidaQuantidadeQuadrasAcum = NULL;
 
   for (int idSimulacao = 0; idSimulacao < simulacoes; ++idSimulacao) {
     string pastaSaidaSimulacao = pastaSaidaMonteCarlo + string("Simulacao_") +
                                  to_string(idSimulacao) + SEPARADOR;
     Simulacao::iniciarSimulacao(
         idSimulacao, parametros, sizeParametros, indexParametros,
-        pastaSaidaSimulacao, saidaQuantidadeTotal, quantLotes, quantQuadras,
-        indexQuadras, indexVizinhancas, vizinhancas, indexPosicoes, posicoes,
-        indexSaidaQuantidadeQuadras, saidaQuantidadeQuadras, sizeSazo, sazo,
+        pastaSaidaSimulacao, saidaQuantidadeTotal, saidaQuantidadeTotalAcum,
+        quantLotes, quantQuadras, indexQuadras, indexVizinhancas, vizinhancas,
+        indexPosicoes, posicoes, indexSaidaQuantidadeQuadras,
+        saidaQuantidadeQuadras, saidaQuantidadeQuadrasAcum, sizeSazo, sazo,
         nHumanosExe, sizeDistHumanos, distHumanos);
   }
 
-  SaidasMonteCarlo::gerarSaidaQuantidadeQuadras(
-      idMonteCarlo, quantQuadras, ciclos, simulacoes,
-      indexSaidaQuantidadeQuadras, saidaQuantidadeQuadras, pastaRaiz);
+  // SaidasMonteCarlo::gerarSaidaQuantidadeQuadras(
+  //    idMonteCarlo, quantQuadras, ciclos, simulacoes,
+  //    indexSaidaQuantidadeQuadras, saidaQuantidadeQuadras, pastaRaiz);
   SaidasMonteCarlo::gerarSaidaQuantidadeTotal(idMonteCarlo, ciclos, simulacoes,
                                               saidaQuantidadeTotal, pastaRaiz);
 
+  // SaidasMonteCarlo::gerarSaidaQuantidadeQuadrasAcum(
+  //    idMonteCarlo, quantQuadras, ciclos, simulacoes,
+  //    indexSaidaQuantidadeQuadras, saidaQuantidadeQuadrasAcum, pastaRaiz);
+  SaidasMonteCarlo::gerarSaidaQuantidadeTotalAcum(
+      idMonteCarlo, ciclos, simulacoes, saidaQuantidadeTotalAcum, pastaRaiz);
+
   delete[](saidaQuantidadeTotal);
+  delete[](saidaQuantidadeTotalAcum);
   delete[](indexQuadras);
   delete[](indexVizinhancas);
   delete[](vizinhancas);
   delete[](indexPosicoes);
   delete[](posicoes);
-  delete[](indexSaidaQuantidadeQuadras);
-  delete[](saidaQuantidadeQuadras);
+  // delete[](indexSaidaQuantidadeQuadras);
+  // delete[](saidaQuantidadeQuadras);
+  // delete[](saidaQuantidadeQuadrasAcum);
   delete[](parametros);
   delete[](indexParametros);
   delete[](quantLotes);

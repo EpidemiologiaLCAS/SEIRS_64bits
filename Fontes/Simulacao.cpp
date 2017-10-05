@@ -395,6 +395,144 @@ gerarSaidaQuantidadeQuadras(const TIPO_AGENTE *agentes, int quantAgentes,
   }
 }
 
+__global__ void gerarSaidaQuantidadeTotalAcum(const TIPO_AGENTE *agentes,
+                                              int quantAgentes,
+                                              int *saidaQuantidadeTotal,
+                                              int ciclo) {
+  int i = (threadIdx.x + blockIdx.x * blockDim.x);
+  if (i < quantAgentes) {
+    if (GET_X(i) != 0 && GET_C(i) == 0) {
+      if (GET_S(i) == MASCULINO) {
+        switch (GET_I(i)) {
+        case CRIANCA:
+          atomicAdd(&saidaQuantidadeTotal[VEC(ciclo, 1 + GET_E(i),
+                                              COLUNAS_SAIDAS_QUANTIDADES)],
+                    1);
+          break;
+        case JOVEM:
+          atomicAdd(&saidaQuantidadeTotal[VEC(ciclo, 5 + GET_E(i),
+                                              COLUNAS_SAIDAS_QUANTIDADES)],
+                    1);
+          break;
+        case ADULTO:
+          atomicAdd(&saidaQuantidadeTotal[VEC(ciclo, 9 + GET_E(i),
+                                              COLUNAS_SAIDAS_QUANTIDADES)],
+                    1);
+          break;
+        case IDOSO:
+          atomicAdd(&saidaQuantidadeTotal[VEC(ciclo, 13 + GET_E(i),
+                                              COLUNAS_SAIDAS_QUANTIDADES)],
+                    1);
+          break;
+        }
+      } else {
+        switch (GET_I(i)) {
+        case CRIANCA:
+          atomicAdd(&saidaQuantidadeTotal[VEC(ciclo, 17 + GET_E(i),
+                                              COLUNAS_SAIDAS_QUANTIDADES)],
+                    1);
+          break;
+        case JOVEM:
+          atomicAdd(&saidaQuantidadeTotal[VEC(ciclo, 21 + GET_E(i),
+                                              COLUNAS_SAIDAS_QUANTIDADES)],
+                    1);
+          break;
+        case ADULTO:
+          atomicAdd(&saidaQuantidadeTotal[VEC(ciclo, 25 + GET_E(i),
+                                              COLUNAS_SAIDAS_QUANTIDADES)],
+                    1);
+          break;
+        case IDOSO:
+          atomicAdd(&saidaQuantidadeTotal[VEC(ciclo, 29 + GET_E(i),
+                                              COLUNAS_SAIDAS_QUANTIDADES)],
+                    1);
+          break;
+        }
+      }
+      atomicAdd(
+          &saidaQuantidadeTotal[VEC(ciclo, 33, COLUNAS_SAIDAS_QUANTIDADES)], 1);
+    }
+  }
+}
+
+__global__ void
+gerarSaidaQuantidadeQuadrasAcum(const TIPO_AGENTE *agentes, int quantAgentes,
+                                const int *indexSaidaQuantidadeQuadras,
+                                int *saidaQuantidadeQuadras, int ciclo) {
+  int i = (threadIdx.x + blockIdx.x * blockDim.x);
+  if (i < quantAgentes) {
+    if (GET_X(i) != 0 && GET_C(i) == 0) {
+      if (GET_S(i) == MASCULINO) {
+        switch (GET_I(i)) {
+        case CRIANCA:
+          atomicAdd(
+              &saidaQuantidadeQuadras[indexSaidaQuantidadeQuadras[GET_Q(i)] +
+                                      VEC(ciclo, 1 + GET_E(i),
+                                          COLUNAS_SAIDAS_QUANTIDADES)],
+              1);
+          break;
+        case JOVEM:
+          atomicAdd(
+              &saidaQuantidadeQuadras[indexSaidaQuantidadeQuadras[GET_Q(i)] +
+                                      VEC(ciclo, 5 + GET_E(i),
+                                          COLUNAS_SAIDAS_QUANTIDADES)],
+              1);
+          break;
+        case ADULTO:
+          atomicAdd(
+              &saidaQuantidadeQuadras[indexSaidaQuantidadeQuadras[GET_Q(i)] +
+                                      VEC(ciclo, 9 + GET_E(i),
+                                          COLUNAS_SAIDAS_QUANTIDADES)],
+              1);
+          break;
+        case IDOSO:
+          atomicAdd(
+              &saidaQuantidadeQuadras[indexSaidaQuantidadeQuadras[GET_Q(i)] +
+                                      VEC(ciclo, 13 + GET_E(i),
+                                          COLUNAS_SAIDAS_QUANTIDADES)],
+              1);
+          break;
+        }
+      } else {
+        switch (GET_I(i)) {
+        case CRIANCA:
+          atomicAdd(
+              &saidaQuantidadeQuadras[indexSaidaQuantidadeQuadras[GET_Q(i)] +
+                                      VEC(ciclo, 17 + GET_E(i),
+                                          COLUNAS_SAIDAS_QUANTIDADES)],
+              1);
+          break;
+        case JOVEM:
+          atomicAdd(
+              &saidaQuantidadeQuadras[indexSaidaQuantidadeQuadras[GET_Q(i)] +
+                                      VEC(ciclo, 21 + GET_E(i),
+                                          COLUNAS_SAIDAS_QUANTIDADES)],
+              1);
+          break;
+        case ADULTO:
+          atomicAdd(
+              &saidaQuantidadeQuadras[indexSaidaQuantidadeQuadras[GET_Q(i)] +
+                                      VEC(ciclo, 25 + GET_E(i),
+                                          COLUNAS_SAIDAS_QUANTIDADES)],
+              1);
+          break;
+        case IDOSO:
+          atomicAdd(
+              &saidaQuantidadeQuadras[indexSaidaQuantidadeQuadras[GET_Q(i)] +
+                                      VEC(ciclo, 29 + GET_E(i),
+                                          COLUNAS_SAIDAS_QUANTIDADES)],
+              1);
+          break;
+        }
+      }
+      atomicAdd(
+          &saidaQuantidadeQuadras[indexSaidaQuantidadeQuadras[GET_Q(i)] +
+                                  VEC(ciclo, 33, COLUNAS_SAIDAS_QUANTIDADES)],
+          1);
+    }
+  }
+}
+
 __global__ void gerarSaidaEspacial(const TIPO_AGENTE *agentes, int quantAgentes,
                                    int *saidaEspacial, int ciclo,
                                    int quantQuadras, int ciclos,
@@ -489,6 +627,133 @@ void gerarSaidaQuantidadeQuadras(const TIPO_AGENTE *agentes, int quantAgentes,
 #pragma omp parallel for
   for (int i = 0; i < quantAgentes; i++) {
     if (GET_X(i) != 0) {
+      if (GET_S(i) == MASCULINO) {
+        switch (GET_I(i)) {
+        case CRIANCA: {
+#pragma omp atomic
+          saidaQuantidadeQuadras[indexSaidaQuantidadeQuadras[GET_Q(i)] +
+                                 VEC(ciclo, 1 + GET_E(i),
+                                     COLUNAS_SAIDAS_QUANTIDADES)]++;
+        } break;
+        case JOVEM: {
+#pragma omp atomic
+          saidaQuantidadeQuadras[indexSaidaQuantidadeQuadras[GET_Q(i)] +
+                                 VEC(ciclo, 5 + GET_E(i),
+                                     COLUNAS_SAIDAS_QUANTIDADES)]++;
+        } break;
+        case ADULTO: {
+#pragma omp atomic
+          saidaQuantidadeQuadras[indexSaidaQuantidadeQuadras[GET_Q(i)] +
+                                 VEC(ciclo, 9 + GET_E(i),
+                                     COLUNAS_SAIDAS_QUANTIDADES)]++;
+        } break;
+        case IDOSO: {
+#pragma omp atomic
+          saidaQuantidadeQuadras[indexSaidaQuantidadeQuadras[GET_Q(i)] +
+                                 VEC(ciclo, 13 + GET_E(i),
+                                     COLUNAS_SAIDAS_QUANTIDADES)]++;
+        } break;
+        }
+      } else {
+        switch (GET_I(i)) {
+        case CRIANCA: {
+#pragma omp atomic
+          saidaQuantidadeQuadras[indexSaidaQuantidadeQuadras[GET_Q(i)] +
+                                 VEC(ciclo, 17 + GET_E(i),
+                                     COLUNAS_SAIDAS_QUANTIDADES)]++;
+        } break;
+        case JOVEM: {
+#pragma omp atomic
+          saidaQuantidadeQuadras[indexSaidaQuantidadeQuadras[GET_Q(i)] +
+                                 VEC(ciclo, 21 + GET_E(i),
+                                     COLUNAS_SAIDAS_QUANTIDADES)]++;
+        } break;
+        case ADULTO: {
+#pragma omp atomic
+          saidaQuantidadeQuadras[indexSaidaQuantidadeQuadras[GET_Q(i)] +
+                                 VEC(ciclo, 25 + GET_E(i),
+                                     COLUNAS_SAIDAS_QUANTIDADES)]++;
+        } break;
+        case IDOSO: {
+#pragma omp atomic
+          saidaQuantidadeQuadras[indexSaidaQuantidadeQuadras[GET_Q(i)] +
+                                 VEC(ciclo, 29 + GET_E(i),
+                                     COLUNAS_SAIDAS_QUANTIDADES)]++;
+        } break;
+        }
+      }
+#pragma omp atomic
+      saidaQuantidadeQuadras[indexSaidaQuantidadeQuadras[GET_Q(i)] +
+                             VEC(ciclo, 33, COLUNAS_SAIDAS_QUANTIDADES)]++;
+    }
+  }
+}
+
+void gerarSaidaQuantidadeTotalAcum(const TIPO_AGENTE *agentes, int quantAgentes,
+                                   int *saidaQuantidadeTotal, int ciclo) {
+#pragma omp parallel for
+  for (int i = 0; i < quantAgentes; i++) {
+    if (GET_X(i) != 0 && GET_C(i) == 0) {
+      if (GET_S(i) == MASCULINO) {
+        switch (GET_I(i)) {
+        case CRIANCA: {
+#pragma omp atomic
+          saidaQuantidadeTotal[VEC(ciclo, 1 + GET_E(i),
+                                   COLUNAS_SAIDAS_QUANTIDADES)]++;
+        } break;
+        case JOVEM: {
+#pragma omp atomic
+          saidaQuantidadeTotal[VEC(ciclo, 5 + GET_E(i),
+                                   COLUNAS_SAIDAS_QUANTIDADES)]++;
+        } break;
+        case ADULTO: {
+#pragma omp atomic
+          saidaQuantidadeTotal[VEC(ciclo, 9 + GET_E(i),
+                                   COLUNAS_SAIDAS_QUANTIDADES)]++;
+        } break;
+        case IDOSO: {
+#pragma omp atomic
+          saidaQuantidadeTotal[VEC(ciclo, 13 + GET_E(i),
+                                   COLUNAS_SAIDAS_QUANTIDADES)]++;
+        } break;
+        }
+      } else {
+        switch (GET_I(i)) {
+        case CRIANCA: {
+#pragma omp atomic
+          saidaQuantidadeTotal[VEC(ciclo, 17 + GET_E(i),
+                                   COLUNAS_SAIDAS_QUANTIDADES)]++;
+        } break;
+        case JOVEM: {
+#pragma omp atomic
+          saidaQuantidadeTotal[VEC(ciclo, 21 + GET_E(i),
+                                   COLUNAS_SAIDAS_QUANTIDADES)]++;
+        } break;
+        case ADULTO: {
+#pragma omp atomic
+          saidaQuantidadeTotal[VEC(ciclo, 25 + GET_E(i),
+                                   COLUNAS_SAIDAS_QUANTIDADES)]++;
+        } break;
+        case IDOSO: {
+#pragma omp atomic
+          saidaQuantidadeTotal[VEC(ciclo, 29 + GET_E(i),
+                                   COLUNAS_SAIDAS_QUANTIDADES)]++;
+        } break;
+        }
+      }
+#pragma omp atomic
+      saidaQuantidadeTotal[VEC(ciclo, 33, COLUNAS_SAIDAS_QUANTIDADES)]++;
+    }
+  }
+}
+
+void gerarSaidaQuantidadeQuadrasAcum(const TIPO_AGENTE *agentes,
+                                     int quantAgentes,
+                                     const int *indexSaidaQuantidadeQuadras,
+                                     int *saidaQuantidadeQuadras, int ciclo) {
+#pragma omp parallel for
+  for (int i = 0; i < quantAgentes; i++) {
+    if (GET_X(i) != 0 && GET_C(i) == 0) {
       if (GET_S(i) == MASCULINO) {
         switch (GET_I(i)) {
         case CRIANCA: {
@@ -1009,17 +1274,15 @@ void transicao(TIPO_AGENTE *agentes, int quantAgentes, const double *parametros,
 
 #endif
 
-void iniciarSimulacao(int idSimulacao, const double *parametros,
-                      int sizeParametros, const int *indexParametros,
-                      string pastaSaida, int *saidaQuantidadeTotal,
-                      const int *quantLotes, int quantQuadras,
-                      const int *indexQuadras, const int *indexVizinhancas,
-                      const int *vizinhancas, const int *indexPosicoes,
-                      const int *posicoes,
-                      const int *indexSaidaQuantidadeQuadras,
-                      int *saidaQuantidadeQuadras, int sizeSazo,
-                      const double *sazo, int nHumanosExe, int sizeDistHumanos,
-                      const int *distHumanos) {
+void iniciarSimulacao(
+    int idSimulacao, const double *parametros, int sizeParametros,
+    const int *indexParametros, string pastaSaida, int *saidaQuantidadeTotal,
+    int *saidaQuantidadeTotalAcum, const int *quantLotes, int quantQuadras,
+    const int *indexQuadras, const int *indexVizinhancas,
+    const int *vizinhancas, const int *indexPosicoes, const int *posicoes,
+    const int *indexSaidaQuantidadeQuadras, int *saidaQuantidadeQuadras,
+    int *saidaQuantidadeQuadrasAcum, int sizeSazo, const double *sazo,
+    int nHumanosExe, int sizeDistHumanos, const int *distHumanos) {
   int ciclos = NUMERO_CICLOS_SIMULACAO + 1;
 
   int quantLinhasSaidaEspacial =
@@ -1041,8 +1304,10 @@ void iniciarSimulacao(int idSimulacao, const double *parametros,
 
   TIPO_AGENTE *agentesDev;
   int *saidaQuantidadeTotalDev;
-  int *indexSaidaQuantidadeQuadrasDev;
-  int *saidaQuantidadeQuadrasDev;
+  int *saidaQuantidadeTotalAcumDev;
+  // int *indexSaidaQuantidadeQuadrasDev;
+  // int *saidaQuantidadeQuadrasDev;
+  // int *saidaQuantidadeQuadrasAcumDev;
   int *saidaEspacialDev;
   int *quantLotesDev;
   double *parametrosDev;
@@ -1058,10 +1323,14 @@ void iniciarSimulacao(int idSimulacao, const double *parametros,
              quantAgentes * ATRIBUTOS_AGENTE * sizeof(TIPO_AGENTE));
   cudaMalloc((void **)&saidaQuantidadeTotalDev,
              ciclos * COLUNAS_SAIDAS_QUANTIDADES * sizeof(int));
-  cudaMalloc((void **)&indexSaidaQuantidadeQuadrasDev,
-             (quantQuadras + 1) * sizeof(int));
-  cudaMalloc((void **)&saidaQuantidadeQuadrasDev,
-             indexSaidaQuantidadeQuadras[quantQuadras] * sizeof(int));
+  cudaMalloc((void **)&saidaQuantidadeTotalAcumDev,
+             ciclos * COLUNAS_SAIDAS_QUANTIDADES * sizeof(int));
+  // cudaMalloc((void **)&indexSaidaQuantidadeQuadrasDev,
+  //           (quantQuadras + 1) * sizeof(int));
+  // cudaMalloc((void **)&saidaQuantidadeQuadrasDev,
+  //           indexSaidaQuantidadeQuadras[quantQuadras] * sizeof(int));
+  // cudaMalloc((void **)&saidaQuantidadeQuadrasAcumDev,
+  //           indexSaidaQuantidadeQuadras[quantQuadras] * sizeof(int));
   cudaMalloc((void **)&saidaEspacialDev,
              quantLinhasSaidaEspacial * ciclos * sizeof(int));
   cudaMalloc((void **)&quantLotesDev, quantQuadras * sizeof(int));
@@ -1085,11 +1354,17 @@ void iniciarSimulacao(int idSimulacao, const double *parametros,
   cudaMemcpy(saidaQuantidadeTotalDev, saidaQuantidadeTotal,
              ciclos * COLUNAS_SAIDAS_QUANTIDADES * sizeof(int),
              cudaMemcpyHostToDevice);
-  cudaMemcpy(indexSaidaQuantidadeQuadrasDev, indexSaidaQuantidadeQuadras,
-             (quantQuadras + 1) * sizeof(int), cudaMemcpyHostToDevice);
-  cudaMemcpy(saidaQuantidadeQuadrasDev, saidaQuantidadeQuadras,
-             indexSaidaQuantidadeQuadras[quantQuadras] * sizeof(int),
+  cudaMemcpy(saidaQuantidadeTotalAcumDev, saidaQuantidadeTotalAcum,
+             ciclos * COLUNAS_SAIDAS_QUANTIDADES * sizeof(int),
              cudaMemcpyHostToDevice);
+  // cudaMemcpy(indexSaidaQuantidadeQuadrasDev, indexSaidaQuantidadeQuadras,
+  //           (quantQuadras + 1) * sizeof(int), cudaMemcpyHostToDevice);
+  // cudaMemcpy(saidaQuantidadeQuadrasDev, saidaQuantidadeQuadras,
+  //           indexSaidaQuantidadeQuadras[quantQuadras] * sizeof(int),
+  //           cudaMemcpyHostToDevice);
+  // cudaMemcpy(saidaQuantidadeQuadrasAcumDev, saidaQuantidadeQuadrasAcum,
+  //           indexSaidaQuantidadeQuadras[quantQuadras] * sizeof(int),
+  //           cudaMemcpyHostToDevice);
   cudaMemcpy(saidaEspacialDev, saidaEspacial,
              quantLinhasSaidaEspacial * ciclos * sizeof(int),
              cudaMemcpyHostToDevice);
@@ -1113,8 +1388,7 @@ void iniciarSimulacao(int idSimulacao, const double *parametros,
   cudaMemcpy(posicoesDev, posicoes,
              indexPosicoes[indexQuadras[quantQuadras * 2 - 1]] * sizeof(int),
              cudaMemcpyHostToDevice);
-  cudaMemcpy(sazoDev, sazo, sizeSazo * sizeof(double),
-             cudaMemcpyHostToDevice);
+  cudaMemcpy(sazoDev, sazo, sizeSazo * sizeof(double), cudaMemcpyHostToDevice);
 
   int numThreads = 1024;
   int f1 = (int)((quantAgentes / numThreads) + 1);
@@ -1144,9 +1418,16 @@ void iniciarSimulacao(int idSimulacao, const double *parametros,
   SaidasSimulacao::gerarSaidaQuantidadeTotal<<<f1, numThreads>>>(
       agentesDev, quantAgentes, saidaQuantidadeTotalDev, 0);
 
-  SaidasSimulacao::gerarSaidaQuantidadeQuadras<<<f1, numThreads>>>(
-      agentesDev, quantAgentes, indexSaidaQuantidadeQuadrasDev,
-      saidaQuantidadeQuadrasDev, 0);
+  // SaidasSimulacao::gerarSaidaQuantidadeQuadras<<<f1, numThreads>>>(
+  //    agentesDev, quantAgentes, indexSaidaQuantidadeQuadrasDev,
+  //    saidaQuantidadeQuadrasDev, 0);
+
+  SaidasSimulacao::gerarSaidaQuantidadeTotalAcum<<<f1, numThreads>>>(
+      agentesDev, quantAgentes, saidaQuantidadeTotalAcumDev, 0);
+
+  // SaidasSimulacao::gerarSaidaQuantidadeQuadrasAcum<<<f1, numThreads>>>(
+  //    agentesDev, quantAgentes, indexSaidaQuantidadeQuadrasDev,
+  //    saidaQuantidadeQuadrasAcumDev, 0);
 
   SaidasSimulacao::gerarSaidaEspacial<<<f2, numThreads>>>(
       agentesDev, quantAgentes, saidaEspacialDev, 0, quantQuadras, ciclos,
@@ -1188,9 +1469,16 @@ void iniciarSimulacao(int idSimulacao, const double *parametros,
     SaidasSimulacao::gerarSaidaQuantidadeTotal<<<f1, numThreads>>>(
         agentesDev, quantAgentes, saidaQuantidadeTotalDev, ciclo);
 
-    SaidasSimulacao::gerarSaidaQuantidadeQuadras<<<f1, numThreads>>>(
-        agentesDev, quantAgentes, indexSaidaQuantidadeQuadrasDev,
-        saidaQuantidadeQuadrasDev, ciclo);
+    // SaidasSimulacao::gerarSaidaQuantidadeQuadras<<<f1, numThreads>>>(
+    //    agentesDev, quantAgentes, indexSaidaQuantidadeQuadrasDev,
+    //    saidaQuantidadeQuadrasDev, ciclo);
+
+    SaidasSimulacao::gerarSaidaQuantidadeTotalAcum<<<f1, numThreads>>>(
+        agentesDev, quantAgentes, saidaQuantidadeTotalAcumDev, ciclo);
+
+    // SaidasSimulacao::gerarSaidaQuantidadeQuadrasAcum<<<f1, numThreads>>>(
+    //    agentesDev, quantAgentes, indexSaidaQuantidadeQuadrasDev,
+    //    saidaQuantidadeQuadrasAcumDev, ciclo);
 
     SaidasSimulacao::gerarSaidaEspacial<<<f2, numThreads>>>(
         agentesDev, quantAgentes, saidaEspacialDev, ciclo, quantQuadras, ciclos,
@@ -1203,9 +1491,14 @@ void iniciarSimulacao(int idSimulacao, const double *parametros,
 
   SaidasSimulacao::gerarSaidaQuantidadeTotal(agentes, quantAgentes,
                                              saidaQuantidadeTotal, 0);
-  SaidasSimulacao::gerarSaidaQuantidadeQuadras(agentes, quantAgentes,
-                                               indexSaidaQuantidadeQuadras,
-                                               saidaQuantidadeQuadras, 0);
+  // SaidasSimulacao::gerarSaidaQuantidadeQuadras(agentes, quantAgentes,
+  //                                             indexSaidaQuantidadeQuadras,
+  //                                             saidaQuantidadeQuadras, 0);
+  SaidasSimulacao::gerarSaidaQuantidadeTotalAcum(agentes, quantAgentes,
+                                                 saidaQuantidadeTotalAcum, 0);
+  // SaidasSimulacao::gerarSaidaQuantidadeQuadrasAcum(agentes, quantAgentes,
+  //                                             indexSaidaQuantidadeQuadras,
+  //                                             saidaQuantidadeQuadrasAcum, 0);
   SaidasSimulacao::gerarSaidaEspacial(agentes, quantAgentes, saidaEspacial, 0,
                                       quantQuadras, ciclos, indexQuadras,
                                       indexPosicoes, posicoes);
@@ -1240,9 +1533,16 @@ void iniciarSimulacao(int idSimulacao, const double *parametros,
 
     SaidasSimulacao::gerarSaidaQuantidadeTotal(agentes, quantAgentes,
                                                saidaQuantidadeTotal, ciclo);
-    SaidasSimulacao::gerarSaidaQuantidadeQuadras(agentes, quantAgentes,
-                                                 indexSaidaQuantidadeQuadras,
-                                                 saidaQuantidadeQuadras, ciclo);
+    // SaidasSimulacao::gerarSaidaQuantidadeQuadras(agentes, quantAgentes,
+    //                                             indexSaidaQuantidadeQuadras,
+    //                                             saidaQuantidadeQuadras,
+    //                                             ciclo);
+    SaidasSimulacao::gerarSaidaQuantidadeTotalAcum(
+        agentes, quantAgentes, saidaQuantidadeTotalAcum, ciclo);
+    // SaidasSimulacao::gerarSaidaQuantidadeQuadrasAcum(agentes, quantAgentes,
+    //                                           indexSaidaQuantidadeQuadras,
+    //                                           saidaQuantidadeQuadrasAcum,
+    //                                           ciclo);
     SaidasSimulacao::gerarSaidaEspacial(agentes, quantAgentes, saidaEspacial,
                                         ciclo, quantQuadras, ciclos,
                                         indexQuadras, indexPosicoes, posicoes);
@@ -1255,9 +1555,15 @@ void iniciarSimulacao(int idSimulacao, const double *parametros,
   cudaMemcpy(saidaQuantidadeTotal, saidaQuantidadeTotalDev,
              ciclos * COLUNAS_SAIDAS_QUANTIDADES * sizeof(int),
              cudaMemcpyDeviceToHost);
-  cudaMemcpy(saidaQuantidadeQuadras, saidaQuantidadeQuadrasDev,
-             indexSaidaQuantidadeQuadras[quantQuadras] * sizeof(int),
+  cudaMemcpy(saidaQuantidadeTotalAcum, saidaQuantidadeTotalAcumDev,
+             ciclos * COLUNAS_SAIDAS_QUANTIDADES * sizeof(int),
              cudaMemcpyDeviceToHost);
+  // cudaMemcpy(saidaQuantidadeQuadras, saidaQuantidadeQuadrasDev,
+  //           indexSaidaQuantidadeQuadras[quantQuadras] * sizeof(int),
+  //           cudaMemcpyDeviceToHost);
+  // cudaMemcpy(saidaQuantidadeQuadrasAcum, saidaQuantidadeQuadrasAcumDev,
+  //           indexSaidaQuantidadeQuadras[quantQuadras] * sizeof(int),
+  //           cudaMemcpyDeviceToHost);
   cudaMemcpy(saidaEspacial, saidaEspacialDev,
              quantLinhasSaidaEspacial * ciclos * sizeof(int),
              cudaMemcpyDeviceToHost);
@@ -1265,8 +1571,10 @@ void iniciarSimulacao(int idSimulacao, const double *parametros,
   cudaFree(seedsDev);
   cudaFree(agentesDev);
   cudaFree(saidaQuantidadeTotalDev);
-  cudaFree(indexSaidaQuantidadeQuadrasDev);
-  cudaFree(saidaQuantidadeQuadrasDev);
+  cudaFree(saidaQuantidadeTotalAcumDev);
+  // cudaFree(indexSaidaQuantidadeQuadrasDev);
+  // cudaFree(saidaQuantidadeQuadrasDev);
+  // cudaFree(saidaQuantidadeQuadrasAcumDev);
   cudaFree(saidaEspacialDev);
   cudaFree(quantLotesDev);
   cudaFree(parametrosDev);
