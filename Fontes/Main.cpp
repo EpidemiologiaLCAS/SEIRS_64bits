@@ -57,6 +57,7 @@ int main(int argc, char **argv) {
   string pastaEntrada, pastaSaida;
   system((COMANDO_EXCLUIR_PASTA + pastaRaiz).c_str());
   for (int idMonteCarlo = 0; idMonteCarlo < 1; idMonteCarlo++) {
+    cout << idMonteCarlo << endl;
     pastaSaida = pastaRaiz + SEPARADOR + string("MonteCarlo_") +
                  to_string(idMonteCarlo) + SEPARADOR;
     pastaEntrada = string("Entradas") + SEPARADOR + string("MonteCarlo_") +

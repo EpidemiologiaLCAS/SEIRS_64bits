@@ -864,13 +864,29 @@ __global__ void movimentacao(curandState *seeds, TIPO_AGENTE *agentes,
                              int quantAgentes, const int *indexQuadras,
                              const int *indexVizinhancas,
                              const int *vizinhancas, const double *parametros,
-                             const int *indexParametros) {
+                             const int *indexParametros,
+                             const int *indexPosicoes, const int *posicoes,
+                             int quantQuadras) {
   int id = (threadIdx.x + blockIdx.x * blockDim.x);
   if (id < quantAgentes && GET_X(id) != 0) {
     int q = GET_Q(id);
     int l = GET_L(id);
     int x = GET_X(id);
     int y = GET_Y(id);
+    if (GET_E(id) == INFECTADO &&
+        curand_uniform_double(&seeds[id]) <=
+            PERC_MIGRACAO(curand_uniform_double(&seeds[id]))) {
+      int pos = curand_uniform_double(&seeds[id]) *
+                (indexPosicoes[indexQuadras[quantQuadras * 2 - 1]] / 4);
+      x = posicoes[pos * 4 + 0];
+      y = posicoes[pos * 4 + 1];
+      l = posicoes[pos * 4 + 2];
+      q = posicoes[pos * 4 + 3];
+      SET_X(id, x);
+      SET_Y(id, y);
+      SET_L(id, l);
+      SET_Q(id, q);
+    }
     double taxa;
     switch (GET_I(id)) {
     case CRIANCA:
@@ -963,7 +979,8 @@ __global__ void contato(curandState *seeds, TIPO_AGENTE *agentes,
               taxa = TAXA_INFECCAO_IDOSO(curand_uniform_double(&seeds[pos]));
               break;
             }
-            if (curand_uniform_double(&seeds[pos]) <= (taxa * sazo[ciclo])) {
+            if (curand_uniform_double(&seeds[pos]) <=
+                (taxa * sazo[ciclo] * SAZONALIDADE)) {
               SET_E(i, EXPOSTO);
             }
           }
@@ -1080,7 +1097,8 @@ void initHumano(TIPO_AGENTE *agentes, int id, int q, int l, int x, int y, int s,
 void movimentacao(TIPO_AGENTE *agentes, int quantAgentes,
                   const int *indexQuadras, const int *indexVizinhancas,
                   const int *vizinhancas, const double *parametros,
-                  const int *indexParametros) {
+                  const int *indexParametros, const int *indexPosicoes,
+                  const int *posicoes, int quantQuadras) {
 #pragma omp parallel for
   for (int id = 0; id < quantAgentes; id++) {
     int q = GET_Q(id);
@@ -1088,6 +1106,19 @@ void movimentacao(TIPO_AGENTE *agentes, int quantAgentes,
     int x = GET_X(id);
     int y = GET_Y(id);
     if (x != 0) {
+      if (GET_E(id) == INFECTADO &&
+          randomizarPercentual() <= PERC_MIGRACAO(randomizarPercentual())) {
+        int pos = randomizarPercentual() *
+                  (indexPosicoes[indexQuadras[quantQuadras * 2 - 1]] / 4);
+        x = posicoes[pos * 4 + 0];
+        y = posicoes[pos * 4 + 1];
+        l = posicoes[pos * 4 + 2];
+        q = posicoes[pos * 4 + 3];
+        SET_X(id, x);
+        SET_Y(id, y);
+        SET_L(id, l);
+        SET_Q(id, q);
+      }
       double taxa;
       switch (GET_I(id)) {
       case CRIANCA:
@@ -1181,7 +1212,7 @@ void contato(TIPO_AGENTE *agentes, int quantAgentes, const int *quantLotes,
               taxa = TAXA_INFECCAO_IDOSO(randomizarPercentual());
               break;
             }
-            if (randomizarPercentual() <= (taxa * sazo[ciclo])) {
+            if (randomizarPercentual() <= (taxa * sazo[ciclo] * SAZONALIDADE)) {
               SET_E(i, EXPOSTO);
             }
           }
@@ -1456,7 +1487,8 @@ void iniciarSimulacao(
 
     movimentacao<<<f1, numThreads>>>(
         seedsDev, agentesDev, quantAgentes, indexQuadrasDev,
-        indexVizinhancasDev, vizinhancasDev, parametrosDev, indexParametrosDev);
+        indexVizinhancasDev, vizinhancasDev, parametrosDev, indexParametrosDev,
+        indexPosicoesDev, posicoesDev, quantQuadras);
 
     contato<<<f2, numThreads>>>(
         seedsDev, agentesDev, quantAgentes, quantLotesDev, quantQuadras,
@@ -1525,7 +1557,8 @@ void iniciarSimulacao(
     }
 
     movimentacao(agentes, quantAgentes, indexQuadras, indexVizinhancas,
-                 vizinhancas, parametros, indexParametros);
+                 vizinhancas, parametros, indexParametros, indexPosicoes,
+                 posicoes, quantQuadras);
     contato(agentes, quantAgentes, quantLotes, quantQuadras, parametros,
             indexParametros, indexQuadras, indexPosicoes, posicoes, ciclo - 1,
             sazo);

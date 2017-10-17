@@ -194,7 +194,8 @@ void iniciarSimulacao(int idMonteCarlo, string pastaEntrada, string pastaSaida,
   int nHumanosExe, sizeDistHumanos;
   int *distHumanos;
   tie(nHumanosExe, sizeDistHumanos, distHumanos) =
-      Parametros::lerArquivoDistribuicaoHumanos();
+      Parametros::lerArquivoDistribuicaoHumanos(
+          quantQuadras, quantLotes, indexPosicoes, posicoes, indexQuadras);
   int sizeParametros;
   double *parametros;
   tie(sizeParametros, parametros) = Parametros::lerParametros(

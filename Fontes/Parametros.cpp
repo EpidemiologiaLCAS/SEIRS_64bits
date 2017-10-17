@@ -1,7 +1,7 @@
 #ifndef PARAMETROS_H
 #define PARAMETROS_H
 
-#define QUANTIDADE_PARAMETROS_GERAIS 54
+#define QUANTIDADE_PARAMETROS_GERAIS 56
 #define ENTRE_FAIXA(min, max, percentual)                                      \
   ((min) + ((max) - (min)) * (percentual))
 
@@ -93,6 +93,11 @@
 #define TAXA_MOBILIDADE_IDOSO(percentual)                                      \
   (double)(ENTRE_FAIXA(parametros[106], parametros[107], percentual))
 
+#define PERC_MIGRACAO(percentual)                                              \
+  (double)(ENTRE_FAIXA(parametros[108], parametros[109], percentual))
+
+#define SAZONALIDADE (double)(parametros[110])
+
 default_random_engine
     gen(chrono::system_clock::now().time_since_epoch().count());
 uniform_real_distribution<double> dis(0.0, 1.0);
@@ -183,7 +188,11 @@ tuple<int, double *> lerSazonalidade() {
   return make_tuple(sizeSazo, sazo);
 }
 
-tuple<int, int, int *> lerArquivoDistribuicaoHumanos() {
+tuple<int, int, int *> lerArquivoDistribuicaoHumanos(int quantQuadras,
+                                                     const int *quantLotes,
+                                                     const int *indexPosicoes,
+                                                     const int *posicoes,
+                                                     const int *indexQuadras) {
   string entrada = string("Entradas");
   entrada += SEPARADOR;
   entrada += string("DistribuicaoHumanos.csv");
@@ -207,7 +216,7 @@ tuple<int, int, int *> lerArquivoDistribuicaoHumanos() {
   int sizeDistHumanos = nHumanos * 9;
   int *distHumanos = new int[sizeDistHumanos]();
 
-  int q, l, x, y, s, fe, sd, st, cic;
+  int q, l, x, y, s, fe, sd, st, cic, posicoesLote, p;
   char s1, fe1, sd1;
 
   for (int i = 0; i < nHumanos; ++i) {
@@ -263,10 +272,20 @@ tuple<int, int, int *> lerArquivoDistribuicaoHumanos() {
       break;
     }
 
+    q = (int)(randomizarPercentual() * quantQuadras);
+    l = (int)(randomizarPercentual() * quantLotes[q]);
+    posicoesLote = (indexPosicoes[indexQuadras[2 * q] + l + 1] -
+                    indexPosicoes[indexQuadras[2 * q] + l]) /
+                   4;
+    p = ENTRE_FAIXA(0, posicoesLote, randomizarPercentual());
+    x = posicoes[indexPosicoes[indexQuadras[q * 2] + l] + p * 4 + 0];
+    y = posicoes[indexPosicoes[indexQuadras[q * 2] + l] + p * 4 + 1];
+
     distHumanos[9 * i + 0] = q;
     distHumanos[9 * i + 1] = l;
     distHumanos[9 * i + 2] = x;
     distHumanos[9 * i + 3] = y;
+
     distHumanos[9 * i + 4] = s;
     distHumanos[9 * i + 5] = fe;
     distHumanos[9 * i + 6] = sd;

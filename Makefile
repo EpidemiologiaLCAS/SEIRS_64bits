@@ -1,6 +1,6 @@
 GPU_CC=nvcc
 CPU_CC=g++
-GPU_FLAGS=-std=c++11 -D_MWAITXINTRIN_H_INCLUDED -x cu
+GPU_FLAGS=-std=c++11 -D_MWAITXINTRIN_H_INCLUDED -x cu -Wno-deprecated-gpu-targets
 CPU_FLAGS=-std=c++17 -fopenmp -Wall
 FILE=Fontes/Main.cpp
 EXE=SEIRS
