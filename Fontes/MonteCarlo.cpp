@@ -187,15 +187,16 @@ void iniciarSimulacao(int idMonteCarlo, string pastaEntrada, string pastaSaida,
   int *indexPosicoes;
   int *posicoes;
   tie(quantQuadras, quantLotes, indexQuadras, indexVizinhancas, vizinhancas,
-      indexPosicoes, posicoes) = Parametros::lerVetores();
+      indexPosicoes, posicoes) = Parametros::lerVetores(pastaEntradaMonteCarlo);
   int sizeSazo;
   double *sazo;
-  tie(sizeSazo, sazo) = Parametros::lerSazonalidade();
+  tie(sizeSazo, sazo) = Parametros::lerSazonalidade(pastaEntradaMonteCarlo);
   int nHumanosExe, sizeDistHumanos;
   int *distHumanos;
   tie(nHumanosExe, sizeDistHumanos, distHumanos) =
       Parametros::lerArquivoDistribuicaoHumanos(
-          quantQuadras, quantLotes, indexPosicoes, posicoes, indexQuadras);
+          pastaEntradaMonteCarlo, quantQuadras, quantLotes, indexPosicoes,
+          posicoes, indexQuadras);
   int sizeParametros;
   double *parametros;
   tie(sizeParametros, parametros) = Parametros::lerParametros(

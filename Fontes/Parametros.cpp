@@ -106,7 +106,8 @@ double randomizarPercentual() { return dis(gen); }
 
 namespace Parametros {
 
-tuple<int, int *, int *, int *, int *, int *, int *> lerVetores() {
+tuple<int, int *, int *, int *, int *, int *, int *>
+lerVetores(string pastaEntrada) {
   int quantQuadras;
   int *quantLotes;
   int *indexQuadras;
@@ -114,8 +115,7 @@ tuple<int, int *, int *, int *, int *, int *, int *> lerVetores() {
   int *vizinhancas;
   int *indexPosicoes;
   int *posicoes;
-  string nomeArquivoEntrada =
-      string("Entradas") + SEPARADOR + string("Vetores.csv");
+  string nomeArquivoEntrada = pastaEntrada + string("Vetores.csv");
   ifstream arquivoEntrada(nomeArquivoEntrada);
   if (arquivoEntrada.is_open()) {
 
@@ -167,11 +167,10 @@ tuple<int, int *, int *, int *, int *, int *, int *> lerVetores() {
                     vizinhancas, indexPosicoes, posicoes);
 }
 
-tuple<int, double *> lerSazonalidade() {
+tuple<int, double *> lerSazonalidade(string pastaEntrada) {
   int sizeSazo;
   double *sazo;
-  string nomeArquivoEntrada =
-      string("Entradas") + SEPARADOR + string("Sazonalidade.csv");
+  string nomeArquivoEntrada = pastaEntrada + string("Sazonalidade.csv");
   ifstream arquivoEntrada(nomeArquivoEntrada);
   if (arquivoEntrada.is_open()) {
     arquivoEntrada >> sizeSazo;
@@ -188,14 +187,11 @@ tuple<int, double *> lerSazonalidade() {
   return make_tuple(sizeSazo, sazo);
 }
 
-tuple<int, int, int *> lerArquivoDistribuicaoHumanos(int quantQuadras,
-                                                     const int *quantLotes,
-                                                     const int *indexPosicoes,
-                                                     const int *posicoes,
-                                                     const int *indexQuadras) {
-  string entrada = string("Entradas");
-  entrada += SEPARADOR;
-  entrada += string("DistribuicaoHumanos.csv");
+tuple<int, int, int *>
+lerArquivoDistribuicaoHumanos(string pastaEntrada, int quantQuadras,
+                              const int *quantLotes, const int *indexPosicoes,
+                              const int *posicoes, const int *indexQuadras) {
+  string entrada = pastaEntrada + string("DistribuicaoHumanos.csv");
 
   ifstream arquivo;
   arquivo.open(entrada);
@@ -301,8 +297,7 @@ tuple<int, double *> lerParametros(string pastaEntrada, const int *quantLotes,
                                    int quantQuadras) {
   int quantParametros = QUANTIDADE_PARAMETROS_GERAIS;
   double *retorno = new double[quantParametros * 2];
-  string pastaEntradaAux = pastaEntrada;
-  string nomeArquivoEntrada = pastaEntradaAux + string("Geral.csv");
+  string nomeArquivoEntrada = pastaEntrada + string("Geral.csv");
   ifstream arquivoEntrada(nomeArquivoEntrada);
   int i = 0;
   if (arquivoEntrada.is_open()) {
