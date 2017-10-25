@@ -96,7 +96,8 @@
 #define PERC_MIGRACAO(percentual)                                              \
   (double)(ENTRE_FAIXA(parametros[108], parametros[109], percentual))
 
-#define SAZONALIDADE (double)(parametros[110])
+#define SAZONALIDADE(percentual)                                               \
+  (double)(ENTRE_FAIXA(parametros[110], parametros[111], percentual))
 
 default_random_engine
     gen(chrono::system_clock::now().time_since_epoch().count());

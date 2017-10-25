@@ -980,7 +980,8 @@ __global__ void contato(curandState *seeds, TIPO_AGENTE *agentes,
               break;
             }
             if (curand_uniform_double(&seeds[pos]) <=
-                (taxa * sazo[ciclo] * SAZONALIDADE)) {
+                (taxa * sazo[ciclo] *
+                 SAZONALIDADE(curand_uniform_double(&seeds[pos])))) {
               SET_E(i, EXPOSTO);
             }
           }
@@ -1212,7 +1213,8 @@ void contato(TIPO_AGENTE *agentes, int quantAgentes, const int *quantLotes,
               taxa = TAXA_INFECCAO_IDOSO(randomizarPercentual());
               break;
             }
-            if (randomizarPercentual() <= (taxa * sazo[ciclo] * SAZONALIDADE)) {
+            if (randomizarPercentual() <=
+                (taxa * sazo[ciclo] * SAZONALIDADE(randomizarPercentual()))) {
               SET_E(i, EXPOSTO);
             }
           }

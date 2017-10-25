@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 
 from sys import argv
 from multiprocessing import Pool
@@ -35,6 +35,7 @@ def criar_grafico_acumulado_total(nome_arquivo):
     # e = np.cumsum(e)
     i = [sum(int(j) for j in i[3::4]) for i in linhas]
     i = np.cumsum(i)
+    print(i)
     # r = [sum(int(j) for j in i[4::4]) for i in linhas]
     # r = np.cumsum(r)
     # plt.plot(x, s, color="green", label="S", linewidth=2)

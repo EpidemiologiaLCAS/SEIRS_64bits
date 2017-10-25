@@ -25,6 +25,29 @@ using namespace std;
 #include "Macros.cpp"
 #include "MonteCarlo.cpp"
 
+#if defined(__GPU__)
+
+void escolherMelhorGPU() {
+  int deviceCount = 0;
+  cudaGetDeviceCount(&deviceCount);
+  int device = 0;
+  double clock = 0.0, highestClock = 0.0;
+  cudaDeviceProp deviceProp;
+  for (int dev = 0; dev < deviceCount; ++dev) {
+    cudaGetDeviceProperties(&deviceProp, dev);
+    clock = deviceProp.clockRate * 1e-3f;
+    if (clock > highestClock) {
+      highestClock = clock;
+      device = dev;
+    }
+  }
+  cudaSetDevice(device);
+  cudaGetDeviceProperties(&deviceProp, device);
+  cout << "Usando device " << device << " - " << deviceProp.name << endl;  
+}
+
+#endif
+
 int main(int argc, char **argv) {
 
 #if defined(__CPU__)
@@ -44,6 +67,8 @@ int main(int argc, char **argv) {
   } else {
     cudaSetDevice(0);
   }
+  
+  escolherMelhorGPU();
 
 #endif
 

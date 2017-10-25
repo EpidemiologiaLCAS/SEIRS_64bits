@@ -2,8 +2,7 @@
 
 for i in {0..0}
 do
-		echo $i
-
+    echo $i
 		echo "Gerando graficos de quantidades..."
 		./grafico.py Saidas_GPU_BIT/MonteCarlo_$i/Quantidades_Total.csv 
 		./grafico_acumulado.py Saidas_GPU_BIT/MonteCarlo_$i/Quantidades_Novo_Total.csv

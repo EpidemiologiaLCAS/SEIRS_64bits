@@ -1,6 +1,6 @@
  #!/bin/sh
 
-for i in {0..0}
+for i in {0..9}
 do
 		echo $i
 		echo "Gerando espaciais acumulados..." 
