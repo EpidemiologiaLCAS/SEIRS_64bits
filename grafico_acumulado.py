@@ -23,6 +23,7 @@ def criar_grafico_acumulado(nome_arquivo, ind):
     plt.plot(x, i, color="red", label="I", linewidth=2)
     # plt.plot(x, r, color="blue", label="R", linewidth=2)
     plt.legend(loc="upper right")
+    plt.axis('tight')
     
 
 def criar_grafico_acumulado_total(nome_arquivo):
@@ -43,6 +44,7 @@ def criar_grafico_acumulado_total(nome_arquivo):
     plt.plot(x, i, color="red", label="I", linewidth=2)
     # plt.plot(x, r, color="blue", label="R", linewidth=2)
     plt.legend(loc="upper right")
+    plt.axis('tight')
 
 
 def plot(arquivo):

@@ -8,10 +8,11 @@ do
 		./grafico_acumulado.py $i/MonteCarlo_0/Quantidades_Novo_Total.csv
 
 		echo "Gerando espaciais acumulados..." 
-		./espacial_acumulado.py $i/MonteCarlo_0/Simulacao_0/Espacial_Geo.csv 
+		./espacial_acumulado.py $i/MonteCarlo_0/Simulacao_0/Espacial_Novo_Geo.csv 
 
 		echo "Resumindo saidas espaciais..."
 		./resumo_saidas.py $i/MonteCarlo_0/Simulacao_0/Espacial_Geo.csv 10
-		./resumo_saidas.py $i/MonteCarlo_0/Simulacao_0/Espacial_Geo_Infectantes.csv 10
-		./resumo_saidas.py $i/MonteCarlo_0/Simulacao_0/Espacial_Geo_Infectantes_Acumulado.csv 10
+		./resumo_saidas.py $i/MonteCarlo_0/Simulacao_0/Espacial_Novo_Geo.csv 10
+		./resumo_saidas.py $i/MonteCarlo_0/Simulacao_0/Espacial_Novo_Geo_Infectantes.csv 10
+		./resumo_saidas.py $i/MonteCarlo_0/Simulacao_0/Espacial_Novo_Geo_Infectantes_Acumulado.csv 10
 done

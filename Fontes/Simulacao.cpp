@@ -233,10 +233,10 @@ int contarTotalAgentes(const int *quantLotes, int quantQuadras,
 
 namespace SaidasSimulacao {
 
-void salvarSaidaEspacial(string pastaSaida, const int *saidaEspacial,
-                         int quantLinhasSaidaEspacial,
+void salvarSaidaEspacial(string nome, string pastaSaida, 
+                         const int *saidaEspacial, int quantLinhasSaidaEspacial,
                          int quantColunasSaidaEspacial, const int *posicoes) {
-  string nomeArquivoSaida = pastaSaida + string("Espacial_Geo.csv");
+  string nomeArquivoSaida = pastaSaida + nome;
   ofstream arquivoSaida(nomeArquivoSaida);
   if (arquivoSaida.is_open()) {
     for (int i = 0; i < quantLinhasSaidaEspacial; ++i) {
@@ -559,6 +559,33 @@ __global__ void gerarSaidaEspacial(const TIPO_AGENTE *agentes, int quantAgentes,
   }
 }
 
+__global__ void gerarSaidaEspacialNovo(const TIPO_AGENTE *agentes, 
+                                       int quantAgentes, int *saidaEspacial, 
+                                       int ciclo, int quantQuadras, int ciclos,
+                                       const int *indexQuadras,
+                                       const int *indexPosicoes,
+                                       const int *posicoes) {
+  int pos = (threadIdx.x + blockIdx.x * blockDim.x);
+  if (pos < indexPosicoes[indexQuadras[quantQuadras * 2 - 1]] / 4) {
+    int x = posicoes[pos * 4 + 0];
+    int y = posicoes[pos * 4 + 1];
+    int l = posicoes[pos * 4 + 2];
+    int q = posicoes[pos * 4 + 3];
+    int e;
+    for (int i = 0; i < quantAgentes; ++i) {
+      if (GET_Q(i) == q && GET_L(i) == l && GET_X(i) == x && GET_Y(i) == y && 
+          GET_C(i) == 0) {
+        e = 2000;
+        e += GET_E(i) + 1;
+        e += (GET_I(i) + 1) * 10;
+        if (e > saidaEspacial[VEC(pos, ciclo, ciclos)]) {
+          saidaEspacial[VEC(pos, ciclo, ciclos)] = e;
+        }
+      }
+    }
+  }
+}
+
 #endif
 
 #ifdef __CPU__
@@ -830,6 +857,32 @@ void gerarSaidaEspacial(const TIPO_AGENTE *agentes, int quantAgentes,
     int e;
     for (int i = 0; i < quantAgentes; ++i) {
       if (GET_Q(i) == q && GET_L(i) == l && GET_X(i) == x && GET_Y(i) == y) {
+        e = 2000;
+        e += GET_E(i) + 1;
+        e += (GET_I(i) + 1) * 10;
+        if (e > saidaEspacial[VEC(pos, ciclo, ciclos)]) {
+          saidaEspacial[VEC(pos, ciclo, ciclos)] = e;
+        }
+      }
+    }
+  }
+}
+
+void gerarSaidaEspacialNovo(const TIPO_AGENTE *agentes, int quantAgentes,
+                            int *saidaEspacial, int ciclo, int quantQuadras,
+                            int ciclos, const int *indexQuadras,
+                            const int *indexPosicoes, const int *posicoes) {
+#pragma omp parallel for
+  for (int pos = 0; pos < indexPosicoes[indexQuadras[quantQuadras * 2 - 1]] / 4;
+       pos++) {
+    int x = posicoes[pos * 4 + 0];
+    int y = posicoes[pos * 4 + 1];
+    int l = posicoes[pos * 4 + 2];
+    int q = posicoes[pos * 4 + 3];
+    int e;
+    for (int i = 0; i < quantAgentes; ++i) {
+      if (GET_Q(i) == q && GET_L(i) == l && GET_X(i) == x && GET_Y(i) == y && 
+          GET_C(i) == 0) {
         e = 2000;
         e += GET_E(i) + 1;
         e += (GET_I(i) + 1) * 10;
@@ -1321,6 +1374,7 @@ void iniciarSimulacao(
   int quantLinhasSaidaEspacial =
       indexPosicoes[indexQuadras[quantQuadras * 2 - 1]] / 4;
   int *saidaEspacial = new int[quantLinhasSaidaEspacial * ciclos]();
+  int *saidaEspacialNovo = new int[quantLinhasSaidaEspacial * ciclos]();
 
   int quantAgentes = Agentes::contarTotalAgentes(
       quantLotes, quantQuadras, parametros, indexParametros, nHumanosExe);
@@ -1342,6 +1396,7 @@ void iniciarSimulacao(
   // int *saidaQuantidadeQuadrasDev;
   // int *saidaQuantidadeQuadrasAcumDev;
   int *saidaEspacialDev;
+  int *saidaEspacialNovoDev;
   int *quantLotesDev;
   double *parametrosDev;
   int *indexParametrosDev;
@@ -1365,6 +1420,8 @@ void iniciarSimulacao(
   // cudaMalloc((void **)&saidaQuantidadeQuadrasAcumDev,
   //           indexSaidaQuantidadeQuadras[quantQuadras] * sizeof(int));
   cudaMalloc((void **)&saidaEspacialDev,
+             quantLinhasSaidaEspacial * ciclos * sizeof(int));
+  cudaMalloc((void **)&saidaEspacialNovoDev, 
              quantLinhasSaidaEspacial * ciclos * sizeof(int));
   cudaMalloc((void **)&quantLotesDev, quantQuadras * sizeof(int));
   cudaMalloc((void **)&parametrosDev, sizeParametros * sizeof(double));
@@ -1400,6 +1457,9 @@ void iniciarSimulacao(
   //           cudaMemcpyHostToDevice);
   cudaMemcpy(saidaEspacialDev, saidaEspacial,
              quantLinhasSaidaEspacial * ciclos * sizeof(int),
+             cudaMemcpyHostToDevice);
+  cudaMemcpy(saidaEspacialNovoDev, saidaEspacialNovo, 
+             quantLinhasSaidaEspacial * ciclos * sizeof(int), 
              cudaMemcpyHostToDevice);
   cudaMemcpy(quantLotesDev, quantLotes, quantQuadras * sizeof(int),
              cudaMemcpyHostToDevice);
@@ -1465,6 +1525,10 @@ void iniciarSimulacao(
   SaidasSimulacao::gerarSaidaEspacial<<<f2, numThreads>>>(
       agentesDev, quantAgentes, saidaEspacialDev, 0, quantQuadras, ciclos,
       indexQuadrasDev, indexPosicoesDev, posicoesDev);
+  
+  SaidasSimulacao::gerarSaidaEspacialNovo<<<f2, numThreads>>>(
+      agentesDev, quantAgentes, saidaEspacialNovoDev, 0, quantQuadras, ciclos, 
+      indexQuadrasDev, indexPosicoesDev, posicoesDev);
 
   int q, l, x, y, s, fe, sd;
   int idHumanoExe = quantAgentes - nHumanosExe;
@@ -1517,6 +1581,10 @@ void iniciarSimulacao(
     SaidasSimulacao::gerarSaidaEspacial<<<f2, numThreads>>>(
         agentesDev, quantAgentes, saidaEspacialDev, ciclo, quantQuadras, ciclos,
         indexQuadrasDev, indexPosicoesDev, posicoesDev);
+        
+    SaidasSimulacao::gerarSaidaEspacialNovo<<<f2, numThreads>>>(
+        agentesDev, quantAgentes, saidaEspacialNovoDev, ciclo, quantQuadras, 
+        ciclos, indexQuadrasDev, indexPosicoesDev, posicoesDev);
   }
 
 #endif
@@ -1536,6 +1604,10 @@ void iniciarSimulacao(
   SaidasSimulacao::gerarSaidaEspacial(agentes, quantAgentes, saidaEspacial, 0,
                                       quantQuadras, ciclos, indexQuadras,
                                       indexPosicoes, posicoes);
+  SaidasSimulacao::gerarSaidaEspacialNovo(agentes, quantAgentes, 
+                                          saidaEspacialNovo, 0, quantQuadras, 
+                                          ciclos, indexQuadras, indexPosicoes, 
+                                          posicoes);
 
   int q, l, x, y, s, fe, sd;
   int idHumanoExe = quantAgentes - nHumanosExe;
@@ -1581,6 +1653,10 @@ void iniciarSimulacao(
     SaidasSimulacao::gerarSaidaEspacial(agentes, quantAgentes, saidaEspacial,
                                         ciclo, quantQuadras, ciclos,
                                         indexQuadras, indexPosicoes, posicoes);
+    SaidasSimulacao::gerarSaidaEspacialNovo(agentes, quantAgentes, 
+                                            saidaEspacialNovo, ciclo, 
+                                            quantQuadras, ciclos, indexQuadras, 
+                                            indexPosicoes, posicoes);
   }
 
 #endif
@@ -1602,6 +1678,9 @@ void iniciarSimulacao(
   cudaMemcpy(saidaEspacial, saidaEspacialDev,
              quantLinhasSaidaEspacial * ciclos * sizeof(int),
              cudaMemcpyDeviceToHost);
+  cudaMemcpy(saidaEspacialNovo, saidaEspacialNovoDev, 
+             quantLinhasSaidaEspacial * ciclos * sizeof(int), 
+             cudaMemcpyDeviceToHost);
 
   cudaFree(seedsDev);
   cudaFree(agentesDev);
@@ -1611,6 +1690,7 @@ void iniciarSimulacao(
   // cudaFree(saidaQuantidadeQuadrasDev);
   // cudaFree(saidaQuantidadeQuadrasAcumDev);
   cudaFree(saidaEspacialDev);
+  cudaFree(saidaEspacialNovoDev);
   cudaFree(quantLotesDev);
   cudaFree(parametrosDev);
   cudaFree(indexParametrosDev);
@@ -1624,10 +1704,13 @@ void iniciarSimulacao(
 #endif
 
   system((COMANDO_CRIAR_PASTA + pastaSaida).c_str());
-  SaidasSimulacao::salvarSaidaEspacial(
+  SaidasSimulacao::salvarSaidaEspacial("Espacial_Geo.csv", 
       pastaSaida, saidaEspacial, quantLinhasSaidaEspacial, ciclos, posicoes);
+  SaidasSimulacao::salvarSaidaEspacial("Espacial_Novo_Geo.csv", 
+      pastaSaida, saidaEspacialNovo, quantLinhasSaidaEspacial, ciclos, posicoes);
 
   delete[](saidaEspacial);
+  delete[](saidaEspacialNovo);
   delete[](agentes);
 }
 }

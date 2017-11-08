@@ -18,6 +18,7 @@ def criar_grafico(nome_arquivo, ind):
     plt.plot(x, i, color="red", label="I", linewidth=2)
     plt.plot(x, r, color="blue", label="R", linewidth=2)
     plt.legend(loc="upper right")
+    plt.axis('tight')
 
 
 def plot(arquivo):
