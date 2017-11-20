@@ -72,14 +72,14 @@ struct Agente {
 // Macros bitstring
 
 // Tamanho em bits dos campos:
-#define T_Q 7  // MAX = 128 valores
-#define T_S 1  // MAX = 2 valores
-#define T_I 2  // MAX = 4 valores
-#define T_L 11 // MAX = 2048 valores
-#define T_X 19 // MAX = 524288 valores
-#define T_Y 24 // MAX = 16777216 valores
-#define T_C 6  // MAX = 64 valores
-#define T_E 2  // MAX = 4 valores
+#define T_Q 7  // MAX = 128 valores             Q: 9 bits
+#define T_S 1  // MAX = 2 valores               S: 1 bit
+#define T_I 2  // MAX = 4 valores              FE: 3 bits 
+#define T_L 11 // MAX = 2048 valores            L: 13 bits
+#define T_X 19 // MAX = 524288 valores          X: 19 bits
+#define T_Y 24 // MAX = 16777216 valores        Y: 23 bits
+#define T_C 6  // MAX = 64 valores              C: 8 bits
+#define T_E 2  // MAX = 4 valores              SD: 3 bits 
 
 // Número de bits anteriores a cada campo:
 #define A_Q 1

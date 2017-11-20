@@ -213,7 +213,7 @@ lerArquivoDistribuicaoHumanos(string pastaEntrada, int quantQuadras,
   int sizeDistHumanos = nHumanos * 9;
   int *distHumanos = new int[sizeDistHumanos]();
 
-  int q, l, x, y, s, fe, sd, st, cic, posicoesLote, p;
+  int q, l, x, y, s, fe, sd, st, cic;
   char s1, fe1, sd1;
 
   for (int i = 0; i < nHumanos; ++i) {
@@ -271,10 +271,10 @@ lerArquivoDistribuicaoHumanos(string pastaEntrada, int quantQuadras,
 
     q = (int)(randomizarPercentual() * quantQuadras);
     l = (int)(randomizarPercentual() * quantLotes[q]);
-    posicoesLote = (indexPosicoes[indexQuadras[2 * q] + l + 1] -
+    int posicoesLote = (indexPosicoes[indexQuadras[2 * q] + l + 1] -
                     indexPosicoes[indexQuadras[2 * q] + l]) /
                    4;
-    p = ENTRE_FAIXA(0, posicoesLote, randomizarPercentual());
+    int p = ENTRE_FAIXA(0, posicoesLote, randomizarPercentual());
     x = posicoes[indexPosicoes[indexQuadras[q * 2] + l] + p * 4 + 0];
     y = posicoes[indexPosicoes[indexQuadras[q * 2] + l] + p * 4 + 1];
 

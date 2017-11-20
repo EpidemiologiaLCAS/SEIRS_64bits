@@ -1,5 +1,5 @@
 Min;Max;Descricao
-100;100;Quantidade de Simulacoes (2*n)
+1;1;Quantidade de Simulacoes (2*n)
 214;214;Quantidade de Ciclos por Simulacao
 33029;33029;Quantidade de Agentes Suscetiveis Crianca Masculino
 0;0;Quantidade de Agentes Expostos Crianca Masculino
@@ -53,5 +53,5 @@ Min;Max;Descricao
 0.10;0.10;Taxa de Mobilidade para Agente Jovem
 0.10;0.10;Taxa de Mobilidade para Agente Adulto
 0.10;0.10;Taxa de Mobilidade para Agente Idoso
-0.03;0.08;Percentual de Migracao Agentes Infectados   0.10 0.10
-0.370;0.370;Multiplicador Sazonalidade                0.435 0.435
+0.10;0.10;Percentual de Migracao Agentes Infectados   0.10 0.10
+0.435;0.435;Multiplicador Sazonalidade                0.435 0.435
